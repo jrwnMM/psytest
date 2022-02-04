@@ -1,0 +1,35 @@
+
+{% if top2 %}
+
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+  {% for obj in top2 %}
+  <li class="nav-item" role="presentation">
+    <button class="nav-link {% if forloop.counter == 1 %}active{% endif %}" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-{{obj}}" type="button" role="tab" aria-controls="pills-{{obj}}" aria-selected="true">{{obj}}</button>
+  </li>
+  {%  endfor %}
+</ul>
+
+<div class="tab-content" id="pills-tabContent">
+  <div>
+    <span class="badge top-2-color">top 2</span>
+  </div>
+  {% for obj in top2 %}
+  <div class="tab-pane fade show {% if forloop.counter == 1 %}active{% endif %}" id="pills-{{obj}}" role="tabpanel" aria-labelledby="pills-home-tab">
+    {% if obj == 'artistic' %}
+    {% include 'riasec/categories/artistic.html' %}
+      {% elif obj == 'investigative' %}
+    {% include 'riasec/categories/investigative.html' %}
+      {% elif obj == 'realistic' %}
+    {% include 'riasec/categories/realistic.html' %}
+      {% elif obj == 'social' %}
+    {% include 'riasec/categories/social.html' %}
+      {% elif obj == 'enterprising' %}
+    {% include 'riasec/categories/enterprising.html' %}
+      {% elif obj == 'conventional' %}
+    {% include 'riasec/categories/conventional.html' %}
+      {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+{% endif %}

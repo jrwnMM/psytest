@@ -1,0 +1,1 @@
+web: gunicorn psytests.wsgi --log-file -

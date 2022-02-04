@@ -1,0 +1,79 @@
+{% extends 'riasec/riasec_base.html' %}
+{% load static %}
+
+
+{% block title %}RIASEC{% endblock %}
+
+{% block content %}
+<header>
+    {% include 'partials/_navbar.html' %}
+</header>
+<main class="container-fluid">
+    <div class="row">
+        {% if messages %}
+        <div class="bg-danger text-white text-center">
+            {% for message in messages %}
+            {{message}}
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if not result %}
+        <div class="jumbotron jumbotron-fluid vh-91p3 d-flex align-items-center riasec-bg mb-5"
+            style="background-image: url({% static 'images/riasec-bg.jpg' %})">
+            <div class="container">
+                <h1 class="display-4 text-right">Hello, {{user.username}}</h1>
+                <p class="lead text-right">Discover which career pathway is right for you with RIASEC test.</p>
+                <div class="d-flex justify-content-start">
+                    <a class="btn riasec-btn btn-lg mx-1" href="#learnmore" role="button">Learn more</a>
+                    <a class="btn riasec-btn btn-lg mx-1" href="{% url 'riasec:test' %}" role="button">Take a test</a>
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+        </div>
+    </div>
+    {% if result %}
+    <div class="m-r-50 my-3  text-end">
+        <a class="btn riasec-btn" href="{% url 'riasec:result' %}">See result</a>
+    </div>
+    {% endif %}
+    <div id='learnmore' class="row px-5">
+        <div class="riasec-dfn-container p-5">
+            <h1>What is RIASEC Test?</h1>
+
+            <p><dfn>RIASEC</dfn> stands for 6 characteristics: Realistic, Investigative, Artistic, Social, Enterprising,
+                and
+                Conventional. The RIASEC test asks questions about your aspirations, activities, skills, and interests
+                in
+                different jobs to help you discover careers and fields of study that are likely to satisfy you</p>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                {% include 'riasec/categories/realistic.html' %}
+                {% include 'riasec/categories/investigative.html' %}
+                {% include 'riasec/categories/artistic.html' %}
+            </div>
+            <div class="col">
+                {% include 'riasec/categories/social.html' %}
+                {% include 'riasec/categories/enterprising.html' %}
+                {% include 'riasec/categories/conventional.html' %}
+
+
+
+            </div>
+        </div>
+    </div>
+    <div class="text-center mb-5">
+        <a href="#top" class="back-to-top">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-arrow-up"
+                viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+            </svg>
+            <h5>Back to top</h5>
+        </a>
+    </div>
+</main>
+{% include 'partials/footer.html' %}
+{% endblock %}

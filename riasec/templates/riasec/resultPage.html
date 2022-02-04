@@ -1,0 +1,100 @@
+{% extends 'riasec/riasec_base.html' %}
+
+{% block title %}RIASEC | Result{% endblock %}
+
+{% block content %}
+<header>
+    {% include 'partials/_navbar.html' %}
+</header>
+<main class="container-fluid">
+    <div class="row justify-content-center">
+        <div class=" w-75 mt-3 d-flex justify-content-between m-0">
+            <h1>Your RIASEC Record</h1>
+            <p class="text-muted align-self-end m-0">Last test: {{result.date_created}}</p>
+        </div>
+        <div class="w-75 border border-2 p-4 mb-2 ">
+            <div class="mb-5">
+                    <div class="row">
+                        <div class="col-4 m-auto">
+                            {% if result %}
+                            <p id="r"> <span class="bg-color-a p-2">Realistic</span> =
+                                {{result.realistic|floatformat:1}}</p>
+                            <p id="i"><span class="bg-color-b p-2">Investigative</span> =
+                                {{result.investigative|floatformat:1}}</p>
+                            <p id="a"><span class="bg-color-c p-2">Artistic</span> =
+                                {{result.artistic|floatformat:1}}</p>
+                            <p id="s"><span class="bg-color-d p-2">Social</span> =
+                                {{result.social|floatformat:1}}</p>
+                            <p id="e"><span class="bg-color-e p-2">Enterprising</span> =
+                                {{result.enterprising|floatformat:1}}</p>
+                            <p id="c"><span class="bg-color-f p-2">Conventional</span> =
+                                {{result.conventional|floatformat:1}}</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-8">
+                            <div class="chart-container m-auto" style="height:450px; width:500px">
+                                <canvas id="pieChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row justify-content-center mt-5">
+                        <div class="chart-container" style="height:50vh; width:50vw">
+                            <canvas id="barChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="row m-t-50 justify-content-center">
+                        <div class="col-4">
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                        <h5 class="card-title">Top 1</h5>
+                                    <ul>
+                                        {% for obj in top1 %}
+                                        <li>{{obj|title}}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% if top2 %}
+                        <div class="col-4">
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Top 2</h5>
+                                    {% for obj in top2 %}
+                                    <li>{{obj|title}}</li>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if top3 %}
+                        <div class="col-4">
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Top 3</h5>
+                                    {% for obj in top3 %}
+                                    <li>{{obj|title}}</li>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% include 'riasec/scripts/piechart.html' %}
+                    {% include 'riasec/scripts/barchart.html' %}
+
+            </div>
+            <!-- carousel -->
+            {% include 'riasec/carousels/top1.html' %}
+            {% include 'riasec/carousels/top2.html' %}
+            {% include 'riasec/carousels/top3.html' %}
+
+        </div>
+        
+    </div>
+
+    
+</main>
+{% include 'partials/footer.html' %}
+{% endblock %}

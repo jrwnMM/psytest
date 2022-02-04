@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<header xmlns="http://www.w3.org/1999/html">
+    {% include 'partials/_navbar.html' %}
+</header>
+<body class="d-flex flex-column min-vh-100">
+<main class="container-fluid">
+     <div class="d-flex justify-content-center">
+    <form method="post" class="p-4 border rounded-3 bg-light mt-5 col-sm-3 col-xs-6">
+        {% csrf_token %}
+
+        <h3 class="text-center color-teal mb-3">Profile Details</h3>
+        <hr>
+        <div class="form-group">
+            <div class="form-floating mb-3">
+                <input type="text" name="first_name" value="{{user.first_name}}"
+                class="form-control"
+                placeholder="Type your first name"
+                id="id_first_name" required>
+                <label for="id_first_name" class="text-muted">First Name</label>
+                {{form.first_name.errors}}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-floating mb-3">
+                <input type="text" name="last_name" value="{{user.last_name}}"
+                class="form-control"
+                placeholder="Type your last name"
+                id="id_last_name" required>
+                <label for="id_last_name" class="text-muted">Last Name</label>
+                {{form.last_name.errors}}
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <div class="form-floating mb-3">
+                <input type="text" name="username" value="{{user.username}}"
+                       class="form-control"
+                       placeholder="Type your username"
+                       id="id_username" readonly>
+                <label for="id_username" class="text-muted">Username</label>
+            </div>
+        </div>
+        {% load socialaccount %}
+        {% get_social_accounts user as accounts %}
+        <div class="form-group">
+            <div class="form-floating mb-3">
+                <input type="email" name="email" value="{{user.email}}" class="form-control"
+                placeholder="Type your email address" readonly id="id_email">
+                <label for="id_email" class="text-muted">Email</label>
+                {{form.email.errors}}
+            </div>
+        </div>
+        <div class="visually-hidden">
+            {{form.is_superuser}}
+        </div>
+
+        <div class="row justify-content-around p-3 ">
+        <a class="btn btn-primary btn-block mt-2" href="{% url 'password_reset' %}">Change Password</a>
+        <button type="submit" class="btn btn-success btn-block mt-2">Update Profile</button>
+        </div>
+    </form>
+     </div>
+</main>
+</body>
+<footer class="mt-auto">
+    {% include 'partials/footer.html' %}
+</footer>
+{% endblock %}

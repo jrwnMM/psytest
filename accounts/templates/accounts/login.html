@@ -1,0 +1,109 @@
+{% extends 'accounts/base.html' %}
+
+
+{% load socialaccount %}
+{% providers_media_js %}
+
+{% load static %}
+
+
+{% block title %}Login{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid vh-100 login-bg">
+    <div class="row justify-content-end">
+        <div class="col-xs-6 col-sm-8">
+            <div class="d-flex justify-content-end m-5">
+                <div class="align-self-center mx-2">
+                    <h1>PSYTEST</h1>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <img src="{% static 'images/jmcseal.png' %}" alt="" class="logo-50">
+                    <img src="{% static 'images/cite.png' %}" alt="" class="logo-50">
+                    <img src="{% static 'images/psychology.png' %}" alt="" class="logo-50">
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <div class="mx-auto mt-5">
+                <h3 class="text-center color-teal mb-3">Login to Continue</h3>
+                <!-- form -->
+                <form class="p-4 border rounded-3 bg-light" action="{% url 'accounts:login' %}" method="post">
+                    {% csrf_token %}
+                    <!-- input div -->
+                    <div>
+                        <div class="form-floating mb-3">
+                            <input type="email/username" class="form-control" id="username"
+                                placeholder="example@email.com" name='username' required>
+                            <label for="username" class="text-muted">Username/Email</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="password" placeholder="example@email.com"
+                                name='password' required>
+                            <label for="password" class="text-muted">password</label>
+                        </div>
+                        <div class="d-flex justify-content-end custom-control custom-checkbox mb-4">
+                            <!-- <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="remember-me" value="rememberme">
+                                <label class="form-check-label text-muted" for="remember-me">Remember me</label>
+                            </div> -->
+                            <a href="{% url 'password_reset' %}" class="fs-15">Forgot Password?</a>
+                        </div>
+                        <button class="btn-style btn w-100 fs-17 p-2 rounded-pill">Login</button>
+                    </div>
+                    <!-- or div -->
+                    <div class="d-flex justify-content-center my-2">
+                        <small class="separator w-50">or</small>
+                    </div>
+                    <!-- Social login div -->
+                    <div class="d-flex flex-column">
+                        <!-- <a href="{% provider_login_url 'google'%}"  -->
+                        <a href="{% provider_login_url 'google'%}"
+                            class="login-google-social social-bg2 flex-c-m mt-2 btn w-100 p-4 rounded-pill"
+                            type="button"><img src="{% static 'images/google.png' %}" alt="googleicon" id="google-icon">
+                            <span>
+                                Continue with Google
+                            </span>
+                        </a>
+<!--                        <a class="login-google-social social-bg2 flex-c-m mt-2 btn w-100 p-4 rounded-pill" type="button"-->
+<!--                            data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top"-->
+<!--                            data-bs-content="Available soon" tabindex="0" data-bs-trigger="focus">-->
+<!--                            <img src="{% static 'images/google.png' %}" alt="googleicon" id="google-icon">-->
+<!--                            <span>-->
+<!--                                Continue with Google-->
+<!--                            </span>-->
+<!--                        </a>-->
+                        <!-- href="{% provider_login_url 'facebook' method='js_sdk' %}" -->
+                        <a class="login-fb-social social-bg1 flex-c-m mt-2 btn w-100 p-4 rounded-pill" type="button"
+                            data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top"
+                            data-bs-content="Available soon" tabindex="0" data-bs-trigger="focus">
+                            <svg id="fb-icon" xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                                fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
+                                <path
+                                    d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z" />
+                            </svg>
+                            <span>
+                                Continue with Facebook
+                            </span>
+                        </a>
+                    </div>
+                </form>
+                <!-- error message div -->
+                <div>
+                    {% for message in messages %}
+                    <p class="m-t-25 text-center" id="messages" style="color:red;">{{message}}</p>
+                    {% endfor %}
+                </div>
+                <!-- sign up link div -->
+                <div class="text-muted mt-3 text-center">Don't have an account? <a href="{% url 'accounts:register' %}"
+                        style="color:#0d6efd">Sign up</a>
+                    <div class="mt-2 text-center">
+                        <small>By clicking Sign up, you agree to the terms of use.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

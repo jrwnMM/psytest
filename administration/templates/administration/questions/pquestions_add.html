@@ -1,0 +1,36 @@
+{% extends 'personalityTest/base.html' %}
+{% load static %}
+
+{% block title %}Add/Edit Personality Test Questionnaires{% endblock %}
+
+{% block content %}
+<main class="container w-50">
+    <div class="mt-5">
+        <div class="text-center">
+            <h3>Personality Test Questionnaire Edit/Add</h3>
+        </div>
+    </div>
+    <div class="border-1-round-box p-3">
+        <form method="post">
+            {% csrf_token %}
+            <div>
+                <label for="">Question:</label>
+                {{form.question}}
+            </div>
+            <div class="mt-2">
+                <label for="">Category:</label>
+                {{form.category}}
+            </div>
+            <div class="mt-2">
+                <label for="">Key:</label>
+                {{form.key}}
+            </div>
+            <div class="text-center mt-2">
+                <input class="btn btn-teal" type="submit">
+            </div>
+        </form>
+    </div>
+    </main>
+
+</div>
+{% endblock %}

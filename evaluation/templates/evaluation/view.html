@@ -1,0 +1,74 @@
+{% extends 'evaluation/base.html' %}
+
+{% block title %}User Feedback{% endblock %}
+
+{% block content %}
+<main class="container">
+    <div class="row justify-content-center mb-5">
+        <div class="col-sm-6 col-xs-6 p-4">
+            <div class="mb-5">
+                <h1>User Feedback Evaluation</h1>
+                <hr>
+                <p class="fs-12">Kindly answer all questions honestly.</p>
+                <hr>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                {% for question in ratings %}
+                <div class="mb-2">
+                    <p>{{forloop.counter}}.) {{question}}</p>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="rate_{{question.id}}"
+                        id="notsatistifed_{{question.id}}" value="1" required>
+                    <label class="form-check-label" for="notsatistifed_{{question.id}}">
+                        Not satisfied at all
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="rate_{{question.id}}" id="notso_{{question.id}}"
+                        value="2" required>
+                    <label class="form-check-label" for="notso_{{question.id}}">
+                        Not so satisfied
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="rate_{{question.id}}" id="somewhat_{{question.id}}"
+                        value="3" required>
+                    <label class="form-check-label" for="somewhat_{{question.id}}">
+                        Somewhat satisfied
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="rate_{{question.id}}" id="satisfied_{{question.id}}"
+                        value="4" required>
+                    <label class="form-check-label" for="satisfied_{{question.id}}">
+                        Satisfied
+                    </label>
+                </div>
+                <div class="form-check mb-4">
+                    <input class="form-check-input" type="radio" name="rate_{{question.id}}" id="very_{{question.id}}"
+                        value="5" required>
+                    <label class="form-check-label" for="very_{{question.id}}">
+                        Very satisfied
+                    </label>
+                </div>
+                {% endfor %}
+
+                {% for question in essays %}
+                <div>
+                    <div class="mb-2">
+                        <p>{{forloop.counter}}.) {{question}}</p>
+                    </div>
+                    <textarea class="form-control mb-3" rows="3" name="essay_{{question.id}}"></textarea>
+                </div>
+                {% endfor %}
+                <div>
+                    <button type="submit" class="btn btn-teal w-100">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

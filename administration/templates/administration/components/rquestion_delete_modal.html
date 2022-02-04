@@ -1,0 +1,18 @@
+<div class="modal fade" id="rquestions_delete{{question.id}}" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Question</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure to delete this question?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="{% url 'administration:rquestions_delete' slug=question.slug  %}" class="btn btn-danger me-3">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>

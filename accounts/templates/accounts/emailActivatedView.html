@@ -1,0 +1,16 @@
+{% extends "accounts/base.html" %}
+{% block title %}Account Activated{% endblock %}
+{% block content %}
+
+
+<div class="row justify-content-center px-5">
+    <div class="col-sm-8 col-xs-6 border-1 mt-5 p-4">
+        <div class="text-center">
+            <h1>Email Activated</h1>
+        </div>
+        <div class="text-center">
+            <p>Thank you for your email confirmation. Now you can <a href="{% url 'accounts:login' %}" class="link-teal">login</a>  your account.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

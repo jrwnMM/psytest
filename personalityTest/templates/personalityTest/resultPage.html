@@ -1,0 +1,125 @@
+{% extends 'personalityTest/base.html' %}
+
+{% block title %}Personality Test | Results{% endblock %}
+
+{% block content %}
+<header>
+    {% include 'partials/_navbar.html' %}
+</header>
+<main class="container-fluid">
+    <div class="row justify-content-center">
+        <div class=" w-75 mt-3 d-flex justify-content-between m-0">
+            <h1>Your Personality Record</h1>
+            <p class="text-muted align-self-end m-0">Last test: {{results.date_created}}</p>
+        </div>
+        <div class="w-75 border border-2 p-4 mb-2 ">
+            <div class="row">
+                <div class="chart-container mx-auto" style="position: relative; height:50vh; width:50vw">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                {% include 'personalityTest/components/barchart.html' %}
+                <table class="table w-50 mx-auto">
+                    <thead>
+                        <th>Extroversion</th>
+                        <th>Neurotic</th>
+                        <th>Agreeable</th>
+                        <th>Conscientious</th>
+                        <th>Openness</th>
+                        <th>Prediction</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{results.extroversion}}</td>
+                            <td>{{results.neurotic}}</td>
+                            <td>{{results.agreeable}}</td>
+                            <td>{{results.conscientious}}</td>
+                            <td>{{results.openness}}</td>
+                            <td>{{results.prediction}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="text-center my-5">
+                    <h2>{{personalityTest_result.prediction}}</h2>
+                </div>
+                <div class="chart-container mx-auto" style="position: relative; height:50vh; width:50vw">
+                    <canvas id="clusterBarChart"></canvas>
+                </div>
+                {% include 'stats/personalityTest-scripts/clusterBarChart.html' %}
+                <table class="table w-50 mx-auto">
+                    <thead>
+                        <th>Extroversion</th>
+                        <th>Neurotic</th>
+                        <th>Agreeable</th>
+                        <th>Conscientious</th>
+                        <th>Openness</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{prediction.extroversion|floatformat:1}}</td>
+                            <td>{{prediction.neurotic|floatformat:1}}</td>
+                            <td>{{prediction.agreeable|floatformat:1}}</td>
+                            <td>{{prediction.conscientious|floatformat:1}}</td>
+                            <td>{{prediction.openness|floatformat:1}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center my-5">
+                <h2>The Big Five Personality Traits</h2>
+            </div>
+            <div id="traitscarousel" class="carousel carousel-dark slide" data-bs-interval="false">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#traitscarousel" data-bs-slide-to="0" class="active"
+                        aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#traitscarousel" data-bs-slide-to="1"
+                        aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#traitscarousel" data-bs-slide-to="2"
+                        aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#traitscarousel" data-bs-slide-to="3"
+                        aria-label="Slide 4"></button>
+                    <button type="button" data-bs-target="#traitscarousel" data-bs-slide-to="4"
+                        aria-label="Slide 5"></button>
+                </div>
+                <div class="carousel-inner pb-5">
+                    <div class="carousel-item active" data-bs-interval="false">
+                        {% include 'personalityTest/traits/conscientious.html' %}
+                    </div>
+                    <div class="carousel-item" data-bs-interval="false">
+                        {% include 'personalityTest/traits/agreeable.html' %}
+                    </div>
+                    <div class="carousel-item" data-bs-interval="false">
+                        {% include 'personalityTest/traits/extroversion.html' %}
+                    </div>
+                    <div class="carousel-item" data-bs-interval="false">
+                        {% include 'personalityTest/traits/openness.html' %}
+                    </div>
+                    <div class="carousel-item" data-bs-interval="false">
+                        {% include 'personalityTest/traits/neurotic.html' %}
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#traitscarousel"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#traitscarousel"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</main>
+{% include 'partials/footer.html' %}
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends 'administration/base.html' %}
+{% load static %}
+
+{% block title %}Users to Check{% endblock %}
+{% block content %}
+<header>
+    {% include 'partials/_navbar.html' %}
+</header>
+<main class="container">
+    <div class="row justify-content-center mt-3">
+        <div class="col-sm-4 col-xs-6">
+            <h1>Users to Check</h1>
+            <div class="list-group">
+                <a href="{% url 'administration:pending-users' %}" class="list-group-item item-badge-between link-teal">
+                    Pending
+                    <span class="badge bg-danger">{{users_pending}}</span>
+                </a>
+                <a href="{% url 'administration:assigned-users' %}"
+                    class="list-group-item item-badge-between link-teal">
+                    Assigned
+                    <span class="badge bg-info">{{users_assigned}}</span>
+                </a>
+
+            </div>
+        </div>
+        <div class="col-sm-8 col-xs-6 pt-5">
+            <div class="d-flex justify-content-between mb-2">
+                <h3>Pending users</h3>
+                <form method='GET' class="w-75 my-auto">
+                    <div class="d-flex justify-content-end">
+                        <div class="w-75">
+                            {{form.name}}
+                        </div>
+                        <button class="btn teal-btn ms-2" type='submit'>Search</button>
+                    </div>
+                </form>
+            </div>
+            <div>
+                {% if users %}
+                <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{user.user.first_name}}</td>
+                            <td>{{user.user.last_name}}</td>
+                            <td>
+                                <div class="d-flex justify-content-evenly">
+                                <a
+                                    href="{% url 'administration:user_detail' user=user.user.username pk=user.user.pk %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#5F4B8BFF"
+                                        class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z" />
+                                        <path fill-rule="evenodd"
+                                            d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z" />
+                                    </svg>
+                                </a>
+                                <a
+                                    href="#" data-bs-toggle="modal" data-bs-target="#send_msg_{{user.user.username}}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#89CFF0" class="bi bi-envelope" viewBox="0 0 16 16">
+                                        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
+                                      </svg>
+                                </a>
+                                {% include 'administration/components/send-msg-modal.html' %}
+                                <a
+                                    href="{% url 'administration:set-schedule' user.user.username %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#f4c430" class="bi bi-calendar2-plus" viewBox="0 0 16 16">
+                                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z"/>
+                                        <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4zM8 8a.5.5 0 0 1 .5.5V10H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V11H6a.5.5 0 0 1 0-1h1.5V8.5A.5.5 0 0 1 8 8z"/>
+                                      </svg>
+                                </a>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#approve_{{user.user.username}}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="green" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                      <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                                    </svg>
+                                  </a>
+                                  {% include 'administration/components/p-approve_modal.html' %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+                {% else %}
+                <div class="text-center">
+                    <img class="w-75" src="{% static 'images/no-sched.png' %}" alt="">
+                    <div>
+                        <h3>
+                            no pending users
+                        </h3>
+                    </div>
+                    {% endif %}
+                </div>
+                {% if is_paginated %}
+                <nav aria-label="Page navigation" class="m-5">
+                    <ul class="pagination justify-content-end">
+                        {% if page_obj.has_previous %}
+                        <li><a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo; PREV </a></li>
+                        {% endif %}
+                        {% for i in page_obj.paginator.page_range %}
+                        <li class="page-item {% if page_obj.number == i %}disabled{% endif %}"><a class="page-link"
+                                href="?page={{ i }}">{{i}}</a></li>
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                        <li><a href="?page={{ page_obj.next_page_number }}" class="page-link"> NEXT
+                                &raquo;</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            </div>
+        </div>
+</main>
+{% endblock %}

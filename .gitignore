@@ -1,0 +1,22 @@
+### Python ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+
+#vscode
+.vscode
+
+#sqlite3
+db.sqlite3
+
+
+
+
+# End of https://www.toptal.com/developers/gitignore/api/python

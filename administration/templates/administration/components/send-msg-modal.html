@@ -1,0 +1,24 @@
+<div class="modal fade" id="send_msg_{{user.user.username}}" tabindex="-1" aria-labelledby="message-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="message-label">Send your message here</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <form method="post" action="{% url 'administration:send-msg' user.user.username %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                <label class="mb-2" for="subject">Subject:</label>
+                <input type="text" name="subject" class="form-control" maxlength="100" required="" id="id_subject">
+                <label class="mb-2" for="message">Message:</label>    
+                <textarea name="message" cols="40" rows="10" class="form-control" maxlength="360" required="" id="id_message"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">close</button>
+                    <button type="submit" class="btn btn-success me-3">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

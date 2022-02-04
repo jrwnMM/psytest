@@ -1,0 +1,164 @@
+/* Login Page */
+a {
+  text-decoration: none;
+  color: #555;
+}
+
+a:focus {
+  outline: none !important;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #008080;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #008080;
+  border: none;
+}
+
+.social-bg1 {
+  background: #3b5998;
+}
+.soical-bg2 {
+  background: #fff;
+}
+
+.login-bg {
+  background-image: url("../images/login-img.f47c690c2df1.svg");
+  background-repeat: no-repeat;
+  background-size: 60%;
+  background-position: 8% 25%; 
+}
+
+.btn-style {
+  background: #008080;
+  color: white;
+  border: none;
+}
+
+.btn-style:hover {
+  background: #008080;
+  color: white;
+  opacity: 0.9;
+}
+
+.login-fb-social {
+  width: 36px;
+  height: 36px;
+  color: #fff;
+  font-size: 15px;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+}
+
+.login-google-social {
+  font-size: 15px;
+  font-size: 15px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+}
+
+.login-fb-social:hover {
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+  color: #fff;
+  border-radius: 50%;
+}
+
+.login-google-social:hover {
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.flex-c-m {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  -ms-align-items: center;
+  align-items: center;
+}
+
+#google-icon {
+  width: 25px;
+  margin-right: 15px;
+}
+
+#fb-icon {
+  margin-right: 15px;
+}
+/* Register Page */
+
+.separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.separator::before,
+.separator::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #000;
+}
+
+.separator:not(:empty)::before {
+  margin-right: 0.25em;
+}
+
+.separator:not(:empty)::after {
+  margin-left: 0.25em;
+}
+
+.title-style {
+  background: #008080;
+  color: white;
+  border: none;
+}
+input[class="form-control"]:focus {
+  box-shadow: 0 0 0 0.25rem rgba(0, 128, 128, 0.3);
+  border: none;
+  border-color: #008080;
+}
+
+select[class="form-select"]:focus {
+  box-shadow: 0 0 0 0.25rem rgba(0, 128, 128, 0.3);
+  border: none;
+  border-color: #008080;
+}
+
+input[type="checkbox"]:focus {
+  box-shadow: 0 0 0 0.25rem rgba(0, 128, 128, 0.2);
+  border: none;
+}
+
+@media screen and (max-width: 576px) {
+  .login-bg {
+    background-image: none;
+  }
+
+  div.d-flex.justify-content-end.m-5 {
+    display: flex!important;
+    justify-content: center!important;
+    flex-direction: column;
+    margin: 0px!important;
+    margin-top: 20px!important;
+  }
+  div.mx-auto.mt-5 {
+    margin: 0px !important;
+    margin-top: 20px!important;
+  }
+
+  .border-1-round-box {
+    border: none;
+    border-radius: none;
+    box-shadow: none;
+  }
+  
+}

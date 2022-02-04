@@ -1,0 +1,95 @@
+{% extends 'administration/base.html' %}
+{% load static %}
+{% block title %}Assigned Users{% endblock %}
+{% block content %}
+<header>
+    {% include 'partials/_navbar.html' %}
+</header>
+<main class="container">
+    <div class="row justify-content-center mt-3">
+        <div class="col-sm-4 col-xs-6">
+            <h1>Users to Check</h1>
+            <div class="list-group">
+                <a href="{% url 'administration:pending-users' %}" class="list-group-item item-badge-between link-teal">
+                    Pending
+                    <span class="badge bg-danger">{{users_pending}}</span>
+                </a>
+                <a href="{% url 'administration:assigned-users' %}"
+                    class="list-group-item item-badge-between link-teal">
+                    Assigned
+                    <span class="badge bg-info">{{users_assigned}}</span>
+                </a>
+
+            </div>
+        </div>
+        <div class="col-sm-8 col-xs-6 pt-5">
+            <div class="d-flex justify-content-between mb-2">
+                <h3>Assigned users</h3>
+                <form method='GET' class="w-75 my-auto">
+                    <div class="d-flex justify-content-end">
+                        <div class="w-75">
+                            {{form.name}}
+                        </div>
+                        <button class="btn teal-btn ms-2" type='submit'>Search</button>
+                    </div>
+                </form>
+            </div>
+            <div>
+                {% if users %}
+                <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Date Assigned</th>
+                            <th>Managed By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{user.user.user.first_name}}</td>
+                            <td>{{user.user.user.last_name}}</td>
+                            <td></td>
+                            <td>{{user.managed_by.user.first_name}} {{user.managed_by.user.last_name}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+                {% else %}
+                <div class="text-center">
+                    <img class="w-75" src="{% static 'images/no-sched.png' %}" alt="">
+                    <div>
+                      <h3>
+                        no assigned users
+                      </h3>
+                    </div>
+                {% endif %}
+            </div>
+            {% if is_paginated %}
+            <nav aria-label="Page navigation" class="m-5">
+                <ul class="pagination justify-content-end">
+                    {% if page_obj.has_previous %}
+                    <li><a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo; PREV </a></li>
+                    {% endif %}
+                    {% for i in page_obj.paginator.page_range %}
+                    <li class="page-item {% if page_obj.number == i %}disabled{% endif %}"><a class="page-link"
+                            href="?page={{ i }}">{{i}}</a></li>
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                    <li><a href="?page={{ page_obj.next_page_number }}" class="page-link"> NEXT
+                            &raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock %}

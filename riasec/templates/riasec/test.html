@@ -1,0 +1,60 @@
+{% extends 'riasec/riasec_base.html' %}
+
+{% block title %}Career Test{% endblock %}
+
+
+{% block content %}
+<div class="sticky-top pt-3 ps-4">
+    <h5>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left color-teal" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+            </svg>
+        <a href="{% url 'assessment' %}" class="back-link">Back</a>
+    </h5>
+</div>
+<main class="d-flex justify-content-center">
+    <div class="container-test">
+        <h1>Career Test</h1>
+        <p class="p-2">
+            Rate each task by how much you would enjoy performing them on a scale of <b>(1) Strongly Disagree (2) Disagree (3) Neutral (4) Agree (5) Strongly Agree</b>. Please answer as honestly as possible for an accurate result.
+        </p>
+        <hr>
+        <form action="{% url 'riasec:test_evaluate' %}" method="POST">
+            {% for question in questions %}
+            <p id="question_{{forloop.counter}}" class="mt-5">{{forloop.counter}}. {{question.question}}</p>
+            {% csrf_token %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="{{question.id}}" id="dislike_{{question.id}}" value="0"
+                    required>
+                <label for="dislike_{{question.id}}">Strongly Disagree</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="{{question.id}}" id="slightly dislike_{{question.id}}"
+                    value="0.25" required>
+                <label for="slightly dislike_{{question.id}}">Disagree</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="{{question.id}}" id="neutral_{{question.id}}" value="0.5"
+                    required>
+                <label for="neutral_{{question.id}}">Neutral</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="{{question.id}}" id="slightly enjoy_{{question.id}}"
+                    value="0.75" required>
+                <label for="slightly enjoy_{{question.id}}">Agree</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="{{question.id}}" id="enjoy_{{question.id}}" value="1"
+                    required>
+                <label for="enjoy_{{question.id}}">Strongly Agree</label>
+            </div>
+            <br>
+            <hr>
+            {% endfor %}
+            <div class="d-flex flex-column p-2 justify-content-center">
+                <input id='submit' type="submit" class="btn riasec-btn btn-lg btn-block" value="Submit">
+            </div>
+        </form>
+    </div>
+</main>
+{% endblock %}

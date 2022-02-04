@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<header>
+    {% include 'partials/_navbar.html' %}
+</header>
+<main class="conainer-fluid">
+    {% if messages %}
+    <div class="bg-success text-white text-center">
+        {% for message in messages %}
+        {{message}}
+        {% endfor %}
+    </div>
+    {% endif %}
+    <!-- Banner -->
+    <section class="banner px-5" style="background-color: #E5F2F2;">
+        <div class="content text-center p-b-160">
+            <div class="m-5">
+                <img src="{% static 'images/jmcseal.png' %}" alt="" class="logo-100">
+                <img src="{% static 'images/cite.png' %}" alt="" class="logo-100">
+                <img src="{% static 'images/psychology.png' %}" alt="" class="logo-100">
+            </div>
+            <header>
+                <h1 class="fs-60">Welcome!</h1>
+            </header>
+            <div>
+                <p class="fs-17">Take a psychological test</p>
+                <a href="{% url 'assessment' %}" class="btn btn-outline-teal mt-3">Click here</a>
+            </div>
+        </div>
+        <span class="image object align-self-center">
+            <img class="img-responsive border border-1 border-dark" src="{% static 'images/home-img.jpg' %}" />
+        </span>
+    </section>
+    <section class="banner px-5 py-3" style="background-color: #f5f5dc;">
+        <span class="image object">
+            <img  class="p-3" src="{% static 'images/decision.svg' %}" alt="" />
+        </span>
+        <div class="content d-flex align-self-center justify-content-center">
+            <h5 class="">Learn what <span style="color: #0b3b5a;">career</span> suites you</h5>
+        </div>
+    </section>
+    <section class="banner px-5 py-3" style="background-color: #f5f5f5;">
+        <span class="image object">
+            <img  class="p-3" src="{% static 'images/personality.svg' %}" alt="" />
+        </span>
+            <div class="content d-flex align-self-center justify-content-center">
+                <div>
+                    <h5 class="">Learn what <span style="color: #0b3b5a;">personality</span> attributes you have</h5>
+                </div>
+            </div>
+    </section>
+</main>
+<footer>
+    {% include 'partials/footer.html' %}
+</footer>
+{% endblock %}

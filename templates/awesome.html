@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Well done!
+{% endblock %}
+
+{% block content %}
+<div class="text-center w-50 mx-auto">
+    <div class="mt-5">
+        {% if riasec and personality %}
+        <img src="{% static 'images/welldone1.png' %}" alt="" class="w-75">
+        {% else %}
+        <img src="{% static 'images/processing.png' %}" alt="" class="w-75">
+        {% endif %}
+        <div class="text-center mt-5">
+            {% if riasec and personality %}
+            <div>
+                <h1>Congratulations!</h1>
+                <p class="fs-20">You completed all the test</p>
+                <p>click<a href="{% url 'assessment' %}" class="link-teal"> here</a> to continue</p>
+            </div>
+            {% else %}
+            <div>
+                <h1>Awesome!</h1>
+                {% if riasec %}
+                <p class="fs-20">You completed the career test</p>
+                <p>
+                    Click <a href="{% url 'personalityTest:test' %}" class="link-teal">here</a> to proceed to
+                    personality test
+                </p>
+                {% endif %}
+                {% if personality %}
+                <p class="fs-20">You completed the personality test</p>
+                <p>
+                    Click <a href="{% url 'riasec:test' %}" class="link-teal">here</a> to proceed to career test
+                </p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

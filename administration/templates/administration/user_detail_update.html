@@ -1,0 +1,38 @@
+{% extends 'administration/base.html' %}
+
+{% block title %}user update{% endblock %}
+
+{% block content %}
+<div class="sticky-top pt-3 ps-4">
+    <h5>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left color-teal" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+            </svg>
+        <a href="{% url 'administration:user-management' %}" class="back-link">Back</a>
+    </h5>
+</div>
+<main class="container">
+    <div class="container-50 mx-auto p-5">
+        <h3>Change the inputs to edit</h3>
+        <form method="post"> 
+            {% csrf_token %}
+            <label class="mt-4">Username:</label>
+            {{form.username}}
+            <label class="mt-2">First Name:</label>
+            {{form.first_name }}
+            <label class="mt-2">Last Name:</label>
+            {{form.last_name}}
+            <label class="mt-2">Email:</label>
+            {{form.email}}
+            <div class="my-3">
+                <label class="me-2">Is_superuser:</label>
+                {{form.is_superuser}}
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn teal-btn">Save</button>
+            </div>
+        </form> 
+    </div>
+</main>
+    
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends 'personalityTest/base.html' %}
+{% load static %}
+
+{% block title %}Personality Test{% endblock %}
+
+{% block content %}
+<header>
+    {% include 'partials/_navbar.html' %}
+</header>
+<main class="container-fluid">
+    <div class="row">
+        {% if messages %}
+        <div class="bg-danger text-white text-center">
+            {% for message in messages %}
+            {{message}}
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if not results %}
+        <div class="jumbotron jumbotron-fluid vh-91p3 d-flex align-items-center pt-bg mb-5"
+            style="background-image: url({% static 'images/pt-bg.jpg' %});">
+            <div class="container">
+                <div class="row justify-content-start">
+
+                    <h1 class="display-4">Hello, {{user.username}}</h1>
+                    <p class="lead">Discover your personality with the test, powered by machine learning.</p>
+                    <div class="d-flex">
+                        <p><a class="btn pt-btn btn-lg mx-1" href="#learnmore" role="button">Learn more</a></p>
+                        <p><a class="btn pt-btn btn-lg mx-1" href="{% url 'personalityTest:test' %}" role="button">Take
+                                a test</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% if results %}
+    <div class="m-r-50 my-3  text-end">
+        <a class="btn pt-btn" href="{% url 'personalityTest:result' %}">See result</a>
+    </div>
+    {% endif %}
+    <div class="row px-5" id="learnmore">
+        <div class="dfn-box p-5 mb-3 m-0">
+            <h1 class="">The Big Five Personality Traits</h1>
+            <p>The Big Five Model, also known as the Five-Factor Model, is the most widely accepted personality
+                theory held by psychologists today. The theory states that personality can be boiled down to five
+                core factors, known by the acronym CANOE or OCEAN</p>
+        </div>
+        {% include 'personalityTest/traits/conscientious.html' %}
+        {% include 'personalityTest/traits/agreeable.html' %}
+        {% include 'personalityTest/traits/extroversion.html' %}
+        {% include 'personalityTest/traits/openness.html' %}
+        {% include 'personalityTest/traits/neurotic.html' %}
+
+    </div>
+    <div class="row traits-box m-4">
+        <div class="text-center my-4">
+            <h2>Different Clusters from Machine Learning</h2>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="chart-container mx-auto" style="position: relative; height: 50vh; width: 80vh">
+                    <h5 class="m-4">Cluster 1</h5>
+                    <canvas id="cluster1"></canvas>
+                    {% include 'personalityTest/clusters/cluster1.html' %}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="chart-container mx-auto" style="height: 50vh; width: 80vh">
+                    <h5 class="m-4">Cluster 2</h5>
+                    <canvas id="cluster2"></canvas>
+
+                    {% include 'personalityTest/clusters/cluster2.html' %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="chart-container mx-auto" style="height: 50vh; width: 80vh">
+                    <h5 class="m-4">Cluster 3</h5>
+                    <canvas id="cluster3"></canvas>
+
+                    {% include 'personalityTest/clusters/cluster3.html' %}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="chart-container mx-auto" style="height: 50vh; width: 80vh">
+                    <h5 class="m-4">Cluster 4</h5>
+                    <canvas id="cluster4"></canvas>
+
+                    {% include 'personalityTest/clusters/cluster4.html' %}
+                </div>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="chart-container mx-auto" style="height: 50vh; width: 80vh">
+                <h5 class="m-4">Cluster 5</h5>
+                <canvas id="cluster5"></canvas>
+                {% include 'personalityTest/clusters/cluster5.html' %}
+            </div>
+        </div>
+    </div>
+    <div class="text-center my-5">
+        <a href="#top" class="back-to-top">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-arrow-up"
+                viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+            </svg>
+            <h5>Back to top</h5>
+        </a>
+    </div>
+</main>
+{% include 'partials/footer.html' %}
+    {% endblock %}

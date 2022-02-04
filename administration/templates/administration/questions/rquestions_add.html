@@ -1,0 +1,30 @@
+{% extends 'personalityTest/base.html' %}
+
+{% block title %}Add/Edit Career Test Questionnaires{% endblock %}
+
+{% block content %}
+<main class="container" style="max-width:800px">
+    <div class="mt-5">
+        <div class="text-center">
+            <h3>Career Test Questionnaire Edit/Add</h3>
+        </div>
+    </div>
+    <div class="border-1-round-box p-3">
+        <form method="post">
+            {% csrf_token %}
+            <div>
+                <label for="">Question:</label>
+                {{form.question}}
+            </div>
+            <div class="mt-2">
+                <label for="">Category</label>
+                {{form.category}}
+            </div>
+            <div class="text-center mt-2">
+                <input type="submit" class="btn btn-teal">
+            </div>
+        </form>
+    </div>
+
+</main>
+{% endblock %}

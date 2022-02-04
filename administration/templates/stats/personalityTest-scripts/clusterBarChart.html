@@ -1,0 +1,63 @@
+<script>
+    let clusterbarChart= document.getElementById('clusterBarChart').getContext('2d');
+    // Global Options
+    Chart.defaults.global.defaultFontFamily = 'Lato';
+    Chart.defaults.global.defaultFontSize = 18;
+    Chart.defaults.global.defaultFontColor = '#777';
+  
+    let clusterBarChart = new Chart(clusterbarChart, {
+      type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+      data: {
+        labels: ['E', 'N', 'A', 'C', 'O'],
+        datasets: [{
+          label: 'Result',
+  
+          data: [
+            {{ prediction.extroversion|floatformat:1}},
+            {{ prediction.neurotic|floatformat:1 }},
+            {{ prediction.agreeable|floatformat:1 }},
+            {{ prediction.conscientious|floatformat:1 }},
+            {{ prediction.openness|floatformat:1 }},
+            ],
+            
+    backgroundColor: [
+      '#a7414a',
+      '#282726',
+      '#6a8a82',
+      '#a37c27',
+      '#563838',
+    ],
+      borderWidth: 1,
+        borderColor: '#777',
+          hoverBorderWidth: 3,
+            hoverBorderColor: '#000'
+          }]
+        },
+    options: {
+      responsive:true,
+      scales: {
+        yAxes: [{
+            display: true,
+            ticks: {
+                max: 5,
+                beginAtZero: true   // minimum value will be 0.
+            }
+        }]
+    },
+      legend: {
+        display: false,
+      },
+      layout: {
+        padding: {
+          left: 0,
+            right: 0,
+              bottom: 0,
+                top: 0
+        }
+      },
+      tooltips: {
+        enabled: true
+      }
+    }
+      });
+  </script>

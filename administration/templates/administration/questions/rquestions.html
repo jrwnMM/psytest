@@ -1,0 +1,84 @@
+{% extends 'administration/base.html' %}
+{% load static %}
+
+{% block title %}Career Questions{% endblock %}
+
+{% block content %}
+<header>
+    {% include 'partials/_navbar.html' %}
+</header>
+<main class="container-fluid">
+
+    {% if rquestions %}
+    <div class="row justify-content-center">
+        <div class="col-sm-8 col-xs-6 mt-3">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h3>Career Test Questionnaires</h3>
+                </div>
+                <div class="d-flex align-self-center">
+                    <a href="{% url 'administration:rquestions_add' %}" class="link-teal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                            class="bi bi-plus-square-fill me-3 " viewBox="0 0 16 16">
+                            <path
+                                d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <hr>
+
+            {% for question in rquestions %}
+            <div class="d-flex justify-content-between mb-2">
+                <div>
+                    <span>{{ forloop.counter0|add:page_obj.start_index }}.)</span>
+                    <span>{{question.get_category_display}} - {{question|capfirst}}</span>
+                </div>
+                <div class="d-flex align-items-center ms-5">
+                    <a style="text-decoration:none;"
+                        href="{% url 'administration:rquestions_edit' slug=question.slug %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="gray"
+                            class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path
+                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                            <path fill-rule="evenodd"
+                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                        </svg>
+                    </a>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#rquestions_delete{{question.id}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" class="bi bi-trash"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                            <path fill-rule="evenodd"
+                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            {% include 'administration/components/rquestion_delete_modal.html' %}
+            {% endfor %}
+            {% endif %}
+
+            <!-- Page -->
+            {% if is_paginated %}
+            <nav aria-label="Page navigation" class="mt-5">
+                <ul class="pagination justify-content-end m-0">
+                    {% if page_obj.has_previous %}
+                    <li><a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo; PREV </a></li>
+                    {% endif %}
+                    {% for i in page_obj.paginator.page_range %}
+                    <li class="page-item {% if page_obj.number == i %}disabled{% endif %}"><a class="page-link"
+                            href="?page={{ i }}">{{i}}</a></li>
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                    <li><a href="?page={{ page_obj.next_page_number }}" class="page-link"> NEXT
+                            &raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock %}

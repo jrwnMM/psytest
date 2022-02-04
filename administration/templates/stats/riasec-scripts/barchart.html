@@ -1,0 +1,62 @@
+<script>
+    let barChart = document.getElementById('barChart').getContext('2d');
+    // Global Options
+    Chart.defaults.global.defaultFontFamily = 'Lato';
+    Chart.defaults.global.defaultFontSize = 18;
+    Chart.defaults.global.defaultFontColor = '#777';
+
+    let riasecBarChart = new Chart(barChart, {
+      type:'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+      data:{
+        labels:['Top 1'{% if top2 %},'Top 2'{% endif %}{% if top3 %}, 'Top 3'{% endif %}],
+        datasets:[{
+          label:'Result',
+
+          data:[
+          {{top1value|floatformat:1}},
+          {% if top2 %}{{top2value|floatformat:1}},{% endif %}
+          {% if top3 %}{{top3value|floatformat:1}},{% endif %}
+          ],
+          
+          backgroundColor:[
+          '#008080',
+          '#4da6a6',
+          '#99cccc',
+          ],
+          borderWidth:1,
+          borderColor:'#777',
+          hoverBorderWidth:3,
+          hoverBorderColor:'#000'
+        }]
+      },
+      options:{
+        scales: {
+          yAxes: [{
+              display: true,
+              ticks: {
+                  max: 100,
+                  beginAtZero: true   // minimum value will be 0.
+              }
+          }]
+      },
+        legend:{
+          display:false,
+          position:'right',
+          labels:{
+            fontColor:'#000'
+          }
+        },
+        layout:{
+          padding:{
+            left:0,
+            right:0,
+            bottom:0,
+            top:0
+          }
+        },
+        tooltips:{
+          enabled:true
+        }
+      }
+    });
+</script>

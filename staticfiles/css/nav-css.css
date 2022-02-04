@@ -1,0 +1,56 @@
+.navbar-nav {
+    flex-direction: row;
+}
+.navlink-brand {
+    color: #008080;
+}
+
+.navlink-brand:hover {
+    color: rgb(0,128,128,0.8);
+}
+
+
+.nav-user:focus {
+    box-shadow:none;
+}
+
+.navlink {
+    color: #008080;
+    text-decoration: none;
+}
+
+.navlink-active {
+    color: #008080;
+    border-bottom: 3px solid #008080;
+}
+
+.navlink:hover {
+    color: #008080;
+    border-bottom: 3px solid #008080;
+}
+
+.login-btn-color {
+    color: white;
+    background: #008080 ;
+}
+
+.login-btn-color:hover {
+    color: white;
+    background: #008080;
+    opacity: 0.9;
+}
+
+.dropdown-item:active {
+    background: #008080;
+}
+
+.svg:hover {
+    color: gray;
+}
+
+@media screen and (max-width: 576px) {
+    .navlink:hover {
+        color: #008080;
+        border-bottom: none;
+    }
+}

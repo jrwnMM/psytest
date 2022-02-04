@@ -1,0 +1,63 @@
+<script>
+    let cluster4barChart= document.getElementById('cluster4').getContext('2d');
+    // Global Options
+    Chart.defaults.global.defaultFontFamily = 'Lato';
+    Chart.defaults.global.defaultFontSize = 18;
+    Chart.defaults.global.defaultFontColor = '#777';
+  
+    let personalityTestcluster4BarChart = new Chart(cluster4barChart, {
+      type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+      data: {
+        labels: ['extroversion', 'neurotic', 'agreeable', 'conscientious', 'openness'],
+        datasets: [{
+          label: 'Result',
+  
+          data: [
+            {{ cluster4.extroversion|floatformat:1}},
+            {{ cluster4.neurotic|floatformat:1 }},
+            {{ cluster4.agreeable|floatformat:1 }},
+            {{ cluster4.conscientious|floatformat:1 }},
+            {{ cluster4.openness|floatformat:1 }},
+            ],
+            
+    backgroundColor: [
+      '#a7414a',
+      '#282726',
+      '#6a8a82',
+      '#a37c27',
+      '#563838',
+    ],
+      borderWidth: 1,
+        borderColor: '#777',
+          hoverBorderWidth: 3,
+            hoverBorderColor: '#000'
+          }]
+        },
+    options: {
+      responsive:true,
+      scales: {
+        yAxes: [{
+            display: true,
+            ticks: {
+                max: 5,
+                beginAtZero: true   // minimum value will be 0.
+            }
+        }]
+    },
+      legend: {
+        display: false,
+      },
+      layout: {
+        padding: {
+          left: 0,
+            right: 0,
+              bottom: 0,
+                top: 0
+        }
+      },
+      tooltips: {
+        enabled: true
+      }
+    }
+      });
+  </script>

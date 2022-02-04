@@ -1,0 +1,115 @@
+{% extends 'administration/base.html' %}
+
+{% block title %}User Management{% endblock %}
+
+{% block content %}
+<header>
+    {% include 'partials/_navbar.html' %}
+</header>
+<main class="container">
+    <div class='admin-div'>
+        <small>Administration</small>
+    </div>
+    <header class="d-flex flex-wrap mx-auto my-3">
+        <div class="d-flex my-2 me-5 align-self-center">
+            <div>
+                <h3 class="m-0">User List</h3>
+            </div>
+        </div>
+        <div class="flex-grow-1">
+            <form method='GET'>
+                <div class="input-group">
+                    <button class="btn teal-btn" type='submit'>Search</button>
+                    {{form.name}}
+                </div>
+            </form>
+        </div>
+    </header>
+    <!-- User Table -->
+    <div class="user-table">
+        {% if users %}
+        <div class="text-center">
+            <p class="text-muted m-0">Total of {{users_total}} user{{users_total|pluralize}} found</p>
+        </div>
+        <div class="table-responsive">
+
+
+            <table class="table able-striped table-hover table-bordered table-responsive-lg">
+                <thead class="bg-teal color-white ">
+                    <tr>
+                        <th>Username</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Is_superuser</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{user.username|capfirst}}</td>
+                        <td>{{user.first_name|capfirst}}</td>
+                        <td>{{user.last_name|capfirst}}</td>
+                        <td>{{user.email}}</td>
+                        <td>{% if user.is_superuser == False %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" class="bi bi-x"
+                                viewBox="0 0 16 16">
+                                <path
+                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                            </svg>
+                            {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="green"
+                                class="bi bi-check" viewBox="0 0 16 16">
+                                <path
+                                    d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
+                            </svg>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'administration:user-detail-update' user.pk %}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                                    class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path
+                                        d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                    <path fill-rule="evenodd"
+                                        d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                </svg>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center">
+            <h3>No records found</h3>
+        </div>
+        {% endif %}
+
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <nav aria-label="Page navigation" class="m-5">
+            <ul class="pagination justify-content-end">
+                {% if page_obj.has_previous %}
+                <li><a href="?name={{ request.GET.name}}&page={{ page_obj.previous_page_number }}"
+                        class="page-link">&laquo;
+                        PREV </a></li>
+                {% endif %}
+                {% for i in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == i %}disabled{% endif %}"><a class="page-link"
+                        href="?name={{ request.GET.name}}&page={{ i }}">{{i}}</a>
+                </li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li><a href="?name={{ request.GET.name}}&page={{ page_obj.next_page_number }}" class="page-link"> NEXT
+                        &raquo;</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}

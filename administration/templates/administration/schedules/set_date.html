@@ -1,0 +1,35 @@
+{% extends 'administration/base.html' %}
+
+{% block title %}
+Set Schedule
+{% endblock %}
+
+{% block content %}
+<main class="row justify-content-center">
+    <div class="col-sm-4 col-xs-6 align-self-center p-4">
+        <div class="text-center">
+            <h3>Set Date</h3>
+        </div>
+        <div class="no-round-box p-4">
+            <div class="mb-3">
+                <p>Name: {{user.user.first_name}} {{user.user.last_name}}</p>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                    {{form.user}}
+                    {{form.is_done}}
+                    <div class="mb-2 input-group">
+                        <label for="managed_by" class="input-group-text">Assign to:</label>
+                        {{form.managed_by}}
+                    </div>
+
+                <div class="input-group">
+                    <label for="scheduled_date" class="input-group-text">Set Date:</label>
+                    {{form.scheduled_date}}
+                    <input type="submit" class="btn teal-btn" value="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,32 @@
+
+<div class="container">
+    <div class="row">
+        <div class="chart-container mx-auto" style="position: relative; height:50vh; width:50vw">
+            <canvas id="barChart"></canvas>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        {% include 'personalityTest/components/barchart.html' %}
+        <table class="table w-50 mx-auto">
+            <thead>
+                <th>Extroversion</th>
+                <th>Neurotic</th>
+                <th>Agreeable</th>
+                <th>Conscientious</th>
+                <th>Openness</th>
+                <th>Prediction</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{results.extroversion}}</td>
+                    <td>{{results.neurotic}}</td>
+                    <td>{{results.agreeable}}</td>
+                    <td>{{results.conscientious}}</td>
+                    <td>{{results.openness}}</td>
+                    <td>{{results.prediction}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
