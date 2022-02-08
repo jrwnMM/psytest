@@ -150,7 +150,7 @@ WSGI_APPLICATION = 'psytests.wsgi.application'
 
 DATABASES = {
     # production
-    # 'default': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'd185ibt8phh2o8',
         'USER': os.environ['DB_USER'],
