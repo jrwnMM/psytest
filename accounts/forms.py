@@ -188,11 +188,7 @@ class CustomizedPasswordResetForm(PasswordResetForm):
         'placeholder': 'Type your email address'
     }))
 
-class CustomizedPasswordResetConfirmForm(PasswordChangeForm):
-    old_password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': 'form-control',
-        'placeholder': 'Old password'
-    }))
+class CustomizedPasswordResetConfirmForm(SetPasswordForm):
     new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={
         'class': 'form-control',
         'placeholder': 'Type here'
