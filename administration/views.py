@@ -1,9 +1,8 @@
+from asyncio.windows_events import NULL
 from django.contrib.auth.models import User
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import request
-from django.http.response import Http404, HttpResponseBadRequest, HttpResponseRedirect
-from django.urls.base import reverse
+from django.db.models import Q
 from django.views.generic import (
     TemplateView,
     ListView,
@@ -98,16 +97,16 @@ class UserManagement(LoginRequiredMixin, SuperUserCheck, ListView):
     template_name = "administration/user_management.html"
     model = User
     context_object_name = "users"
-    paginate_by = 8
+    paginate_by = 10
 
     def get_queryset(self):
         query = self.request.GET.get("name")
         if query:
-            object_list = self.model.objects.filter(username__icontains=query).exclude(
+            object_list = self.model.objects.filter(Q(first_name__icontains=query) | Q(last_name__icontains=query)).exclude(
                 username=self.request.user
             )
         else:
-            object_list = self.model.objects.exclude(username=self.request.user)
+            object_list = self.model.objects.exclude(username=self.request.user).order_by('-date_joined')
         return object_list
 
     def get_context_data(self, **kwargs):
@@ -129,21 +128,21 @@ class PendingUsers(LoginRequiredMixin, SuperUserCheck, ListView):
     template_name = "administration/pending-users.html"
     model = Profile
     context_object_name = "users"
-    paginate_by = 4
+    paginate_by = 10
 
     def get_queryset(self):
         query = self.request.GET.get("name")
         if query:
             object_list = (
                 self.model.objects.filter(
-                    user__username__icontains=query, is_assigned=False
+                    Q(user__first_name__icontains=query) | Q(user__last_name__icontains=query), is_assigned=False
                 )
                 .order_by("is_assigned")
                 .exclude(user__username=self.request.user)
             )
         else:
             obj_excluded = self.model.objects.exclude(user__username=self.request.user)
-            object_list = obj_excluded.filter(is_assigned=False)
+            object_list = obj_excluded.filter(is_assigned=False).order_by('test_completed')
         return object_list
 
     def get_context_data(self, **kwargs):
@@ -166,13 +165,13 @@ class AssignedUsers(LoginRequiredMixin, SuperUserCheck, ListView):
     template_name = "administration/assigned-users.html"
     model = AdminScheduledConsultation
     context_object_name = "users"
-    paginate_by = 4
+    paginate_by = 10
 
     def get_queryset(self):
         query = self.request.GET.get("name")
         if query:
             object_list = self.model.objects.filter(
-                user__user__username__icontains=query, user__is_assigned=True
+                Q(user__first_name__icontains=query) | Q(user__last_name__icontains=query), user__is_assigned=True
             ).exclude(user__user__username=self.request.user)
         else:
             obj = Profile.objects.get(user__username=self.request.user)
@@ -439,6 +438,7 @@ def deleteRecord(request, p_pk, p_user, r_pk, r_user):
         
         obj.is_assigned = None
         obj.is_result = False
+        obj.test_completed = None
         obj.save()
     except ObjectDoesNotExist:
         pass
@@ -539,6 +539,8 @@ class UserSchedules(LoginRequiredMixin, SuperUserCheck, ListView):
     model = AdminScheduledConsultation
     context_object_name = "users"
     paginate_by = 8
+
+    ordering = ['scheduled_date']
 
     def get_queryset(self):
         object_list = AdminScheduledConsultation.objects.filter(

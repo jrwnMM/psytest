@@ -13,7 +13,9 @@ from accounts.models import Profile
 from personalityTest.models import Questionnaire, Result, Cluster
 from riasec.models import Riasec_result
 
+from datetime import datetime
 
+now = datetime.now()
 
 
 class TestView(LoginRequiredMixin, TemplateView):
@@ -122,6 +124,7 @@ class TestView(LoginRequiredMixin, TemplateView):
             if obj and obj2:
                 obj3 = Profile.objects.get(user__username=name)
                 obj3.is_assigned = False
+                obj3.test_completed = now
                 obj3.save()
         except ObjectDoesNotExist:
             pass

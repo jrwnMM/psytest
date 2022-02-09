@@ -14,6 +14,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=6, choices=gender_choices, null=True, blank=True)
+    test_completed = models.DateTimeField(null=True, blank=True)
     is_assigned = models.BooleanField(null=True)
     is_result = models.BooleanField(default=False)
     

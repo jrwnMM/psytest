@@ -43,7 +43,7 @@
                         <tbody>
                         {% for user in history %}
                         <tr>
-                            <th scope="row">{{forloop.counter}}</th>
+                            <th scope="row">{{ forloop.counter0|add:page_obj.start_index }}</th>
                             <td>{{user.user.user.first_name}}</td>
                             <td>{{user.user.user.last_name}}</td>
                             <td></td>

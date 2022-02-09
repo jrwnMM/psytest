@@ -147,6 +147,7 @@
             </div>
             {{obj_prediction.extroversion}}
             <div class="row">
+                <h4><u>IPIP Measures</u></h4>
                 <div class="col-sm-4 col-xs-12">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">Extroversion: {{personalityTest_result.extroversion}}</li>
@@ -154,7 +155,6 @@
                         <li class="list-group-item">Agreeable: {{personalityTest_result.agreeable}}</li>
                         <li class="list-group-item">Conscientious: {{personalityTest_result.conscientious}}</li>
                         <li class="list-group-item">Openness: {{personalityTest_result.openness}}</li>
-                        <li class="list-group-item">Prediction: {{personalityTest_result.prediction}}</li>
                     </ul>
                 </div>
                 <div class="col-sm-8 col-xs-12">
@@ -164,16 +164,26 @@
                     {% include 'stats/personalityTest-scripts/predictionBarChart.html' %}
                 </div>
             </div>
-
-            <div class="text-center my-5">
-                <h2>{{personalityTest_result.prediction}}</h2>
-            </div>
-            <div class="row">
-                <div class="chart-container mx-auto" style="height:100%; width:100%">
-                    <canvas id="clusterBarChart"></canvas>
+            <div class="row mt-5">
+                <h4><u>Machine Learning</u></h4>
+                <div class="col-sm-4 col-xs-12">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Prediction: {{personalityTest_result.prediction}}</li>
+                        <li class="list-group-item">Extroversion: {{ prediction.extroversion|floatformat:1}}</li>
+                        <li class="list-group-item">Neurotic: {{ prediction.neurotic|floatformat:1 }}</li>
+                        <li class="list-group-item">Agreeable: {{ prediction.agreeable|floatformat:1 }}</li>
+                        <li class="list-group-item">Conscientious: {{ prediction.conscientious|floatformat:1 }}</li>
+                        <li class="list-group-item">Openness: {{ prediction.openness|floatformat:1 }}</li>
+                    </ul>
+                </div>
+                <div class="col-sm-8 col-xs-12">
+                        <div class="chart-container" style="height:100%; width:100%">
+                            <canvas id="clusterBarChart"></canvas>
+                        </div>
+                    {% include 'stats/personalityTest-scripts/clusterBarChart.html' %}
                 </div>
             </div>
-            {% include 'stats/personalityTest-scripts/clusterBarChart.html' %}
+
             <div class="text-center my-5">
                 <h2>The Big Five Personality Traits</h2>
             </div>
