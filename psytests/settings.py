@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
 ]
-SITE_ID=2
+SITE_ID=1
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
@@ -150,23 +150,23 @@ WSGI_APPLICATION = 'psytests.wsgi.application'
 
 DATABASES = {
     # production
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd185ibt8phh2o8',
-        'USER': os.environ['DB_USER'],
-        'PASSWORD': os.environ['DB_PASS'],
-        'HOST':'ec2-18-235-114-62.compute-1.amazonaws.com',
-        'PORT': '5432',
-    }
-
-    # local
-    #     'default': {
+    # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': os.environ['LOCAL_DB_NAME'],
-    #     'USER': os.environ['LOCAL_DB_USER'],
-    #     'PASSWORD': os.environ['LOCAL_DB_PASS'],
+    #     'NAME': 'd185ibt8phh2o8',
+    #     'USER': os.environ['DB_USER'],
+    #     'PASSWORD': os.environ['DB_PASS'],
+    #     'HOST':'ec2-18-235-114-62.compute-1.amazonaws.com',
     #     'PORT': '5432',
     # }
+
+    # local
+        'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ['LOCAL_DB_NAME'],
+        'USER': os.environ['LOCAL_DB_USER'],
+        'PASSWORD': os.environ['LOCAL_DB_PASS'],
+        'PORT': '5432',
+    }
 
 
     }
