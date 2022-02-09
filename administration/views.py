@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from django.contrib.auth.models import User
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ObjectDoesNotExist
