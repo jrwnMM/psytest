@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib import admin
 from accounts.models import Profile
 
 # Create your models here.
@@ -13,3 +14,10 @@ class AdminScheduledConsultation(models.Model):
     def __str__(self):
         return f'manage by {self.managed_by.user.username} to {self.user.user.username}'
 
+    @admin.display(ordering='user__user__first_name')
+    def full_name(self):
+        return self.user.user.get_full_name()
+
+    @admin.display(ordering='managed_by__user__first_name')
+    def managedby(self):
+        return self.managed_by.user.get_full_name()
