@@ -15,7 +15,7 @@ from riasec.models import Riasec_result
 
 from datetime import datetime
 
-now = datetime.now()
+
 
 
 class TestView(LoginRequiredMixin, TemplateView):
@@ -33,6 +33,7 @@ class TestView(LoginRequiredMixin, TemplateView):
         return context
 
     def post(self, *args, **kwargs):
+        now = datetime.now()
         name = self.request.user
         model = joblib.load("model/theModel.sav")
         q = Questionnaire.objects.all().order_by('pk').values_list('id', flat=True)

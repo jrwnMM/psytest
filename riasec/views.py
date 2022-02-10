@@ -10,9 +10,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 
 from datetime import datetime
-
+from django.utils import timezone
 # Create your views here.
-now = datetime.now()
+
 
 @login_required(login_url="accounts:login")
 def testPage(request):
@@ -27,6 +27,7 @@ def testPage(request):
 
 @login_required(login_url="accounts:login")
 def evaluate(request):
+    now = datetime.now()
     name = request.user
     r = []
     i = []

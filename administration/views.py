@@ -36,7 +36,7 @@ from accounts.forms import UpdateUserForm
 from django.core.mail import send_mail
 from django.conf import settings
 
-now = datetime.today()
+
 
 # Create your views here.
 class SuperUserCheck(UserPassesTestMixin, View):
@@ -44,6 +44,7 @@ class SuperUserCheck(UserPassesTestMixin, View):
         return self.request.user.is_superuser
 
     def get_context_data(self, **kwargs):
+        now = datetime.today()
         context = super().get_context_data(**kwargs)
         context["unapproved_users"] = (
             Profile.objects.filter(is_assigned=False)
@@ -213,6 +214,7 @@ class UserDetailViewMixin(UserPassesTestMixin):
         return test
     
     def get_context_data(self, **kwargs):
+        now = datetime.today()
         context = super().get_context_data(**kwargs)
         context["unapproved_users"] = (
             Profile.objects.filter(is_assigned=False)
@@ -549,6 +551,7 @@ class UserSchedules(LoginRequiredMixin, SuperUserCheck, ListView):
         return object_list
 
     def get_context_data(self, **kwargs):
+        now = datetime.today()
         context = super().get_context_data(**kwargs)
         queryset = self.get_queryset()
         soon = queryset.filter(
