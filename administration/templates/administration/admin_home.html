@@ -36,7 +36,16 @@
                     </div>
                 </div>
             </a>
+            <a href="{% url 'administration:user-stats' %}" class="m-2 admin-selection">
+                <div class="text-center">
+                    <img class="svg-120 m-2" src="{% static 'icons/statistics.png' %}" alt="">
+                    <div class="text-center">
+                        <p class="fs-20">User Statistics</p>
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
 </main>
+<footer class="page-footer font-small pt-4 fixed-bottom">{% include 'partials/footer.html'%} </footer>
 {% endblock %}

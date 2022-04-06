@@ -1,5 +1,5 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg navbar-light px-5 border-bottom">
+<nav class="navbar navbar-light bg-light fixed-top navbar-expand-lg  px-5 border-bottom">
     
     <a class="navbar-brand navlink-brand noto-serif" href="{% url 'homepage' %}"><span><img src="{% static 'icons/favicon.png' %}" alt="" class="favicon-30"></span> PSYTEST</a>
     <!-- collapse btn -->
@@ -64,10 +64,10 @@
                         class="bi bi-person-fill color-teal" viewBox="0 0 16 16">
                         <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
                     </svg>
-                    <span style="font-size:small" class="color-teal d-none d-sm-inline">{{request.user.email}}</span>
+                    <span style="font-size:small" class="color-teal d-none d-sm-inline" data-toggle="tooltip" title="{{request.user.email}}">{{request.user}}</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="{% url 'accounts:edit_user'%}">Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'accounts:edit_user' user.id %}">Profile</a></li>
                     {% if request.user.is_superuser %}
                     <li><a class="dropdown-item" href="{% url 'administration:home' %}">Admin</a></li>
                     {% endif %}

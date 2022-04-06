@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 # DEBUG_PROPAGATE_EXCEPTIONS = True
 
 ALLOWED_HOSTS = ["jmcproject.herokuapp.com", "127.0.0.1", "localhost"]
@@ -57,6 +57,11 @@ INSTALLED_APPS = [
     # providers
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.facebook",
+    #filters
+    "django_filters",
+    "mathfilters",
+    #Other apps
+    "phonenumber_field",
 ]
 SITE_ID = 1
 
@@ -66,10 +71,10 @@ AUTHENTICATION_BACKENDS = (
     "psytests.auth.EmailBackend",
 )
 SOCIALACCOUNT_PROVIDERS = {
-    "google": {
         # For each OAuth based provider, either add a ``SocialApp``
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
+    "google": {
         "SCOPE": [
             "profile",
             "email",
@@ -146,22 +151,22 @@ WSGI_APPLICATION = "psytests.wsgi.application"
 
 DATABASES = {
     # production
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd185ibt8phh2o8',
-        'USER': os.environ['DB_USER'],
-        'PASSWORD': os.environ['DB_PASS'],
-        'HOST':'ec2-18-235-114-62.compute-1.amazonaws.com',
-        'PORT': '5432',
-    }
-    # local
-    # "default": {
-    #     "ENGINE": "django.db.backends.postgresql",
-    #     "NAME": os.environ["LOCAL_DB_NAME"],
-    #     "USER": os.environ["LOCAL_DB_USER"],
-    #     "PASSWORD": os.environ["LOCAL_DB_PASS"],
-    #     "PORT": "5432",
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'd185ibt8phh2o8',
+    #     'USER': os.environ['DB_USER'],
+    #     'PASSWORD': os.environ['DB_PASS'],
+    #     'HOST':'ec2-18-235-114-62.compute-1.amazonaws.com',
+    #     'PORT': '5432',
     # }
+    # local
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ["LOCAL_DB_NAME"],
+        "USER": os.environ["LOCAL_DB_USER"],
+        "PASSWORD": os.environ["LOCAL_DB_PASS"],
+        "PORT": "5432",
+    }
 }
 
 
@@ -208,7 +213,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
 
 
 MEDIA_URL = "/images/"

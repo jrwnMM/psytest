@@ -1,0 +1,253 @@
+{% extends "stats/base.html" %}
+{% load static %}
+{% load mathfilters %}
+{% block title %}User Statistics{% endblock %}
+
+{% block content %}
+<header>
+    {% include 'partials/_navbar.html' %}
+</header>
+
+<main class="container pt-5 mt-5">
+    <button
+            type="button"
+            class="btn btn-teal btn-floating btn-lg"
+            id="btn-back-to-top"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="34px" fill="currentColor" class="bi bi-arrow-up"
+             viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                  d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+        </svg>
+    </button>
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="v-pills-career-tab" data-bs-toggle="tab"
+                    data-bs-target="#v-pills-career" type="button" role="tab" aria-controls="v-pills-career"
+                    aria-selected="false">Career
+            </button>
+            <button class="nav-link" id="v-pills-personality-tab" data-bs-toggle="tab"
+                    data-bs-target="#v-pills-personality" type="button" role="tab" aria-controls="v-pills-personality"
+                    aria-selected="false">Personality
+            </button>
+        </div>
+    </nav>
+    <div class="tab-content" id="v-pills-tabContent">
+        <!-- career tab -->
+        <div class="tab-pane fade show active" id="v-pills-career" role="tabpanel" aria-labelledby="v-pills-career-tab">
+            {% if riasec_male or riasec_female or personality_male or personality_female %}
+            {% if riasec_male %}
+            <div class="row">
+                <div class="text-center my-5">
+                    <h2> {{rm_count}} Male Results</h2>
+                </div>
+                <div class="col-sm-3 col-xs-6 align-self-center">
+                    <p class="p-2" id="r"><span class="bg-color-a p-2">Realistic</span> =
+                        {{ riasec_male.realistic__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="i"><span class="bg-color-b p-2">Investigative</span> =
+                        {{ riasec_male.investigative__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="a"><span class="bg-color-c p-2">Artistic</span> =
+                        {{ riasec_male.artistic__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="s"><span class="bg-color-d p-2">Social</span> =
+                        {{ riasec_male.social__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="e"><span class="bg-color-e p-2">Enterprising</span> =
+                        {{ riasec_male.enterprising__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="c"><span class="bg-color-f p-2">Conventional</span> =
+                        {{ riasec_male.conventional__avg|floatformat:1 }}</p>
+                </div>
+                <div class="col-sm-9 col-xs-6 py-3">
+                    <div class="chart-container mx-auto" style="height: 100%; width: 100%">
+                        <canvas id="RMlineChart"></canvas>
+                    </div>
+                    {% include 'stats/riasec-scripts/Mlinechart.html' %}
+                </div>
+                {% endif %}
+                {% if riasec_female %}
+                <div class="text-center my-5">
+                    <h2>{{rf_count}} Female Results</h2>
+                </div>
+                <div class="col-sm-3 col-xs-6 align-self-center">
+                    <p class="p-2" id="r"><span class="bg-color-a p-2">Realistic</span> =
+                        {{ riasec_female.realistic__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="i"><span class="bg-color-b p-2">Investigative</span> =
+                        {{ riasec_female.investigative__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="a"><span class="bg-color-c p-2">Artistic</span> =
+                        {{ riasec_female.artistic__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="s"><span class="bg-color-d p-2">Social</span> =
+                        {{ riasec_female.social__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="e"><span class="bg-color-e p-2">Enterprising</span> =
+                        {{ riasec_female.enterprising__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="c"><span class="bg-color-f p-2">Conventional</span> =
+                        {{ riasec_female.conventional__avg|floatformat:1 }}</p>
+                </div>
+                <div class="col-sm-9 col-xs-6 py-3">
+                    <div class="chart-container mx-auto" style="height: 100%; width: 100%">
+                        <canvas id="RFlineChart"></canvas>
+                    </div>
+                    {% include 'stats/riasec-scripts/Flinechart.html' %}
+                </div>
+                {% endif %}
+                {% if riasec_college %}
+                <div class="text-center my-5">
+                    <h2> College Result</h2>
+                </div>
+                <div class="col-sm-3 col-xs-6 align-self-center">
+                    <p class="p-2" id="r"><span class="bg-color-a p-2">Realistic</span> =
+                        {{ riasec_college.realistic__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="i"><span class="bg-color-b p-2">Investigative</span> =
+                        {{ riasec_college.investigative__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="a"><span class="bg-color-c p-2">Artistic</span> =
+                        {{ riasec_college.artistic__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="s"><span class="bg-color-d p-2">Social</span> =
+                        {{ riasec_college.social__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="e"><span class="bg-color-e p-2">Enterprising</span> =
+                        {{ riasec_college.enterprising__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="c"><span class="bg-color-f p-2">Conventional</span> =
+                        {{ riasec_college.conventional__avg|floatformat:1 }}</p>
+                </div>
+                <div class="col-sm-9 col-xs-6 py-3">
+                    <div class="chart-container mx-auto" style="height: 100%; width: 100%">
+                        <canvas id="RClineChart"></canvas>
+                    </div>
+                    {% include 'stats/riasec-scripts/Collegelinechart.html' %}
+                </div>
+                {% endif %}
+                {% if riasec_ibed %}
+                <div class="text-center my-5">
+                    <h2> IBED Result</h2>
+                </div>
+                <div class="col-sm-3 col-xs-6 align-self-center">
+                    <p class="p-2" id="r"><span class="bg-color-a p-2">Realistic</span> =
+                        {{ riasec_ibed.realistic__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="i"><span class="bg-color-b p-2">Investigative</span> =
+                        {{ riasec_ibed.investigative__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="a"><span class="bg-color-c p-2">Artistic</span> =
+                        {{ riasec_ibed.artistic__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="s"><span class="bg-color-d p-2">Social</span> =
+                        {{ riasec_ibed.social__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="e"><span class="bg-color-e p-2">Enterprising</span> =
+                        {{ riasec_ibed.enterprising__avg|floatformat:1 }}</p>
+                    <p class="p-2" id="c"><span class="bg-color-f p-2">Conventional</span> =
+                        {{ riasec_ibed.conventional__avg|floatformat:1 }}</p>
+                </div>
+                <div class="col-sm-9 col-xs-6 py-3">
+                    <div class="chart-container mx-auto" style="height: 100%; width: 100%">
+                        <canvas id="RIlineChart"></canvas>
+                    </div>
+                    {% include 'stats/riasec-scripts/IBEDlinechart.html' %}
+                </div>
+                {% endif %}
+            </div>
+            </div>
+            <!-- Personality Tab -->
+            <div class="tab-pane fade show" id="v-pills-personality" role="tabpanel"
+                 aria-labelledby="v-pills-personality-tab">
+                {% if personality_male %}
+                <div class="row">
+                    <div class="text-center my-5">
+                        <h2> {{pm_count}} Male Results</h2>
+                    </div>
+                    <div class="col-sm-3 col-xs-6 align-self-center">
+                        <p class="p-2" id="o"><span class="bg-color-a p-2">Openness</span> =
+                            {{ personality_male.openness__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="c"><span class="bg-color-b p-2">Conscientious</span> =
+                            {{ personality_male.conscientious__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="e"><span class="bg-color-c p-2">Extroversion</span> =
+                            {{ personality_male.extroversion__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="a"><span class="bg-color-d p-2">Agreeable</span> =
+                            {{ personality_male.agreeable__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="n"><span class="bg-color-e p-2">Neurotic</span> =
+                            {{ personality_male.neurotic__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="p"><span class="bg-color-f p-2">Prediction</span> =
+                            {{ personality_male.prediction__avg|floatformat:1 }}</p>
+                    </div>
+                    <div class="col-sm-9 col-xs-6 py-3">
+                        <div class="chart-container mx-auto" style="height: 100%; width: 100%">
+                            <canvas id="PMlineChart"></canvas>
+                        </div>
+                        {% include 'stats/personalityTest-scripts/Mlinechart.html' %}
+                    </div>
+                    {% endif %}
+                    {% if personality_female %}
+                    <div class="text-center my-5">
+                        <h2>{{pf_count}} Female Results</h2>
+                    </div>
+                    <div class="col-sm-3 col-xs-6 align-self-center">
+                        <p class="p-2" id="o"><span class="bg-color-a p-2">Openness</span> =
+                            {{ personality_female.openness__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="c"><span class="bg-color-b p-2">Conscientious</span> =
+                            {{ personality_female.conscientious__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="e"><span class="bg-color-c p-2">Extroversion</span> =
+                            {{ personality_female.extroversion__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="a"><span class="bg-color-d p-2">Agreeable</span> =
+                            {{ personality_female.agreeable__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="n"><span class="bg-color-e p-2">Neurotic</span> =
+                            {{ personality_female.neurotic__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="p"><span class="bg-color-f p-2">Prediction</span> =
+                            {{ personality_female.prediction__avg|floatformat:1 }}</p>
+                    </div>
+                    <div class="col-sm-9 col-xs-6 py-3">
+                        <div class="chart-container mx-auto" style="height: 100%; width: 100%">
+                            <canvas id="PFlineChart"></canvas>
+                        </div>
+                        {% include 'stats/personalityTest-scripts/Flinechart.html' %}
+                    </div>
+                    {% endif %}
+                    {% if personality_college %}
+                    <div class="text-center my-5">
+                        <h2>College Result</h2>
+                    </div>
+                    <div class="col-sm-3 col-xs-6 align-self-center">
+                        <p class="p-2" id="o"><span class="bg-color-a p-2">Openness</span> =
+                            {{ personality_college.openness__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="c"><span class="bg-color-b p-2">Conscientious</span> =
+                            {{ personality_college.conscientious__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="e"><span class="bg-color-c p-2">Extroversion</span> =
+                            {{ personality_college.extroversion__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="a"><span class="bg-color-d p-2">Agreeable</span> =
+                            {{ personality_college.agreeable__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="n"><span class="bg-color-e p-2">Neurotic</span> =
+                            {{ personality_college.neurotic__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="p"><span class="bg-color-f p-2">Prediction</span> =
+                            {{ personality_college.prediction__avg|floatformat:1 }}</p>
+                    </div>
+                    <div class="col-sm-9 col-xs-6 py-3">
+                        <div class="chart-container mx-auto" style="height: 100%; width: 100%">
+                            <canvas id="PClineChart"></canvas>
+                        </div>
+                        {% include 'stats/personalityTest-scripts/Collegelinechart.html' %}
+                    </div>
+                    {% endif %}
+                    {% if personality_ibed %}
+                    <div class="text-center my-5">
+                        <h2>IBED Result</h2>
+                    </div>
+                    <div class="col-sm-3 col-xs-6 align-self-center">
+                        <p class="p-2" id="o"><span class="bg-color-a p-2">Openness</span> =
+                            {{ personality_ibed.openness__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="c"><span class="bg-color-b p-2">Conscientious</span> =
+                            {{ personality_ibed.conscientious__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="e"><span class="bg-color-c p-2">Extroversion</span> =
+                            {{ personality_ibed.extroversion__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="a"><span class="bg-color-d p-2">Agreeable</span> =
+                            {{ personality_ibed.agreeable__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="n"><span class="bg-color-e p-2">Neurotic</span> =
+                            {{ personality_ibed.neurotic__avg|floatformat:1 }}</p>
+                        <p class="p-2" id="p"><span class="bg-color-f p-2">Prediction</span> =
+                            {{ personality_ibed.prediction__avg|floatformat:1 }}</p>
+                    </div>
+                    <div class="col-sm-9 col-xs-6 py-3">
+                        <div class="chart-container mx-auto" style="height: 100%; width: 100%">
+                            <canvas id="PIlineChart"></canvas>
+                        </div>
+                        {% include 'stats/personalityTest-scripts/IBEDlinechart.html' %}
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <p>No result found</p>
+                </div>
+                    {% endif %}
+                </div>
+            </div>
+</main>
+{% endblock %}

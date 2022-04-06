@@ -6,8 +6,8 @@
 <header>
     {% include 'partials/_navbar.html' %}
 </header>
-<main class="container">
-    <div class="row justify-content-center">
+<main class="container pt-5 mt-5 ">
+    <div class="row justify-content-center ">
         <div class="col-sm-2 col-xs-12 p-0 m-0">
             <div class="border-1-round-box p-3 m-2 status">
                 <div>
@@ -142,7 +142,7 @@
                             <img
                                 src="https://img.icons8.com/external-wanicon-lineal-color-wanicon/120/000000/external-psychology-university-courses-wanicon-lineal-color-wanicon.png" />
                         </div>
-                        <div {% if personalityTest_results %}class="text-muted" {% endif %}>
+                        <div {% if personalityTest_results %} class="text-muted" {% endif %}>
                             Personality Test
                         </div>
                     </a>
@@ -154,7 +154,7 @@
                             <img
                                 src="https://img.icons8.com/external-itim2101-lineal-color-itim2101/120/000000/external-skills-business-recruitment-itim2101-lineal-color-itim2101-1.png" />
                         </div>
-                        <div {% if riasec_results %}class="text-muted" {% endif %}>
+                        <div {% if riasec_results %} class="text-muted" {% endif %}>
                             Career Test
                         </div>
                     </a>

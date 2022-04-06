@@ -4,7 +4,7 @@ from .views import (
     loginPage,
     logoutUser,
     activate,
-    editProfile,
+    EditProfile,
 )
 
 app_name='accounts'
@@ -13,5 +13,6 @@ urlpatterns = [
     path('activate/<uidb64>/<token>/', activate, name='activate'),
     path('login/', loginPage, name='login'),
     path('logout/',logoutUser,name='logout'),
-    path('edit-profile/',editProfile.as_view(),name='edit_user'),
+    # path('edit-profile/',editProfile.as_view(),name='edit_user'),
+    path('edit-profile/<int:pk>/', EditProfile.as_view(), name='edit_user'),
 ]

@@ -3,6 +3,10 @@
 {% block title %}user update{% endblock %}
 
 {% block content %}
+<header>
+    {% include 'partials/_navbar.html' %}
+</header>
+<main class="container mt-5 pt-5">
 <div class="sticky-top pt-3 ps-4">
     <h5>
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left color-teal" viewBox="0 0 16 16">
@@ -11,7 +15,6 @@
         <a href="{% url 'administration:user-management' %}" class="back-link">Back</a>
     </h5>
 </div>
-<main class="container">
     <div class="container-50 mx-auto p-5">
         <h3>Change the inputs to edit</h3>
         <form method="post"> 
@@ -34,5 +37,5 @@
         </form> 
     </div>
 </main>
-    
+<footer class="page-footer font-small pt-4 fixed-bottom">{% include 'partials/footer.html'%} </footer>
 {% endblock %}
