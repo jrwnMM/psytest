@@ -1,6 +1,23 @@
-.img-responsive {
-  border-radius: 15px ;
+
+
+.bg-main {
+  position: relative;
+  height: 700px;
 }
+
+.bg-main::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255) 0%,rgba(255, 255, 255, 0) 70%), url('../images/home/jmc.jpg');
+  background-position: center;
+  background-size: cover;
+  content: "";
+  z-index: -1;
+}
+
 .banner
  {
   padding: 6em 0 4em 0;
@@ -113,6 +130,10 @@
   .banner{
     padding: 10px;
     padding-bottom: 25px;
+  }
+  .bg-main {
+    position: relative;
+    height: 500px;
   }
 }
 

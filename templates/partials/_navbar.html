@@ -1,7 +1,7 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg navbar-light px-5 border-bottom">
-    
-    <a class="navbar-brand navlink-brand noto-serif" href="{% url 'homepage' %}"><span><img src="{% static 'icons/favicon.png' %}" alt="" class="favicon-30"></span> PSYTEST</a>
+<nav class="navbar navbar-expand-lg navbar-light px-5 justify-content-between">
+    <a class="brand-text fs-20 d-flex align-items-center me-3" href="{% url 'homepage' %}"><img
+        src="{% static 'icons/favicon.png' %}" alt="" class="favicon-30"><span>PSYTEST</span></a>
     <!-- collapse btn -->
     {% if user.is_authenticated %}
     <div>
@@ -77,10 +77,8 @@
         </div>
     </div>
     {% else %}
-    <div class="alig-self-end">
-        <a class="btn login-btn-color" href="{% url 'accounts:login' %}"><strong>Login / Sign Up</strong></a>
+    <div>
+        <a class="btn btn-teal" href="{% url 'accounts:login' %}"><strong>Login / Sign Up</strong></a>
     </div>
     {% endif %}
-
-
 </nav>

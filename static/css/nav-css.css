@@ -1,14 +1,6 @@
 .navbar-nav {
     flex-direction: row;
 }
-.navlink-brand {
-    color: #008080;
-}
-
-.navlink-brand:hover {
-    color: rgb(0,128,128,0.8);
-}
-
 
 .nav-user:focus {
     box-shadow:none;
@@ -17,6 +9,9 @@
 .navlink {
     color: #008080;
     text-decoration: none;
+}
+.border-bottom-teal {
+    border-bottom: #008080 solid 1px;
 }
 
 .navlink-active {
@@ -27,17 +22,6 @@
 .navlink:hover {
     color: #008080;
     border-bottom: 3px solid #008080;
-}
-
-.login-btn-color {
-    color: white;
-    background: #008080 ;
-}
-
-.login-btn-color:hover {
-    color: white;
-    background: #008080;
-    opacity: 0.9;
 }
 
 .dropdown-item:active {
