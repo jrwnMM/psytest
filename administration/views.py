@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
+from django.db.models import Q, Avg, Count, Sum
 from django.views.generic import (
     TemplateView,
     ListView,
@@ -20,14 +20,15 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormMixin
-
+from dateutil.relativedelta import *
+from datetime import date
 from personalityTest.models import Questionnaire, Result
 from psytests.forms import ContactForm
 from riasec.models import RIASEC_Test, Riasec_result
 
 from datetime import datetime
 
-from .forms import ScheduleDateForm, SearchForm, AddRQuestionsForm, AddPQuestionsForm
+from .forms import ScheduleDateForm, SearchForm, AdminSearchForm, AddRQuestionsForm, AddPQuestionsForm
 from .models import AdminScheduledConsultation
 
 from accounts.models import Profile
@@ -35,7 +36,7 @@ from accounts.forms import UpdateUserForm
 
 from django.core.mail import send_mail
 from django.conf import settings
-
+from .filters import ProfileFilter, UserFilter
 
 
 # Create your views here.
@@ -43,6 +44,36 @@ class SuperUserCheck(UserPassesTestMixin, View):
     def test_func(self):
         return self.request.user.is_superuser
 
+<<<<<<< HEAD
+=======
+    def get_context_data(self, **kwargs):
+        now = datetime.today()
+        context = super().get_context_data(**kwargs)
+        context["unapproved_users"] = (
+            Profile.objects.filter(is_assigned=False)
+                .exclude(user__username=self.request.user)
+                .count()
+        )
+        notif_count = (
+                AdminScheduledConsultation.objects.filter(
+                    managed_by__user=self.request.user,
+                    is_done=False,
+                    scheduled_date__date=now.date(),
+                    scheduled_date__time__gt=now.time(),
+                    user__is_assigned=True,
+                ).count()
+                + AdminScheduledConsultation.objects.filter(
+            managed_by__user=self.request.user,
+            is_done=False,
+            scheduled_date__lt=now.today(),
+            user__is_assigned=True,
+        ).count()
+        )
+        context["notif_count"] = notif_count if notif_count is not None else None
+
+        return context
+
+>>>>>>> c8fb06ebdc7344c7dc6739b319995b072d498ebc
 
 class UserAccessMixin(PermissionRequiredMixin):
     def dispatch(self, request, *args, **kwargs):
@@ -69,24 +100,23 @@ class Home(LoginRequiredMixin, SuperUserCheck, TemplateView):
 class UserManagement(LoginRequiredMixin, SuperUserCheck, ListView):
     template_name = "administration/user_management.html"
     model = User
+    form_class = AdminSearchForm
     context_object_name = "users"
     paginate_by = 10
 
     def get_queryset(self):
-        query = self.request.GET.get("name")
-        if query:
-            object_list = self.model.objects.filter(Q(first_name__icontains=query) | Q(last_name__icontains=query)).exclude(
-                username=self.request.user
-            )
-        else:
-            object_list = self.model.objects.exclude(username=self.request.user).order_by('-date_joined')
-        return object_list
+        qs = self.model.objects.exclude(id=self.request.user.id)
+        if qs:
+            users = UserFilter(self.request.GET, queryset=qs)
+            return users.qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["form"] = SearchForm
+        context.update(
+            filter=UserFilter(self.request.GET, queryset=self.model.objects.all())
+        )
         context["users_total"] = self.get_queryset().count()
-
+        context["form"] = context
         return context
 
 
@@ -99,20 +129,26 @@ class UserDetailUpdate(LoginRequiredMixin, SuperUserCheck, UpdateView):
 
 class PendingUsers(LoginRequiredMixin, SuperUserCheck, ListView):
     template_name = "administration/pending-users.html"
+    form_class = SearchForm
     model = Profile
     context_object_name = "users"
     paginate_by = 10
 
     def get_queryset(self):
-        query = self.request.GET.get("name")
-        if query:
-            object_list = (
-                self.model.objects.filter(
-                    Q(user__first_name__icontains=query) | Q(user__last_name__icontains=query), is_assigned=False
-                )
-                .order_by("is_assigned")
-                .exclude(user__username=self.request.user)
-            )
+        # query = self.request.GET.get("name")
+        # if query:
+        #     object_list = (
+        #         self.model.objects.filter(
+        #             Q(user__first_name__icontains=query) | Q(user__last_name__icontains=query), is_assigned=False
+        #         )
+        #         .order_by("is_assigned")
+        #         .exclude(user__username=self.request.user)
+        #     )
+        # query = self.model.objects.filter().exclude(user__username=self.request.user)
+        qs = self.model.objects.exclude(user__username=self.request.user)
+        if qs:
+            profiles = ProfileFilter(self.request.GET, queryset=qs)
+            return profiles.qs
         else:
             obj_excluded = self.model.objects.exclude(user__username=self.request.user)
             object_list = obj_excluded.filter(is_assigned=False).order_by('test_completed')
@@ -120,23 +156,28 @@ class PendingUsers(LoginRequiredMixin, SuperUserCheck, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["form"] = SearchForm
-        context["users_pending"] = (
-            Profile.objects.filter(is_assigned=False)
-            .exclude(user__username=self.request.user)
-            .count()
+        context.update(
+            filter=ProfileFilter(self.request.GET, queryset=self.model.objects.all())
         )
-        context["users_assigned"] = (
-            AdminScheduledConsultation.objects.filter(user__is_assigned=True)
-            .exclude(managed_by=Profile.objects.get(user__username=self.request.user))
-            .count()
-        )
+        context["form"] = context
         return context
+
+        # context["users_pending"] = (
+        #     Profile.objects.filter(is_assigned=False)
+        #     .exclude(user__username=self.request.user)
+        #     .count()
+        # )
+        # context["users_assigned"] = (
+        #     AdminScheduledConsultation.objects.filter(user__is_assigned=True)
+        #     .exclude(managed_by=Profile.objects.get(user__username=self.request.user))
+        #     .count()
+        # )
 
 
 class AssignedUsers(LoginRequiredMixin, SuperUserCheck, ListView):
     template_name = "administration/assigned-users.html"
     model = AdminScheduledConsultation
+    form_class = SearchForm
     context_object_name = "users"
     paginate_by = 10
 
@@ -154,37 +195,68 @@ class AssignedUsers(LoginRequiredMixin, SuperUserCheck, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["form"] = SearchForm
         context["users_assigned"] = (
             AdminScheduledConsultation.objects.filter(user__is_assigned=True)
-            .exclude(managed_by=Profile.objects.get(user__username=self.request.user))
-            .count()
+                .exclude(managed_by=Profile.objects.get(user__username=self.request.user))
+                .count()
         )
         context["users_pending"] = (
             Profile.objects.filter(is_assigned=False)
-            .exclude(user__username=self.request.user)
-            .count()
+                .exclude(user__username=self.request.user)
+                .count()
         )
         return context
 
+
 class UserDetailViewMixin(UserPassesTestMixin):
-    
+
     def test_func(self):
-        obj = get_object_or_404(Profile, user__username = self.request.user)
-        
+        obj = get_object_or_404(Profile, user__username=self.request.user)
+
         if obj.user.is_superuser:
             test = True
             if obj.user.username == self.kwargs['user']:
                 if obj.is_result == False:
                     test = False
         elif obj.is_result:
-            if obj.user.username == self.kwargs['user']: 
+            if obj.user.username == self.kwargs['user']:
                 test = True
-            else: 
+            else:
                 test = False
         else:
             test = False
         return test
+<<<<<<< HEAD
+=======
+
+    def get_context_data(self, **kwargs):
+        now = datetime.today()
+        context = super().get_context_data(**kwargs)
+        context["unapproved_users"] = (
+            Profile.objects.filter(is_assigned=False)
+                .exclude(user__username=self.request.user)
+                .count()
+        )
+        notif_count = (
+                AdminScheduledConsultation.objects.filter(
+                    managed_by__user=self.request.user,
+                    is_done=False,
+                    scheduled_date__date=now.date(),
+                    scheduled_date__time__gt=now.time(),
+                    user__is_assigned=True,
+                ).count()
+                + AdminScheduledConsultation.objects.filter(
+            managed_by__user=self.request.user,
+            is_done=False,
+            scheduled_date__lt=now.today(),
+            user__is_assigned=True,
+        ).count()
+        )
+        context["notif_count"] = notif_count if notif_count is not None else None
+
+        return context
+>>>>>>> c8fb06ebdc7344c7dc6739b319995b072d498ebc
+
 
 class UserDetailView(LoginRequiredMixin, UserDetailViewMixin, FormMixin, DetailView):
     template_name = "stats/stats.html"
@@ -228,7 +300,7 @@ class UserDetailView(LoginRequiredMixin, UserDetailViewMixin, FormMixin, DetailV
                     user__username=self.kwargs.get("user"),
                     user__id=self.kwargs.get("pk"),
                 )
-                .values(
+                    .values(
                     "realistic",
                     "investigative",
                     "artistic",
@@ -236,7 +308,7 @@ class UserDetailView(LoginRequiredMixin, UserDetailViewMixin, FormMixin, DetailV
                     "enterprising",
                     "conventional",
                 )
-                .first()
+                    .first()
             )
             if obj is not None:
                 objects = dict(
@@ -307,16 +379,18 @@ class UserDetailView(LoginRequiredMixin, UserDetailViewMixin, FormMixin, DetailV
         send_mail(subject, message, email_from, recipient_list, fail_silently=True)
         return super().form_valid(form)
 
+
 def send_msg(request, user):
-        obj = Profile.objects.get(user__username=user)
-        subject = request.POST.get("subject")
-        message = request.POST.get("message")
-        email_from = settings.EMAIL_HOST_USER
-        recipient_list = [
-            obj.user.email,
-        ]
-        send_mail(subject, message, email_from, recipient_list, fail_silently=True)
-        return redirect('administration:pending-users')
+    obj = Profile.objects.get(user__username=user)
+    subject = request.POST.get("subject")
+    message = request.POST.get("message")
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = [
+        obj.user.email,
+    ]
+    send_mail(subject, message, email_from, recipient_list, fail_silently=True)
+    return redirect('administration:pending-users')
+
 
 def return_user(request, user, pk):
     try:
@@ -334,6 +408,7 @@ def return_user(request, user, pk):
         pass
 
     return redirect("administration:pending-users")
+
 
 def approve_user(request, user, pk):
     try:
@@ -358,7 +433,7 @@ def approve_user(request, user, pk):
         pass
 
     obj = Profile.objects.get(user__username=user)
-    print(request.GET.get('user'), 'Print User' )
+    print(request.GET.get('user'), 'Print User')
     subject = 'Well done!'
     message = f'Your result is now available. Go to the app > Assessment > View Result or go directly here http://jmcproject.herokuapp.com/administration/stats/{user}/{pk}/'
     email_from = settings.EMAIL_HOST_USER
@@ -382,7 +457,7 @@ def deleteRecord(request, p_pk, p_user, r_pk, r_user):
             obj2.delete()
         except:
             pass
-        
+
         obj.is_assigned = None
         obj.is_result = False
         obj.test_completed = None
@@ -412,7 +487,6 @@ class PQuestionsTemplateView(SuperUserCheck, ListView):
     template_name = "administration/questions/pquestions.html"
     context_object_name = 'pquestions'
     paginate_by = 10
-
 
 
 class RQuestionsCreateView(UserAccessMixin, CreateView):
@@ -590,7 +664,7 @@ class SetSchedule(LoginRequiredMixin, SuperUserCheck, CreateView):
         obj_x = AdminScheduledConsultation.objects.get(user=obj)
         obj.is_assigned = True
         obj.save()
-        
+
         subject = 'Consultation Notice'
         message = f'Hello, you are asked to report in guidance office for consultation. Your schedule is set to {obj_x.scheduled_date.strftime("%d %B, %Y  %H:%M%p")}'
         email_from = settings.EMAIL_HOST_USER
@@ -605,3 +679,53 @@ class SetSchedule(LoginRequiredMixin, SuperUserCheck, CreateView):
         context = super().get_context_data(**kwargs)
         context["user"] = Profile.objects.get(user__username=self.kwargs["username"])
         return context
+
+
+class UserStats(LoginRequiredMixin, SuperUserCheck, TemplateView):
+    template_name = "administration/user_stats.html"
+    model = User
+    context_object_name = "user"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            riasec_avg = (Avg('realistic'), Avg('investigative'), Avg('artistic'), Avg('social'), Avg('enterprising'),
+                          Avg('conventional'))
+            context['riasec_male'] = Riasec_result.objects.filter(user__profile__gender='M').aggregate(*riasec_avg)
+            context['riasec_female'] = Riasec_result.objects.filter(user__profile__gender='F').aggregate(*riasec_avg)
+            context['riasec_college'] = Riasec_result.objects.filter(
+                user__profile__department__name='College').aggregate(
+                *riasec_avg)
+            context['riasec_ibed'] = Riasec_result.objects.filter(user__profile__department__name='IBED').aggregate(
+                *riasec_avg)
+
+        except ObjectDoesNotExist:
+            pass
+
+        try:
+            personality_avg = (Avg('openness'),
+                               Avg('conscientious'),
+                               Avg('extroversion'),
+                               Avg('agreeable'),
+                               Avg('neurotic'),
+                               Avg('prediction'))
+            context["personality_male"] = Result.objects.filter(user__profile__gender='M').aggregate(*personality_avg)
+            context["personality_female"] = Result.objects.filter(user__profile__gender='F').aggregate(*personality_avg)
+            context["personality_college"] = Result.objects.filter(user__profile__department__name='College').aggregate(
+                *personality_avg)
+            context["personality_ibed"] = Result.objects.filter(user__profile__department__name='IBED').aggregate(
+                *personality_avg)
+
+        except ObjectDoesNotExist:
+            pass
+
+        context['rm_count'] = Riasec_result.objects.filter(user__profile__gender='M').count()
+        context['rf_count'] = Riasec_result.objects.filter(user__profile__gender='F').count()
+        context["pm_count"] = Result.objects.filter(user__profile__gender='M').count()
+        context["pf_count"] = Result.objects.filter(user__profile__gender='F').count()
+        return context
+
+        #get age
+        # today = date.today()
+        # dob =
+        # age = relativedelta(today, dob)

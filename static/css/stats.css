@@ -70,3 +70,11 @@
       }
     
   }
+
+ #btn-back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  border-radius: 50%;
+  display: none;
+}

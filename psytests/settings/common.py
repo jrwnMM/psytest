@@ -22,6 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
+<<<<<<< HEAD:psytests/settings/common.py
+=======
+DEBUG = True
+# DEBUG_PROPAGATE_EXCEPTIONS = True
+>>>>>>> c8fb06ebdc7344c7dc6739b319995b072d498ebc:psytests/settings.py
 
 
 
@@ -50,6 +55,11 @@ INSTALLED_APPS = [
     # providers
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.facebook",
+    #filters
+    "django_filters",
+    "mathfilters",
+    #Other apps
+    "phonenumber_field",
 ]
 SITE_ID = 1
 
@@ -59,10 +69,10 @@ AUTHENTICATION_BACKENDS = (
     "psytests.auth.EmailBackend",
 )
 SOCIALACCOUNT_PROVIDERS = {
-    "google": {
         # For each OAuth based provider, either add a ``SocialApp``
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
+    "google": {
         "SCOPE": [
             "profile",
             "email",
@@ -135,6 +145,33 @@ TEMPLATES = [
 WSGI_APPLICATION = "psytests.wsgi.application"
 
 
+<<<<<<< HEAD:psytests/settings/common.py
+=======
+# Database
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
+DATABASES = {
+    # production
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'd185ibt8phh2o8',
+    #     'USER': os.environ['DB_USER'],
+    #     'PASSWORD': os.environ['DB_PASS'],
+    #     'HOST':'ec2-18-235-114-62.compute-1.amazonaws.com',
+    #     'PORT': '5432',
+    # }
+    # local
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ["LOCAL_DB_NAME"],
+        "USER": os.environ["LOCAL_DB_USER"],
+        "PASSWORD": os.environ["LOCAL_DB_PASS"],
+        "PORT": "5432",
+    }
+}
+
+
+>>>>>>> c8fb06ebdc7344c7dc6739b319995b072d498ebc:psytests/settings.py
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -178,7 +215,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
 
 
 MEDIA_URL = "/images/"

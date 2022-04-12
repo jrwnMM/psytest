@@ -1,21 +1,45 @@
 from django import forms
 from accounts.models import Profile
-
+from django.contrib.auth.models import User
 from personalityTest.models import Questionnaire
 from riasec.models import RIASEC_Test
-
+from django.forms.widgets import Select, SelectDateWidget
 from personalityTest.models import Questionnaire
 from riasec.models import RIASEC_Test
 from administration.models import AdminScheduledConsultation
 
 
-class SearchForm(forms.Form):
-    name = forms.CharField(required=False, widget=forms.TextInput(attrs={
-        'class': 'form-control',
-        'placeholder': 'Search Name',
-    }))
+class SearchForm(forms.ModelForm):
+    class Meta:
+        model=Profile
+        fields=['user','department','program','year','test_completed']
 
+    widgets = {
+        'user': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Search Name','id':'id_user'}),
+        'department': forms.Select(attrs={'class': 'form-control'}),
+        'program': forms.Select(attrs={'class': 'form-control'}),
+        'year': forms.Select(attrs={'class': 'form-control'}),
+        'test_completed': forms.SelectDateWidget(attrs={'class': 'form-control'}),
+    }
 
+class AdminSearchForm(forms.ModelForm):
+    # name = forms.CharField(required=False, widget=forms.TextInput(attrs={
+    #     'class': 'form-control',
+    #     'placeholder': 'Search Name',
+    # }))
+    #
+    class Meta:
+        model=User
+        fields = ['username','first_name','last_name','is_superuser','date_joined','email']
+
+    widgets = {
+        'username': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Search Name','id':'id_user'}),
+        'first_name': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Search Firstname'}),
+        'last_name': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Search Lastname'}),
+        'email': forms.EmailInput(attrs={'class': 'form-control','placeholder': 'Search Email'}),
+        'date_joined': forms.SelectDateWidget(attrs={'class': 'form-control'}),
+        'is_superuser': forms.CheckboxInput(attrs={'class': 'form-control'}),
+    }
 class AddRQuestionsForm(forms.ModelForm):
     class Meta:
         model = RIASEC_Test
@@ -79,4 +103,5 @@ class ScheduleDateForm(forms.ModelForm):
     class Meta:
         model = AdminScheduledConsultation
         fields = ['scheduled_date', 'managed_by', 'user', 'is_done']
+
 

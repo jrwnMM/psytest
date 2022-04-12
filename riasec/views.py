@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
 
 from datetime import datetime
 from django.utils import timezone
@@ -19,11 +20,18 @@ def testPage(request):
     range_num = range(42)
     obj = Riasec_result.objects.all()
     questions = RIASEC_Test.objects.all()
-    return render(
-        request,
-        "riasec/test.html",
-        {"questions": questions, "obj": obj, "range": range_num},
-    )
+
+    if (request.user.profile.department):
+        return render(
+            request,
+            "riasec/test.html",
+            {"questions": questions, "obj": obj, "range": range_num},
+        )
+    else:
+        messages.error(request, 'Please enter Department,Program and Year')
+        return redirect('accounts:edit_user')
+
+
 
 @login_required(login_url="accounts:login")
 def evaluate(request):
