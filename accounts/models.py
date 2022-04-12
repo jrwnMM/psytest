@@ -102,14 +102,15 @@ class Profile(models.Model):
         return self.user.username
 
 #get_age----------------
-    @property
-    def get_age(self):
-        return relativedelta(self.date_of_birth.days, datetime.date.now()).years
+    # @property
+    # def get_age(self):
+    #     print('DATEOFBIRTH',self.date_of_birth)
+    #     return relativedelta(self.date_of_birth, datetime.date.now()).years
 
 #save_age---------------
-    def save(self, *args, **kwargs):
-        self.age = self.get_age
-        super(Profile, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     self.age = self.get_age
+    #     super(Profile, self).save(*args, **kwargs)
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):

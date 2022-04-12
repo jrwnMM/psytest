@@ -44,36 +44,6 @@ class SuperUserCheck(UserPassesTestMixin, View):
     def test_func(self):
         return self.request.user.is_superuser
 
-<<<<<<< HEAD
-=======
-    def get_context_data(self, **kwargs):
-        now = datetime.today()
-        context = super().get_context_data(**kwargs)
-        context["unapproved_users"] = (
-            Profile.objects.filter(is_assigned=False)
-                .exclude(user__username=self.request.user)
-                .count()
-        )
-        notif_count = (
-                AdminScheduledConsultation.objects.filter(
-                    managed_by__user=self.request.user,
-                    is_done=False,
-                    scheduled_date__date=now.date(),
-                    scheduled_date__time__gt=now.time(),
-                    user__is_assigned=True,
-                ).count()
-                + AdminScheduledConsultation.objects.filter(
-            managed_by__user=self.request.user,
-            is_done=False,
-            scheduled_date__lt=now.today(),
-            user__is_assigned=True,
-        ).count()
-        )
-        context["notif_count"] = notif_count if notif_count is not None else None
-
-        return context
-
->>>>>>> c8fb06ebdc7344c7dc6739b319995b072d498ebc
 
 class UserAccessMixin(PermissionRequiredMixin):
     def dispatch(self, request, *args, **kwargs):
@@ -226,36 +196,6 @@ class UserDetailViewMixin(UserPassesTestMixin):
         else:
             test = False
         return test
-<<<<<<< HEAD
-=======
-
-    def get_context_data(self, **kwargs):
-        now = datetime.today()
-        context = super().get_context_data(**kwargs)
-        context["unapproved_users"] = (
-            Profile.objects.filter(is_assigned=False)
-                .exclude(user__username=self.request.user)
-                .count()
-        )
-        notif_count = (
-                AdminScheduledConsultation.objects.filter(
-                    managed_by__user=self.request.user,
-                    is_done=False,
-                    scheduled_date__date=now.date(),
-                    scheduled_date__time__gt=now.time(),
-                    user__is_assigned=True,
-                ).count()
-                + AdminScheduledConsultation.objects.filter(
-            managed_by__user=self.request.user,
-            is_done=False,
-            scheduled_date__lt=now.today(),
-            user__is_assigned=True,
-        ).count()
-        )
-        context["notif_count"] = notif_count if notif_count is not None else None
-
-        return context
->>>>>>> c8fb06ebdc7344c7dc6739b319995b072d498ebc
 
 
 class UserDetailView(LoginRequiredMixin, UserDetailViewMixin, FormMixin, DetailView):
