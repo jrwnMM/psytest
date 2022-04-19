@@ -6,6 +6,7 @@ from django.views.generic.edit import FormView
 from django.urls import reverse_lazy, reverse
 from accounts.models import Profile
 from django.contrib import messages
+from django.shortcuts import render
 
 
 import datetime
@@ -72,7 +73,9 @@ class DataPrivacyConsent(LoginRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         if (self.request.user.profile.department):
-            return render(request, self.template_name)
+            return render(request, self.template_name, {
+                'test': self.kwargs['test']
+            })
         else:
             messages.error(request, 'Please enter Department,Program and Year')
             return redirect(reverse('accounts:edit_user', kwargs={'pk':self.request.user.id}))

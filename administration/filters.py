@@ -1,17 +1,11 @@
 import django_filters
-import operator
 from django import forms
 from django_filters import (
     DateFilter,
     CharFilter,
-    OrderingFilter,
-    AllValuesFilter,
-    ChoiceFilter,
     ModelChoiceFilter,
     BooleanFilter,
 )
-from django_filters.widgets import LinkWidget
-from django.forms.widgets import Select, SelectDateWidget
 from django.contrib.auth.models import User
 from accounts.models import Profile, Department, Program, Year
 from django.db.models import Q

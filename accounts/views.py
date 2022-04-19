@@ -15,7 +15,7 @@ from django.core.mail import EmailMessage
 from django.contrib.auth.decorators import login_required
 from .forms import CreateUserForm, UpdateUserForm
 from django.views.generic import (
-    UpdateView, )
+    UpdateView, TemplateView)
 from .models import Department, Program, Year, Profile
 from django.http import JsonResponse
 # Create your views here.
@@ -129,16 +129,18 @@ def logoutUser(request):
 #
 #         return render(request, 'accounts/profile.html', context)
 
+class ProfileView(TemplateView):
+    template_name = 'accounts/profile.html'
 
 class EditProfile(UpdateView):
     model = Profile
     form_class = UpdateUserForm
-    template_name = 'accounts/profile.html'
+    template_name = 'accounts/profile-edit.html'
     success_url = reverse_lazy('homepage')
 
 #ValueError
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(EditProfile, self).get_context_data(**kwargs)
         context['initial']=Profile.objects.get(user=self.request.user)
         context['department']=Department.objects.all()
         context['program']=Program.objects.all()
@@ -204,7 +206,7 @@ class EditProfile(UpdateView):
         #---------------------
         user.username = form.cleaned_data.get('username')
         user.is_superuser = form.cleaned_data.get('is_superuser')
-        user.department.name = Department.objects.get(name=form.cleaned_data.get('department'))
+        user.department = Department.objects.get(name=form.cleaned_data.get('department'))
         user.program = Program.objects.get(name=form.cleaned_data.get('program'))
         user.year = Year.objects.get(name=form.cleaned_data.get('year'))
         user.save()

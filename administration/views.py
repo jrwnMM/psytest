@@ -28,7 +28,13 @@ from riasec.models import RIASEC_Test, Riasec_result
 
 from datetime import datetime
 
-from .forms import ScheduleDateForm, SearchForm, AdminSearchForm, AddRQuestionsForm, AddPQuestionsForm
+from .forms import (
+    ScheduleDateForm,
+    SearchForm,
+    AdminSearchForm,
+    AddRQuestionsForm,
+    AddPQuestionsForm,
+)
 from .models import AdminScheduledConsultation
 
 from accounts.models import Profile
@@ -114,15 +120,20 @@ class PendingUsers(LoginRequiredMixin, SuperUserCheck, ListView):
         #         .order_by("is_assigned")
         #         .exclude(user__username=self.request.user)
         #     )
-        # query = self.model.objects.filter().exclude(user__username=self.request.user)
-        qs = self.model.objects.exclude(user__username=self.request.user)
+        #     return query
+        # query = self.model.objects.exclude(user__username=self.request.user)
+        qs = (
+            self.model.objects.exclude(user__username=self.request.user)
+            .filter(is_assigned=False)
+            .order_by("test_completed")
+        )
         if qs:
             profiles = ProfileFilter(self.request.GET, queryset=qs)
             return profiles.qs
-        else:
-            obj_excluded = self.model.objects.exclude(user__username=self.request.user)
-            object_list = obj_excluded.filter(is_assigned=False).order_by('test_completed')
-        return object_list
+        # else:
+        #     obj_excluded = self.model.objects.exclude(user__username=self.request.user)
+        #     object_list = obj_excluded.filter(is_assigned=False).order_by('test_completed')
+        #     return object_list
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -131,17 +142,6 @@ class PendingUsers(LoginRequiredMixin, SuperUserCheck, ListView):
         )
         context["form"] = context
         return context
-
-        # context["users_pending"] = (
-        #     Profile.objects.filter(is_assigned=False)
-        #     .exclude(user__username=self.request.user)
-        #     .count()
-        # )
-        # context["users_assigned"] = (
-        #     AdminScheduledConsultation.objects.filter(user__is_assigned=True)
-        #     .exclude(managed_by=Profile.objects.get(user__username=self.request.user))
-        #     .count()
-        # )
 
 
 class AssignedUsers(LoginRequiredMixin, SuperUserCheck, ListView):
@@ -155,7 +155,9 @@ class AssignedUsers(LoginRequiredMixin, SuperUserCheck, ListView):
         query = self.request.GET.get("name")
         if query:
             object_list = self.model.objects.filter(
-                Q(user__first_name__icontains=query) | Q(user__last_name__icontains=query), user__is_assigned=True
+                Q(user__first_name__icontains=query)
+                | Q(user__last_name__icontains=query),
+                user__is_assigned=True,
             ).exclude(user__user__username=self.request.user)
         else:
             obj = Profile.objects.get(user__username=self.request.user)
@@ -167,29 +169,28 @@ class AssignedUsers(LoginRequiredMixin, SuperUserCheck, ListView):
         context = super().get_context_data(**kwargs)
         context["users_assigned"] = (
             AdminScheduledConsultation.objects.filter(user__is_assigned=True)
-                .exclude(managed_by=Profile.objects.get(user__username=self.request.user))
-                .count()
+            .exclude(managed_by=Profile.objects.get(user__username=self.request.user))
+            .count()
         )
         context["users_pending"] = (
             Profile.objects.filter(is_assigned=False)
-                .exclude(user__username=self.request.user)
-                .count()
+            .exclude(user__username=self.request.user)
+            .count()
         )
         return context
 
 
 class UserDetailViewMixin(UserPassesTestMixin):
-
     def test_func(self):
         obj = get_object_or_404(Profile, user__username=self.request.user)
 
         if obj.user.is_superuser:
             test = True
-            if obj.user.username == self.kwargs['user']:
+            if obj.user.username == self.kwargs["user"]:
                 if obj.is_result == False:
                     test = False
         elif obj.is_result:
-            if obj.user.username == self.kwargs['user']:
+            if obj.user.username == self.kwargs["user"]:
                 test = True
             else:
                 test = False
@@ -240,7 +241,7 @@ class UserDetailView(LoginRequiredMixin, UserDetailViewMixin, FormMixin, DetailV
                     user__username=self.kwargs.get("user"),
                     user__id=self.kwargs.get("pk"),
                 )
-                    .values(
+                .values(
                     "realistic",
                     "investigative",
                     "artistic",
@@ -248,7 +249,7 @@ class UserDetailView(LoginRequiredMixin, UserDetailViewMixin, FormMixin, DetailV
                     "enterprising",
                     "conventional",
                 )
-                    .first()
+                .first()
             )
             if obj is not None:
                 objects = dict(
@@ -329,7 +330,7 @@ def send_msg(request, user):
         obj.user.email,
     ]
     send_mail(subject, message, email_from, recipient_list, fail_silently=True)
-    return redirect('administration:pending-users')
+    return redirect("administration:pending-users")
 
 
 def return_user(request, user, pk):
@@ -373,9 +374,9 @@ def approve_user(request, user, pk):
         pass
 
     obj = Profile.objects.get(user__username=user)
-    print(request.GET.get('user'), 'Print User')
-    subject = 'Well done!'
-    message = f'Your result is now available. Go to the app > Assessment > View Result or go directly here http://jmcproject.herokuapp.com/administration/stats/{user}/{pk}/'
+    print(request.GET.get("user"), "Print User")
+    subject = "Well done!"
+    message = f"Your result is now available. Go to the app > Assessment > View Result or go directly here http://jmcproject.herokuapp.com/administration/stats/{user}/{pk}/"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [
         obj.user.email,
@@ -418,14 +419,14 @@ def deleteRecord(request, p_pk, p_user, r_pk, r_user):
 class RQuestionsTemplateView(SuperUserCheck, ListView):
     model = RIASEC_Test
     template_name = "administration/questions/rquestions.html"
-    context_object_name = 'rquestions'
+    context_object_name = "rquestions"
     paginate_by = 10
 
 
 class PQuestionsTemplateView(SuperUserCheck, ListView):
     model = Questionnaire
     template_name = "administration/questions/pquestions.html"
-    context_object_name = 'pquestions'
+    context_object_name = "pquestions"
     paginate_by = 10
 
 
@@ -501,7 +502,7 @@ class UserSchedules(LoginRequiredMixin, SuperUserCheck, ListView):
     context_object_name = "users"
     paginate_by = 8
 
-    ordering = ['scheduled_date']
+    ordering = ["scheduled_date"]
 
     def get_queryset(self):
         object_list = AdminScheduledConsultation.objects.filter(
@@ -573,7 +574,7 @@ class ResetSchedule(LoginRequiredMixin, SuperUserCheck, UpdateView):
         target.is_assigned = True
         target.save()
 
-        subject = 'Schedule Reset'
+        subject = "Schedule Reset"
         message = f'Hello, there have been changes in schedule. Your new consultation time will be followed on {obj.scheduled_date.strftime("%d %B, %Y  %H:%M%p")}'
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [
@@ -605,7 +606,7 @@ class SetSchedule(LoginRequiredMixin, SuperUserCheck, CreateView):
         obj.is_assigned = True
         obj.save()
 
-        subject = 'Consultation Notice'
+        subject = "Consultation Notice"
         message = f'Hello, you are asked to report in guidance office for consultation. Your schedule is set to {obj_x.scheduled_date.strftime("%d %B, %Y  %H:%M%p")}'
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [
@@ -629,43 +630,66 @@ class UserStats(LoginRequiredMixin, SuperUserCheck, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
-            riasec_avg = (Avg('realistic'), Avg('investigative'), Avg('artistic'), Avg('social'), Avg('enterprising'),
-                          Avg('conventional'))
-            context['riasec_male'] = Riasec_result.objects.filter(user__profile__gender='M').aggregate(*riasec_avg)
-            context['riasec_female'] = Riasec_result.objects.filter(user__profile__gender='F').aggregate(*riasec_avg)
-            context['riasec_college'] = Riasec_result.objects.filter(
-                user__profile__department__name='College').aggregate(
-                *riasec_avg)
-            context['riasec_ibed'] = Riasec_result.objects.filter(user__profile__department__name='IBED').aggregate(
-                *riasec_avg)
+            riasec_avg = (
+                Avg("realistic"),
+                Avg("investigative"),
+                Avg("artistic"),
+                Avg("social"),
+                Avg("enterprising"),
+                Avg("conventional"),
+            )
+            context["riasec_male"] = Riasec_result.objects.filter(
+                user__profile__gender="M"
+            ).aggregate(*riasec_avg)
+            context["riasec_female"] = Riasec_result.objects.filter(
+                user__profile__gender="F"
+            ).aggregate(*riasec_avg)
+            context["riasec_college"] = Riasec_result.objects.filter(
+                user__profile__department__name="College"
+            ).aggregate(*riasec_avg)
+            context["riasec_ibed"] = Riasec_result.objects.filter(
+                user__profile__department__name="IBED"
+            ).aggregate(*riasec_avg)
 
         except ObjectDoesNotExist:
             pass
 
         try:
-            personality_avg = (Avg('openness'),
-                               Avg('conscientious'),
-                               Avg('extroversion'),
-                               Avg('agreeable'),
-                               Avg('neurotic'),
-                               Avg('prediction'))
-            context["personality_male"] = Result.objects.filter(user__profile__gender='M').aggregate(*personality_avg)
-            context["personality_female"] = Result.objects.filter(user__profile__gender='F').aggregate(*personality_avg)
-            context["personality_college"] = Result.objects.filter(user__profile__department__name='College').aggregate(
-                *personality_avg)
-            context["personality_ibed"] = Result.objects.filter(user__profile__department__name='IBED').aggregate(
-                *personality_avg)
+            personality_avg = (
+                Avg("openness"),
+                Avg("conscientious"),
+                Avg("extroversion"),
+                Avg("agreeable"),
+                Avg("neurotic"),
+                Avg("prediction"),
+            )
+            context["personality_male"] = Result.objects.filter(
+                user__profile__gender="M"
+            ).aggregate(*personality_avg)
+            context["personality_female"] = Result.objects.filter(
+                user__profile__gender="F"
+            ).aggregate(*personality_avg)
+            context["personality_college"] = Result.objects.filter(
+                user__profile__department__name="College"
+            ).aggregate(*personality_avg)
+            context["personality_ibed"] = Result.objects.filter(
+                user__profile__department__name="IBED"
+            ).aggregate(*personality_avg)
 
         except ObjectDoesNotExist:
             pass
 
-        context['rm_count'] = Riasec_result.objects.filter(user__profile__gender='M').count()
-        context['rf_count'] = Riasec_result.objects.filter(user__profile__gender='F').count()
-        context["pm_count"] = Result.objects.filter(user__profile__gender='M').count()
-        context["pf_count"] = Result.objects.filter(user__profile__gender='F').count()
+        context["rm_count"] = Riasec_result.objects.filter(
+            user__profile__gender="M"
+        ).count()
+        context["rf_count"] = Riasec_result.objects.filter(
+            user__profile__gender="F"
+        ).count()
+        context["pm_count"] = Result.objects.filter(user__profile__gender="M").count()
+        context["pf_count"] = Result.objects.filter(user__profile__gender="F").count()
         return context
 
-        #get age
+        # get age
         # today = date.today()
         # dob =
         # age = relativedelta(today, dob)

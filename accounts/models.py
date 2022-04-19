@@ -7,7 +7,6 @@ from django.dispatch import receiver
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 from phonenumber_field.modelfields import PhoneNumberField
-from django.contrib.auth.models import AbstractBaseUser
 
 
 
@@ -102,15 +101,16 @@ class Profile(models.Model):
         return self.user.username
 
 #get_age----------------
-    # @property
-    # def get_age(self):
-    #     print('DATEOFBIRTH',self.date_of_birth)
-    #     return relativedelta(self.date_of_birth, datetime.date.now()).years
-
+    @property
+    def get_age(self):
+        if self.date_of_birth:
+            return relativedelta(datetime.today(), self.date_of_birth).years
+        else:
+            return None
 #save_age---------------
-    # def save(self, *args, **kwargs):
-    #     self.age = self.get_age
-    #     super(Profile, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        self.age = self.get_age
+        super(Profile, self).save(*args, **kwargs)
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
