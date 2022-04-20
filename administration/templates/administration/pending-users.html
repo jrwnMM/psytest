@@ -88,7 +88,6 @@
                         <tbody>
                         {% for user in users %}
 <!--                        ADD not below after testing-->
-                            {% if not user.test_completed == None %}
                         <tr>
                             <td>{{ forloop.counter0|add:page_obj.start_index }}</td>
                             <td>{{user.user.first_name}}</td>
@@ -139,7 +138,6 @@
                                 </div>
                             </td>
                         </tr>
-                        {% endif %}
                         {% endfor %}
                         </tbody>
                     </table>
