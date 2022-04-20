@@ -81,7 +81,7 @@ class Profile(models.Model):
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=6, choices=gender_choices, null=True, blank=True)
     #added models---------------
-    contacts = PhoneNumberField(unique=True, null=True, blank=True)
+    contactNumber = PhoneNumberField(unique=True, null=True, blank=True)
     age = models.IntegerField(null=True, blank=True)
     middle_name= models.CharField(max_length=128,null=True, blank=True) #Use custom user model?
     #add fields in filters.py

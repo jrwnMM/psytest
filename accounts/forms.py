@@ -366,6 +366,7 @@ class CreateUserForm(UserCreationForm):
 #         return self.cleaned_data.get('user__last_name')
 class UpdateUserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs) -> None:
+        self.gender = kwargs.pop('gender', None)
         self.department = kwargs.pop('department', None)
         self.program = kwargs.pop('program', None)
         self.year = kwargs.pop('year', None)
@@ -381,16 +382,11 @@ class UpdateUserForm(forms.ModelForm):
         self.fields['year'].label = 'Year'
         self.fields['year'].choices = self.year
         self.fields['gender'].label = 'Gender'
+        self.fields['gender'].choices = self.gender
         self.fields['date_of_birth'].label = 'Date of Birth'
 
     year_range = list(range(now.year - 100, now.year + 1))
     year_range.reverse()
-
-    gender_choices = [
-        ('', '---'),
-        ('M', 'Male'),
-        ('F', 'Female'),
-    ]
 
 
     date_of_birth = forms.DateField(required=False,
@@ -398,7 +394,7 @@ class UpdateUserForm(forms.ModelForm):
                                                             years=year_range,
                                                             attrs={'class': 'form-select'}))
 
-    gender = forms.CharField(widget=Select(choices=gender_choices, attrs={
+    gender = forms.CharField(widget=Select(attrs={
         'class': 'form-select'
     }))
     first_name = forms.CharField(widget=forms.TextInput(attrs={

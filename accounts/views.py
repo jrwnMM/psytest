@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -12,12 +11,11 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
-from django.contrib.auth.decorators import login_required
 from .forms import CreateUserForm, UpdateUserForm
 from django.views.generic import (
     UpdateView, TemplateView)
 from .models import Department, Program, Year, Profile
-from django.http import JsonResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 
 
@@ -36,7 +34,11 @@ def loginPage(request):
             return HttpResponseRedirect(reverse('homepage'))
         else:
             messages.error(request, 'Username or Password is incorrect')
-    return render(request, 'accounts/login.html')
+    else:
+        if request.user.is_authenticated:
+            return redirect('homepage')
+        else:
+            return render(request, 'accounts/login.html')
 
 
 def registerPage(request):
@@ -70,13 +72,15 @@ def registerPage(request):
             return render(request, 'accounts/emailConfirmationView.html')
 
     else:
-        form = CreateUserForm()
-        form.fields['department'].choices = Department.objects.values_list('id', 'name')
-        form.fields['program'].choices = Program.objects.values_list('id', 'name')
-        form.fields['year'].choices = Year.objects.values_list('id', 'name')
-        context = {'form': form}
-
-    return render(request, 'accounts/register.html', context)
+        if request.user.is_authenticated:
+            return redirect('homepage')
+        else:
+            form = CreateUserForm()
+            form.fields['department'].choices = Department.objects.values_list('id', 'name')
+            form.fields['program'].choices = Program.objects.values_list('id', 'name')
+            form.fields['year'].choices = Year.objects.values_list('id', 'name')
+            context = {'form': form}
+            return render(request, 'accounts/register.html', context)
 
 
 def activate(request, uidb64, token):
@@ -129,14 +133,19 @@ def logoutUser(request):
 #
 #         return render(request, 'accounts/profile.html', context)
 
-class ProfileView(TemplateView):
+class ProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'accounts/profile.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profile'] = Profile.objects.get(user=self.request.user)
+        return context
 
-class EditProfile(UpdateView):
-    model = Profile
+class EditProfile(LoginRequiredMixin, UpdateView):
+    model = User
     form_class = UpdateUserForm
     template_name = 'accounts/profile-edit.html'
-    success_url = reverse_lazy('homepage')
+    success_url = reverse_lazy('accounts:profile')
 
 #ValueError
     def get_context_data(self, **kwargs):
@@ -187,7 +196,13 @@ class EditProfile(UpdateView):
             ('4th', '4th Year'),
             ('5th', '5th Year'),
         ]
+        gender = [
+        ('', '---'),
+        ('M', 'Male'),
+        ('F', 'Female'),
+    ]
         kwargs = super(EditProfile, self).get_form_kwargs()
+        kwargs['gender'] = gender
         kwargs['department'] = department
         kwargs['program'] = program
         kwargs['year'] = year
@@ -196,19 +211,19 @@ class EditProfile(UpdateView):
     def form_valid(self, form):
         user = form.save(commit=False)
         user.refresh_from_db()
-        user.date_of_birth = form.cleaned_data.get('date_of_birth')
-        user.gender = form.cleaned_data.get('gender')
-        user.user.first_name = form.cleaned_data.get('first_name')
-        user.user.last_name = form.cleaned_data.get('last_name')
+        user.profile.date_of_birth = form.cleaned_data.get('date_of_birth')
+        user.profile.gender = form.cleaned_data.get('gender')
+        user.first_name = form.cleaned_data.get('first_name')
+        user.last_name = form.cleaned_data.get('last_name')
         #---------------------
-        user.middle_name = form.cleaned_data.get('middle_name')
-        user.contact = form.cleaned_data.get('contact')
+        user.profile.middle_name = form.cleaned_data.get('middle_name')
+        user.profile.contact = form.cleaned_data.get('contact')
         #---------------------
         user.username = form.cleaned_data.get('username')
         user.is_superuser = form.cleaned_data.get('is_superuser')
-        user.department = Department.objects.get(name=form.cleaned_data.get('department'))
-        user.program = Program.objects.get(name=form.cleaned_data.get('program'))
-        user.year = Year.objects.get(name=form.cleaned_data.get('year'))
+        user.profile.department = Department.objects.get(name=form.cleaned_data.get('department'))
+        user.profile.program = Program.objects.get(name=form.cleaned_data.get('program'))
+        user.profile.year = Year.objects.get(name=form.cleaned_data.get('year'))
         user.save()
         return super().form_valid(form)
 
