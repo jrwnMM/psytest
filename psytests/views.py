@@ -78,5 +78,5 @@ class DataPrivacyConsent(LoginRequiredMixin, TemplateView):
             })
         else:
             messages.error(request, 'Please enter Department,Program and Year')
-            return redirect(reverse('accounts:edit_user', kwargs={'pk':self.request.user.id}))
+            return redirect(reverse('accounts:edit-profile', kwargs={'pk':self.request.user.id}))
 

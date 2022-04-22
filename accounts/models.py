@@ -11,12 +11,12 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Department(models.Model):
-    department=[
+    departments=[
         ('IBED','Integrated Basic Education (Preschool to SHS)'),
         ('College','College Department')
     ]
 
-    name = models.CharField(_('Department'),max_length=50,choices=department)
+    name = models.CharField(_('Department'),max_length=50,choices=departments)
 
     def __str__(self):
         return self.name
@@ -24,9 +24,13 @@ class Department(models.Model):
 
 class Program(models.Model):
     programs = [
+        ('IBED',[
         ('Grade', 'Grade School'),
         ('Junior', 'Junior Highschool'),
-        ('Senior', 'Senior Highschool'),
+        ('Senior', 'Senior Highschool')
+        ]),
+
+        ('College', [
         ('BSA', 'BS in Accountancy'),
         ('BSBA', 'BS in Business Administration'),
         ('BSMA', 'BS in Management Accounting'),
@@ -38,6 +42,9 @@ class Program(models.Model):
         ('BSP', 'BS in Psychology'),
         ('BSSW', 'BS in Social Work'),
         ('BSMT', 'BS in Medical Technology'),
+        ])
+        
+        
     ]
 
     name = models.CharField(_('Program'),max_length=50,choices=programs)
@@ -46,27 +53,30 @@ class Program(models.Model):
         return self.name
 
 class Year(models.Model):
-    year=[
-        ('1','Grade 1'),
+    years=[
+        ('Grade',[('1','Grade 1'),
         ('2','Grade 2'),
         ('3','Grade 3'),
         ('4','Grade 4'),
         ('5','Grade 5'),
-        ('6','Grade 6'),
-        ('7','Grade 7'),
+        ('6','Grade 6')]),
+
+        ('Junior', [('7','Grade 7'),
         ('8','Grade 8'),
         ('9','Grade 9'),
-        ('10','Grade 10'),
-        ('11','Grade 11'),
-        ('12','Grade 12'),
-        ('1st','1st Year'),
+        ('10','Grade 10')]),
+
+        ('Senior', [('11','Grade 11'),
+        ('12','Grade 12')]),
+
+        ('College',[('1st','1st Year'),
         ('2nd','2nd Year'),
         ('3rd','3rd Year'),
         ('4th','4th Year'),
-        ('5th','5th Year'),
+        ('5th','5th Year')])
     ]
 
-    name = models.CharField(_('Year'),max_length=10,choices=year)
+    name = models.CharField(_('Year'),max_length=10,choices=years)
 
     def __str__(self):
         return self.name

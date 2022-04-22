@@ -1,18 +1,17 @@
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth import password_validation
+
 from django.contrib.auth.forms import UserCreationForm, SetPasswordForm
 from django.contrib.auth.models import User
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.forms.widgets import Select, SelectDateWidget
 
-from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm
+from django.contrib.auth.forms import PasswordResetForm
 
 from django.utils import timezone
-
 import re
 
-from .models import Year, Program, Department, Profile
+from .models import Year, Program, Department
 
 now = timezone.now()
 
@@ -170,9 +169,6 @@ class CreateUserForm(UserCreationForm):
         self.fields['username'].label = 'Username'
         self.fields['first_name'].label = 'First Name'
         self.fields['last_name'].label = 'Last Name'
-        self.fields['department'].label = 'Department'
-        self.fields['program'].label = 'Program'
-        self.fields['year'].label = 'Year'
         self.fields['gender'].label = 'Gender'
         self.fields['date_of_birth'].label = 'Date of Birth'
 
@@ -202,22 +198,18 @@ class CreateUserForm(UserCreationForm):
         'class': 'form-control',
         'placeholder': 'Type your last name'
     }))
+    middle_name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Type your middle name'
+    }))
     username = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
         'placeholder': 'Type your username'
     }))
-    department = forms.ChoiceField(widget=Select(attrs={
-        'class': 'form-control'
+    contactNumber = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Type your contact number'
     }))
-
-    program = forms.ChoiceField(widget=Select(attrs={
-        'class': 'form-control',
-    },
-    ))
-    year = forms.ChoiceField(widget=Select(attrs={
-        'class': 'form-control',
-    },
-    ))
     email = forms.EmailField(widget=forms.EmailInput(attrs={
         'class': 'form-control',
         'placeholder': 'Type your email address'
@@ -230,27 +222,29 @@ class CreateUserForm(UserCreationForm):
         'class': 'form-control',
         'placeholder': 'Re-enter password'
     }))
-    is_superuser = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={
-        'placeholder': 'is_superuser'
-    }))
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'gender', 'department', 'program', 'year', 'date_of_birth', 'username',
-                  'email', 'password1', 'password2',
-                  'is_superuser']
+        fields = ['first_name', 'middle_name', 'last_name', 'gender', 'date_of_birth','contactNumber', 'username',
+                  'email', 'password1', 'password2']
 
     def clean_first_name(self):
         if not self.cleaned_data.get('first_name').replace(" ", "").isalpha():
             raise ValidationError("it shouldn't contain numbers")
 
-        return self.cleaned_data.get('first_name')
+        return self.cleaned_data.get('first_name').title()
+
+    def clean_middle_name(self):
+        if not self.cleaned_data.get('middle_name').replace(" ", "").isalpha():
+            raise ValidationError("it shouldn't contain numbers")
+
+        return self.cleaned_data.get('middle_name').title()
 
     def clean_last_name(self):
         if not self.cleaned_data.get('last_name').replace(" ", "").isalpha():
             raise ValidationError("it shouldn't contain numbers")
 
-        return self.cleaned_data.get('last_name')
+        return self.cleaned_data.get('last_name').title()
 
     def clean_date_of_birth(self):
         try:
@@ -282,7 +276,9 @@ class CreateUserForm(UserCreationForm):
         return password1
 
     def clean_password2(self):
-        if self.cleaned_data.get('password2') != self.cleaned_data.get('password1'):
+        if self.cleaned_data.get('password1') is None:
+            pass
+        elif self.cleaned_data.get('password2') != self.cleaned_data.get('password1'):
             raise ValidationError("Confirmation password doesn't match")
 
         return self.cleaned_data.get('password2')

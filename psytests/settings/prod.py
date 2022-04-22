@@ -5,6 +5,8 @@ ALLOWED_HOSTS = ["jmcproject.herokuapp.com", "127.0.0.1", "localhost"]
 
 SECRET_KEY = os.environ["SECRET_KEY"]
 
+SITE_ID = 1
+
 DATABASES = {
     # production
     'default': {

@@ -11,107 +11,116 @@
 
             <form method="post" id="registerForm" data-profile-url="{% url 'accounts:register' %}">
                 {% csrf_token %}
-                <!--                <div class="row mb-3">-->
-                <!--                    <div class="col-sm-6 col-xs-6">-->
-                <!--                        <label for="">{{form.first_name.label}}</label>-->
-                <!--                        {{form.first_name}}-->
-                <!--                        <p class="text-danger ms-3">{{form.first_name.errors }}</p>-->
-                <!--                    </div>-->
-                <!--                    <div class="col-sm-6 col-xs-6">-->
-                <!--                        <label for="">{{form.last_name.label}}</label>-->
-                <!--                        {{form.last_name}}-->
-                <!--                        <p class="text-danger ms-3">{{form.last_name.errors }}</p>-->
-                <!--                    </div>-->
-                <!--                </div>-->
-                <!--                <div class="row mb-3">-->
-                <!--                    <div class="col-sm-6 col-xs-6">-->
-                <!--                        <label for="">{{form.gender.label}}</label>-->
-                <!--                        {{form.gender}}-->
-                <!--                    </div>-->
-                <!--                    <div class="col-sm-6 col-xs-6">-->
-                <!--                        <label for="">{{form.date_of_birth.label}}</label>-->
-                <!--                        <div class="input-group">{{form.date_of_birth}}</div>-->
-                <!--                        {{form.date_of_birth.errors}}-->
-                <!--                    </div>-->
-                <!--                </div>-->
-                <!--                <div class="mb-3">-->
-                <!--                    <label for="">{{form.username.label}}</label>-->
-                <!--                    {{form.username}}-->
-                <!--                </div>-->
-                <!--                {% if form.username.errors %}-->
-                <!--                {{form.username.errors}}-->
-                <!--                <div class="alert alert-secondary">-->
-                <!--                    <ul>-->
-                <!--                        <li>Usernames can consist of lowercase and capitals</li>-->
-                <!--                        <li>Usernames can consist of alphanumeric characters</li>-->
-                <!--                        <li>Usernames can consist of underscore and hyphens and spaces</li>-->
-                <!--                        <li>Cannot be two underscores, two hypens or two spaces in a row</li>-->
-                <!--                        <li>Cannot have a underscore, hypen or space at the start or end</li>-->
-                <!--                    </ul>-->
-                <!--                </div>-->
-                <!--                {% endif %}-->
-                <!--                <div class="mb-3">-->
-                <!--                    <label for="">{{form.email.label}}</label>-->
-                <!--                    {{form.email}}-->
-                <!--                    {{form.email.errors}}-->
-                <!--                </div>-->
-
-                <!--                <div class="row mb-3">-->
-                <!--                    <div class="col-sm-6 col-xs-6">-->
-                <!--                        <label for="">{{form.password1.label}}</label>-->
-                <!--                        {{form.password1}}-->
-                <!--                        {{form.password1.errors}}-->
-                <!--                    </div>-->
-                <!--                    <div class="col-sm-6 col-xs-6">-->
-                <!--                        <label for="">{{form.password2.label}}</label>-->
-                <!--                        {{form.password2}}-->
-                <!--                        {{form.password2.errors}}-->
-                <!--                    </div>-->
-                <!--                    {% if form.password1.errors %}-->
-                <!--                    <div class="alert alert-secondary">-->
-                <!--                        <p>Password should be:</p>-->
-                <!--                        <ul>-->
-                <!--                            <li>Minimum of eight characters</li>-->
-                <!--                            <li>Must include a mix of upper and lower case</li>-->
-                <!--                            <li>Must include a number</li>-->
-                <!--                        </ul>-->
-                <!--                    </div>-->
-                <!--                    {% endif %}-->
-                <!--                </div>-->
-                <!--                <div class="d-flex justify-content-center">-->
-                <!--                    <input type="submit" value="Submit" class="btn btn-style w-100 mt-3">-->
-                <!--                </div>-->
-                {{ form.as_p }}
-                <div class="ui selection dropdown" id="dept">
-                    <input type="hidden" name="dept">
-                    <i class="dropdown icon"></i>
-                    <div class="default text">Department</div>
-                    <div class="menu" id="dept-data-box">
+                <div class="row">
+                    <div class="col-sm-4 col-xs-6">
+                        <label for="id_first_name">First Name</label>
+                        {{form.first_name}}
+                        {{form.first_name.errors}}
+                    </div>
+                    <div class="col-sm-4 col-xs-6">
+                        <label for="id_middle_name">Middle Name</label>
+                        {{form.middle_name}}
+                        {{form.middle_name.errors}}
+                    </div>
+                    <div class="col-sm-4 col-xs-6">
+                        <label for="id_last_name">Last Name</label>
+                        {{form.last_name}}
+                        {{form.last_name.errors}}
                     </div>
                 </div>
-                <div class="ui selection dropdown" id="prog">
-                    <input type="hidden" name="prog">
-                    <i class="dropdown icon"></i>
-                    <div class="default text" id="prog-text">Program</div>
-                    <div class="menu" id="prog-data-box">
+                
+                <div class="row">
+                    <div class="col-sm-4 col-xs-6">
+                        <label for="id_gender">Gender</label>
+                        {{form.gender}}
+                        {{form.gender.errors}}
+                    </div>
+                    <div class="col-sm-4 col-xs-6">
+                        <label for="id_contactNumber">ContactNumber</label>
+                        <small class="text-muted">(e.g +639057833050)</small>
+                        {{form.contactNumber}}
+                        {{form.contactNumber.errors}}
+                    </div>
+                    <div class="col-sm-4 col-xs-6">
+                        <label for="id_date_of_birth">Birthdate</label>
+                        <div class="d-flex">
+                            {{form.date_of_birth}}
+                            {{form.date_of_birth.errors}}
+                        </div>
                     </div>
                 </div>
-                <div class="ui selection dropdown" id="year">
-                    <input type="hidden" name="year">
-                    <i class="dropdown icon"></i>
-                    <div class="default text">Year</div>
-                    <div class="menu" id="year-data-box">
+                
+                <div class="row">
+                    <div class="col-4 col-xs-6">
+                        <label for="id_department">Department</label>
+                        <select class="form-select" name="department" aria-label="Department" required>
+                            {% for index, choice in department %}
+                            <option value="{{index}}">{{choice}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-4 col-xs-6">
+                        <label for="id_program">Program</label>
+                        <select class="form-select" name="program" aria-label="Prorgam" required>
+                            {% for index, choice in program_ibed %}
+                            <option value="{{index}}">{{choice}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-4 col-xs-6">
+                        <label for="id_year">Year</label>
+                        <select class="form-select" name="year" aria-label="Year" required>
+                            {% for index, choice in year_grade %}
+                            <option value="{{index}}">{{choice}}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
+                
+                <div class="row">
+                    <div class="col-sm-6 col-xs-6">
+                        <label for="id_username">Username</label>
+                        {{form.username}}
+                        {{form.username.errors}}
+                    </div>
+                    <div class="col-sm-6 col-xs-6">
+                        <label for="id_email">Email</label>
+                        {{form.email}}
+                        {{form.email.errors}}
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-6 col-xs-6">
+                        <label for="id_password1">Password</label>
+                        {{form.password1}}
+                        {{form.password1.errors}}
+                    </div>
+                    <div class="col-sm-6 col-xs-6">
+                        <label for="id_password2">Confirm Password</label>
+                        {{form.password2}}
+                        {{form.password2.errors}}
+                    </div>
+                </div>
+                {% if form.password1.errors %}
+                <div class="alert alert-secondary">
+                    <ul>
+                        <li>Usernames can consist of lowercase and capitals</li>
+                        <li>Usernames can consist of alphanumeric characters</li>
+                        <li>Usernames can consist of underscore and hyphens and spaces</li>
+                        <li>Cannot be two underscores, two hypens or two spaces in a row</li>
+                        <li>Cannot have a underscore, hypen or space at the start or end</li>
+                    </ul>
+                </div>
+                {% endif %}
                 <div class="d-flex justify-content-center">
-                    <input type="submit" value="Submit" class="btn btn-style w-100 mt-3">
+                    <input type="submit" value="Submit" class="btn btn-teal w-100 mt-3">
                 </div>
             </form>
         </div>
     </div>
 </main>
 <script>
-{% include 'accounts/scripts/main.js' %}
 
 </script>
 <!--<script>-->

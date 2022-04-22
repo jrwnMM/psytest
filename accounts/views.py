@@ -16,6 +16,8 @@ from django.views.generic import (
     UpdateView, TemplateView)
 from .models import Department, Program, Year, Profile
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from django.contrib.sites.models import Site
 # Create your views here.
 
 
@@ -42,18 +44,20 @@ def loginPage(request):
 
 
 def registerPage(request):
+    form = CreateUserForm(request.POST or None)
     if request.method == 'POST':
-        form = CreateUserForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.is_active = False
             user.save()
             user.refresh_from_db()
+            user.profile.middle_name = form.cleaned_data.get('middle_name')
             user.profile.date_of_birth = form.cleaned_data.get('date_of_birth')
             user.profile.gender = form.cleaned_data.get('gender')
-            user.profile.department = Department.objects.all()
-            user.profile.program = Program.objects.all()
-            user.profile.year = Year.objects.all()
+            user.profile.contactNumber = form.cleaned_data.get('contactNumber')
+            user.profile.department = Department.objects.get(name=request.POST.get("department"))
+            user.profile.program = Program.objects.get(name=request.POST.get("program"))
+            user.profile.year= Year.objects.get(name=request.POST.get("year"))
             user.save()
 
             current_site = get_current_site(request)
@@ -70,17 +74,22 @@ def registerPage(request):
             )
             email.send()
             return render(request, 'accounts/emailConfirmationView.html')
-
+        else:
+            print('Printing...', form.errors)
     else:
         if request.user.is_authenticated:
             return redirect('homepage')
-        else:
-            form = CreateUserForm()
-            form.fields['department'].choices = Department.objects.values_list('id', 'name')
-            form.fields['program'].choices = Program.objects.values_list('id', 'name')
-            form.fields['year'].choices = Year.objects.values_list('id', 'name')
-            context = {'form': form}
-            return render(request, 'accounts/register.html', context)
+    context = {
+        'form': form,
+        'department': [('', 'Please Select One')] + Department.departments,
+        'program_ibed': [('', 'Please Select One')] + Program.programs[0][1],
+        'program_college': [('', 'Please Select One')] + Program.programs[1][1],
+        'year_grade': [('', 'Please Select One')] + Year.years[0][1],
+        'year_junior': [('', 'Please Select One')] + Year.years[1][1],
+        'year_senior': [('', 'Please Select One')] + Year.years[2][1],
+        'year_college': [('', 'Please Select One')] + Year.years[3][1],
+        }
+    return render(request, 'accounts/register.html', context)
 
 
 def activate(request, uidb64, token):
