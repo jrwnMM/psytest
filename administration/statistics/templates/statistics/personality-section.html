@@ -1,0 +1,28 @@
+<div class="tab-pane fade show" id="v-pills-personality" role="tabpanel" aria-labelledby="v-pills-personality-tab">
+
+    <div class="d-flex justify-content-end my-2">
+        <div class="text-end" style="width: 250px;">
+            <label for="personality_category">Category</label>
+            <select name="personality_category"
+                id="personality_category" 
+                class="form-select" 
+                hx-get="{% url 'administration:statistics_personality_category' %}"
+                hx-trigger="change"
+                hx-swap="innerHTML"
+                hx-target="#personality-section"                
+                >
+                <option value="1">All</option>
+                <option value="2">Gender</option>
+                <option value="3">College</option>
+                <option value="4">Senior Highschool</option>
+                <option value="5">Junior Highschool</option>
+                <option value="6">Grade School</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="personality-section">
+        {% include 'statistics/partials/personality_all.html' %}
+    </div>
+
+</div>

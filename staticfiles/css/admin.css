@@ -21,12 +21,9 @@
 
 .admin-div {
     background-color: rgba(0,128,128);
-    display: flex;
-    justify-content: space-between;
-    padding: 5px;
-    padding-left: 25px;
+}
+.admin-div a {
     color: whitesmoke;
-    margin-top: 10px;
 }
 
 input[type='text']:focus {

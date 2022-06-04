@@ -1,30 +1,24 @@
 {% extends 'administration/base.html' %}
 {% load static %}
-{% block title %}System Administration{% endblock %}
+{% block title %}Administration{% endblock %}
 
 {% block content %}
-<header>
-    {% include 'partials/_navbar.html' %}
-</header>
 <main class="container">
-    <div class='admin-div'>
-        <small>Administration</small>
-    </div>
     <div class="row justify-content-center mt-5">
         <div class="d-flex justify-content-center flex-wrap">
-            <a href="{% url 'administration:rquestions' %}" class="m-2 admin-selection">
+            <a href="{% url 'administration:career' %}" class="m-2 admin-selection">
                 <div class="text-center">
                     <img class="svg-120 m-2" src="{% static 'icons/riasec.png' %}" alt="">
                     <div class="text-center">
-                        <p class="fs-20">RIASEC Questionnaire</p>
+                        <p class="fs-20">Manage Career Test</p>
                     </div>
                 </div>
             </a>
-            <a href="{% url 'administration:pquestions' %}" class="m-2 admin-selection">
+            <a href="{% url 'administration:personality' %}" class="m-2 admin-selection">
                 <div class="text-center">
                     <img class="svg-120 m-2" src="{% static 'icons/personality.png' %}" alt="">
                     <div class="text-center">
-                        <p class="fs-20">Personality Test Questionnaire</p>
+                        <p class="fs-20">Manage Personality Test</p>
                     </div>
                 </div>
             </a>
@@ -32,15 +26,23 @@
                 <div class="text-center">
                     <img class="svg-120 m-2" src="{% static 'icons/management.png' %}" alt="">
                     <div class="text-center">
-                        <p class="fs-20">User Management</p>
+                        <p class="fs-20">Manage Users</p>
                     </div>
                 </div>
             </a>
-            <a href="{% url 'administration:user-stats' %}" class="m-2 admin-selection">
+            <a href="{% url 'administration:statistics' %}" class="m-2 admin-selection">
                 <div class="text-center">
                     <img class="svg-120 m-2" src="{% static 'icons/statistics.png' %}" alt="">
                     <div class="text-center">
-                        <p class="fs-20">User Statistics</p>
+                        <p class="fs-20">Statistics</p>
+                    </div>
+                </div>
+            </a>
+            <a href="{% url 'administration:departments' %}" class="m-2 admin-selection">
+                <div class="text-center">
+                    <img class="svg-120 m-2" src="{% static 'icons/department.png' %}" alt="">
+                    <div class="text-center">
+                        <p class="fs-20">Manage Departments</p>
                     </div>
                 </div>
             </a>

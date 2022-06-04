@@ -1,0 +1,22 @@
+<div class="modal fade" id="unapprove" tabindex="-1" aria-labelledby="unapprove-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="unapprove-label">Unapprove Record</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure do you want to hide the record to the user?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">close</button>
+                <button hx-post="{% url 'administration:unapprove-result' profile.user.id %}" 
+                        hx-swap="none" 
+                        class="btn btn-success me-3"
+                        data-bs-dismiss="modal"
+                        >unapprove</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,11 +1,12 @@
 from django.urls import path
 from .views import (
+    departments,
     registerPage,
     loginPage,
     logoutUser,
     activate,
-    EditProfile,
-    ProfileView
+    years,
+    programs,
 )
 
 app_name='accounts'
@@ -14,6 +15,8 @@ urlpatterns = [
     path('activate/<uidb64>/<token>/', activate, name='activate'),
     path('login/', loginPage, name='login'),
     path('logout/',logoutUser,name='logout'),
-    path('profile/',ProfileView.as_view(), name='profile'),
-    path('edit-profile/<int:pk>/', EditProfile.as_view(), name='edit-profile'),
+    path('register/departments/', departments, name='department_choices'),
+    path('register/programs/', programs, name='program_choices'),
+    path('register/years/', years, name='year_choices'),
+
 ]

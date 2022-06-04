@@ -4,120 +4,48 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.urls import reverse
 from dateutil.relativedelta import relativedelta
-from datetime import datetime
+import datetime
 from phonenumber_field.modelfields import PhoneNumberField
-
-
-
-class Department(models.Model):
-    departments=[
-        ('IBED','Integrated Basic Education (Preschool to SHS)'),
-        ('College','College Department')
-    ]
-
-    name = models.CharField(_('Department'),max_length=50,choices=departments)
-
-    def __str__(self):
-        return self.name
-
-
-class Program(models.Model):
-    programs = [
-        ('IBED',[
-        ('Grade', 'Grade School'),
-        ('Junior', 'Junior Highschool'),
-        ('Senior', 'Senior Highschool')
-        ]),
-
-        ('College', [
-        ('BSA', 'BS in Accountancy'),
-        ('BSBA', 'BS in Business Administration'),
-        ('BSMA', 'BS in Management Accounting'),
-        ('BSC', 'BS in Criminology'),
-        ('BSCE', 'BS in Civil Engineering'),
-        ('BSE', 'Bachelor in Secondary Education'),
-        ('BEE', 'Bachelor in Elementary Education'),
-        ('BSIT', 'BS in Information Technology'),
-        ('BSP', 'BS in Psychology'),
-        ('BSSW', 'BS in Social Work'),
-        ('BSMT', 'BS in Medical Technology'),
-        ])
-        
-        
-    ]
-
-    name = models.CharField(_('Program'),max_length=50,choices=programs)
-    department = models.ForeignKey(Department,on_delete=models.CASCADE)
-    def __str__(self):
-        return self.name
-
-class Year(models.Model):
-    years=[
-        ('Grade',[('1','Grade 1'),
-        ('2','Grade 2'),
-        ('3','Grade 3'),
-        ('4','Grade 4'),
-        ('5','Grade 5'),
-        ('6','Grade 6')]),
-
-        ('Junior', [('7','Grade 7'),
-        ('8','Grade 8'),
-        ('9','Grade 9'),
-        ('10','Grade 10')]),
-
-        ('Senior', [('11','Grade 11'),
-        ('12','Grade 12')]),
-
-        ('College',[('1st','1st Year'),
-        ('2nd','2nd Year'),
-        ('3rd','3rd Year'),
-        ('4th','4th Year'),
-        ('5th','5th Year')])
-    ]
-
-    name = models.CharField(_('Year'),max_length=10,choices=years)
-
-    def __str__(self):
-        return self.name
 
 class Profile(models.Model):
     gender_choices = (
-        ('M', 'Male'),
-        ('F', 'Female'),
+        ('Male', 'Male'),
+        ('Female', 'Female'),
     )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=6, choices=gender_choices, null=True, blank=True)
-    #added models---------------
     contactNumber = PhoneNumberField(unique=True, null=True, blank=True)
     age = models.IntegerField(null=True, blank=True)
     middle_name= models.CharField(max_length=128,null=True, blank=True) #Use custom user model?
-    #add fields in filters.py
-    #---------------------------
-    department = models.ForeignKey(Department,on_delete=models.SET_NULL,null=True)
-    program= models.ForeignKey(Program,on_delete=models.SET_NULL,null=True)
-    year= models.ForeignKey(Year,on_delete=models.SET_NULL,null=True)
-    test_completed = models.DateTimeField(null=True, blank=True)
+    educationlevel = models.ForeignKey("EducationLevel",on_delete=models.SET_NULL,null=True)
+    department = models.ForeignKey("Department",on_delete=models.SET_NULL,null=True)
+    program= models.ForeignKey("Program",on_delete=models.SET_NULL,null=True)
+    year= models.ForeignKey("Year",on_delete=models.SET_NULL,null=True)
+    last_test_taken = models.DateTimeField(null=True, blank=True)
     is_assigned = models.BooleanField(null=True)
-    is_result = models.BooleanField(default=False)
+    is_result = models.BooleanField(null=True)
     
     @admin.display(ordering='user__first_name')
     def full_name(self):
         return self.user.get_full_name()
 
     def __str__(self):
-        return self.user.username
+        return f"{self.user.first_name} {self.user.last_name}"
 
-#get_age----------------
     @property
     def get_age(self):
-        if self.date_of_birth:
-            return relativedelta(datetime.today(), self.date_of_birth).years
+        if type(self.date_of_birth) is str:
+            dob = datetime.datetime.strptime(self.date_of_birth, '%Y-%m-%d')
+            return relativedelta(datetime.datetime.today(), dob).years
+        elif type(self.date_of_birth) is datetime.date:
+            return relativedelta(datetime.datetime.today(), self.date_of_birth).years
         else:
             return None
-#save_age---------------
+
     def save(self, *args, **kwargs):
         self.age = self.get_age
         super(Profile, self).save(*args, **kwargs)
@@ -128,3 +56,31 @@ class Profile(models.Model):
             Profile.objects.create(user=instance)
         instance.profile.save()
 
+class EducationLevel(models.Model):
+    name = models.CharField(max_length=50, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+class Department(models.Model):
+    educationlevel = models.ForeignKey(EducationLevel, on_delete=models.CASCADE, null=True, blank=True)
+    code = models.CharField(max_length=16, null=True, blank=True)
+    name = models.CharField(max_length=64, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+class Program(models.Model):
+    department = models.ForeignKey(Department, on_delete=models.PROTECT, null=True, blank=True, related_name='programs')
+    code = models.CharField(max_length=16, null=True, blank=True)
+    name = models.CharField(max_length=128, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+class Year(models.Model):
+    educationlevel = models.ForeignKey(EducationLevel, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(_('Year'),max_length=32, null=True, blank=True)
+
+    def __str__(self):
+        return self.name

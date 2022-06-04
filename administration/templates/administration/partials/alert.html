@@ -1,0 +1,15 @@
+<div id="id_alert"
+    class="position-absolute fade-me-out"
+    hx-get="{% url 'administration:alert-userschedules' %}" 
+    hx-trigger="alert from:body"
+    hx-target="#id_alert"
+    hx-swap="outerHTML"
+    >
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.extra_tags}} m-3" role="alert">
+        <span>{{ message }}</span>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>

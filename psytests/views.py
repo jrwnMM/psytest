@@ -7,15 +7,14 @@ from django.urls import reverse_lazy, reverse
 from accounts.models import Profile
 from django.contrib import messages
 from django.shortcuts import render
+from django_htmx.http import trigger_client_event
 
-
-import datetime
-from personalityTest.models import Result
+from personalityTest.models import Result as PResult
 from psytests.forms import ContactForm
 
 from django.conf import settings
 
-from riasec.models import Riasec_result
+from riasec.models import Result as RResult
 
 
 
@@ -34,18 +33,15 @@ class Assessment(LoginRequiredMixin, FormView):
 
         obj = get_object_or_404(Profile, user__username = self.request.user)
         context['obj'] = obj
+        context['request_status'] = obj.is_assigned
         
         try:
-            context["personalityTest_results"] = Result.objects.get(
-                user=self.request.user
-            )
+            context["personalityTest_results"] = PResult.objects.get(user=self.request.user)
         except ObjectDoesNotExist:
             pass
 
         try:
-            context["riasec_results"] = Riasec_result.objects.get(
-                user=self.request.user
-            )
+            context["riasec_results"] = RResult.objects.get(user=self.request.user)
         except ObjectDoesNotExist:
             pass
 
@@ -58,12 +54,12 @@ class Awesome(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
-            context['riasec'] = Riasec_result.objects.get(user__username=self.request.user)
+            context['riasec'] = RResult.objects.get(user=self.request.user)
         except ObjectDoesNotExist:
             pass
 
         try:
-            context['personality'] = Result.objects.get(user__username=self.request.user)
+            context['personality'] = PResult.objects.get(user=self.request.user)
         except ObjectDoesNotExist:
             pass
         return context
@@ -80,3 +76,22 @@ class DataPrivacyConsent(LoginRequiredMixin, TemplateView):
             messages.error(request, 'Please enter Department,Program and Year')
             return redirect(reverse('accounts:edit-profile', kwargs={'pk':self.request.user.id}))
 
+def request_counsel(request):
+    context = {}
+    profile = Profile.objects.get(id=request.user.id)
+
+    if profile.is_assigned is False:
+        profile.is_assigned = None
+        messages.success(request, 'Request canceled', extra_tags="success")
+        profile.save()
+    elif profile.is_assigned is None:
+        profile.is_assigned = False
+        messages.success(request, 'Request Sent', extra_tags="success")
+        profile.save()
+
+    context['request_status'] = profile.is_assigned
+
+    response = render(request, 'partials/request-section.html', context)
+    trigger_client_event(response, 'confirm_request', {})
+    trigger_client_event(response, 'alert', {})
+    return  response

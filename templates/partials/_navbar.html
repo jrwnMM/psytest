@@ -1,9 +1,9 @@
 {% load static %}
 <nav class="navbar navbar-expand-lg navbar-light px-5 justify-content-between">
     <a class="brand-text fs-20 d-flex align-items-center me-3" href="{% url 'homepage' %}"><img
-        src="{% static 'icons/favicon.png' %}" alt="" class="favicon-30"><span>PSYTEST</span></a>
+        src="{% static 'icons/favicon.ico' %}" alt="" class="favicon-30"><span>PSYTEST</span></a>
     <!-- collapse btn -->
-    {% if user.is_authenticated %}
+    {% if request.user.is_authenticated %}
     <div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,7 +14,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <div class="d-flex me-auto flex-grow-1">
             <!-- Assessment -->
-            {% if user.is_authenticated %}
+            {% if request.user.is_authenticated %}
             <div class="nav-item align-self-center me-auto">
                 <a href="{% url 'assessment' %}" class="navlink py-3">
                     <span>Assessment</span>
@@ -39,7 +39,7 @@
                     </a>
                 </li>
                 <li class="nav-item align-self-center px-2">
-                    <a href="{% url 'administration:pending-users' %}" class="link-teal position-relative">
+                    <a href="{% url 'administration:counseling-requests' %}" class="link-teal position-relative">
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                             class="bi bi-card-checklist" viewBox="0 0 16 16">
                             <path
@@ -47,9 +47,9 @@
                             <path
                                 d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z" />
                         </svg>
-                        {% if unapproved_users %}
+                        {% if userstocheck %}
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            {{unapproved_users}}
+                            {{userstocheck}}
                             <span class="visually-hidden">unread messages</span>
                         </span>
                         {% endif %}
@@ -67,7 +67,7 @@
                     <span style="font-size:small" class="color-teal d-none d-sm-inline" data-toggle="tooltip" title="{{request.user.email}}">{{request.user.email}}</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="{% url 'accounts:profile'%}">Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'profile:user-stats' user.username user.id%}">Profile</a></li>
                     {% if request.user.is_superuser %}
                     <li><a class="dropdown-item" href="{% url 'administration:home' %}">Admin</a></li>
                     {% endif %}

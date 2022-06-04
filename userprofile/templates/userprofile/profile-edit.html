@@ -1,0 +1,112 @@
+{% extends 'userprofile/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+
+<header>
+    {% include 'partials/_navbar.html' %}
+</header>
+<main class="container my-2">
+    <div class="row justify-content-center">
+        <form method="post" class="p-4 border rounded-3 bg-light mt-5">
+            {% csrf_token %}
+            <h3 class="text-center color-teal mb-3">Edit Your Profile</h3>
+            <div class="row mb-3">
+                <div class="col-xs-6 col-sm-4">
+                    <div class="form-floating ">
+                        {{profile_form.first_name}}
+                        <label for="id_first_name" class="text-muted">First Name</label>
+                        {{profile_form_errors.first_name}}
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-4">
+                    <div class="form-floating ">
+                        {{profile_form.middle_name}}
+                        <label for="id_middle_name" class="text-muted">Middle Name</label>
+                        {{profile_form_errors.middle_name}}
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-4">
+                    <div class="form-floating ">
+                        {{profile_form.last_name}}
+                        <label for="id_last_name" class="text-muted">Last Name</label>
+                        {{profile_form_errors.last_name}}
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-xs-6 col-sm-4">
+                    <label for="id_date_of_birth">Birthdate</label>
+                    <div class="d-flex">
+                        {{profile_form.date_of_birth}}
+                    </div>
+                    {{profile_form_errors.date_of_birth}}
+                </div>
+                <div class="col-xs-6 col-sm-4">
+                    <label for="id_gender">Gender</label>
+                    <div>
+                        {{profile_form.gender}}
+                    </div>
+                    {{profile_form_errors.gender}}
+                </div>
+                <div class="col-xs-6 col-sm-4">
+                    <label for="id_contactNumber">Contact Number<small class="text-muted">(e.g. 09052674902)</small></label>
+                    <div>
+                        {{profile_form.contactNumber}}
+                    </div>
+                    {{profile_form_errors.contactNumber}}
+
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-xs-6 col-sm-3">
+                    <label for="id_educationlevel">{{profile_form.educationlevel.label}}</label>
+                    <div class="d-flex">
+                        {% render_field profile_form.educationlevel class='form-select' hx-get="years/" hx-target="#id_year" %}
+                    </div>
+                    {{profile_form_errors.educationleve}}
+                </div>
+                <div class="col-xs-6 col-sm-3">
+                    <label for="id_department">{{profile_form.department.label}}</label>
+                    <div class="d-flex">
+                        <activate hx-get="departments/" hx-include="[name='educationlevel']" hx-target="#id_department"
+                            hx-trigger="change from:#id_educationlevel"></activate>
+                        {% render_field profile_form.department class="form-select" %}
+                    </div>
+                    {{profile_form_errors.department}}
+                </div>
+                <div class="col-xs-6 col-sm-3">
+                    <label for="id_program">{{profile_form.program.label}}</label>
+                    <div class="d-flex">
+                        <activate hx-get="programs/" hx-include="[name='department']" hx-target="#id_program"
+                            hx-trigger="change from:#id_department"></activate>
+                        <activate hx-get="programs/" hx-target="#id_program"
+                            hx-trigger="change from:#id_educationlevel"></activate>
+                        {% render_field profile_form.program class="form-select" %}
+                    </div>
+                    {{profile_form_errors.program}}
+                </div>
+                <div class="col-xs-6 col-sm-3">
+                    <label for="id_year">{{profile_form.year.label}}</label>
+                    <div class="d-flex">
+                        {% render_field profile_form.year class="form-select" %}
+                    </div>
+                    {{profile_form_errors.year}}
+                </div>
+            </div>
+            <div class="d-flex justify-content-end align-items-center gap-3">
+                <div>
+                    <a class="link-teal mt-2" href="{% url 'password_reset' %}">Change password?</a>
+                </div>
+                <div class="p-auto">
+                    <button type="submit" class="btn btn-success m-auto">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+{% endblock %}

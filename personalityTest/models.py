@@ -1,16 +1,14 @@
 from django.db import models
-from django.db.models.fields import CharField
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
-# Create your models here.
-class Questionnaire(models.Model):
+from riasec.models import OfferedProgram
 
+# Create your models here.
+class Question(models.Model):
     class Meta:
-        verbose_name = _('Questionnaire')
-        verbose_name_plural = _('Questionnaires')
-        # ordering = ('-id',)
+        ordering = ['-id']
 
     category_choices =[
         ('EXT','Extroversion'),
@@ -24,9 +22,8 @@ class Questionnaire(models.Model):
         ('1', 'Positive'),
         ('0', 'Negative')
     ]
-
-    question=models.TextField(editable=True)
-    slug=models.SlugField(null=True)
+    question=models.TextField(null=True, blank=True)
+    slug=models.SlugField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=100, choices=category_choices)
     key = models.CharField(max_length=10, null=True, blank=True, choices=key_choices)
@@ -36,29 +33,26 @@ class Questionnaire(models.Model):
 
     def save(self,*args, **kwargs):
         self.slug = slugify(self.question)
-        return super(Questionnaire, self).save(*args, **kwargs)
+        return super(Question, self).save(*args, **kwargs)
 
-
-class Cluster(models.Model):
-    cluster = models.CharField(max_length=10)
-    extroversion = models.FloatField(default=0)
-    neurotic = models.FloatField(default=0)
-    agreeable = models.FloatField(default=0)
-    conscientious = models.FloatField(default=0)
-    openness = models.FloatField (default=0)
-
-    def __str__(self):
-        return self.cluster
+class Answer(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.SET_NULL, null=True, blank=True)
+    answer = models.IntegerField(null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name="personality_answer_user")
 
 class Result(models.Model):
-    user=models.OneToOneField(User,null=True, on_delete=models.CASCADE)
+    user=models.OneToOneField(User, on_delete=models.CASCADE, null=True, related_name="personality_result_user")
     extroversion = models.FloatField(default=0)
     neurotic = models.FloatField(default=0)
     agreeable = models.FloatField(default=0)
     conscientious = models.FloatField(default=0)
     openness = models.FloatField (default=0)
-    prediction = models.ForeignKey(Cluster, on_delete=models.CASCADE, null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{str(self.user)}"
+
+
+class RecommendedProgram(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    offeredProgram = models.ForeignKey(OfferedProgram, on_delete=models.PROTECT, null=True, blank=True )

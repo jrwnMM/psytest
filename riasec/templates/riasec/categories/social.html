@@ -2,26 +2,15 @@
     <h2 class="mt-2">S = Social</h2>
     <hr>
     <p>These people like to work with other people,
-        rather than things. Good college majors for
-        Social people are:</p>
-    <div class="row">
-        <div class="col">
-            <ul>
-                <li>Counseling</li>
-                <li>Nursing</li>
-                <li>Physical Therapy</li>
-                <li>Travel</li>
-                <li>Advertising</li>
-                <li>Public Relations</li>
-                <li>Education</li>
-            </ul>
+        rather than things.</p>
+        <div class="row mt-2">
+            <h5>Related Pathways:</h5>
+            <div>
+                <ul>
+                    {% for program in social_programs %}
+                    <li>{{program}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
-        <div class="col">
-            <h5>Related Pathways</h5>
-            <ul>
-                <li>Health Services</li>
-                <li>Public and Human Services</li>
-            </ul>
-        </div>
-    </div>
 </div>

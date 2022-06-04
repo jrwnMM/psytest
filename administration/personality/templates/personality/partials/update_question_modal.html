@@ -1,0 +1,21 @@
+<div class="modal fade" id="update_question_{{question.id}}" aria-labelledby="update_question_{{question.id}}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="update_question_{{question.id}}">Update a question</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <!-- form -->
+            <form hx-post='{% url "administration:update-personality-question" question.id %}' hx-target='#questions' hx-swap='innerHTML'>
+                {% csrf_token %}
+                <div class="modal-body" id="modal-body-{{question.id}}" >
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-teal me-3">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

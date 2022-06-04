@@ -26,22 +26,10 @@ input[type="checkbox"]:checked {
 }
 
 .login-bg {
-  background-image: url("../images/login-img.svg");
+  background-image: url("../images/login/bg.jpg");
   background-repeat: no-repeat;
   background-size: 60%;
-  background-position: 8% 25%; 
-}
-
-.btn-style {
-  background: #008080;
-  color: white;
-  border: none;
-}
-
-.btn-style:hover {
-  background: #008080;
-  color: white;
-  opacity: 0.9;
+  background-position: 8% 50%; 
 }
 
 .login-fb-social {

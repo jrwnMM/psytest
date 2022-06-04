@@ -1,0 +1,27 @@
+{% extends 'administration/base.html' %}
+{% load static %}
+{% block title %}{{title}} Schedules{% endblock %}
+
+{% block content %}
+<main class="container">
+  <div class="d-flex justify-content-center  align-items-center">
+    {% include 'administration/partials/alert.html' %}
+  </div>
+  <!-- content -->
+  <div class="row justify-content-center mt-3">
+    <div class="col-sm-4 col-xs-6">
+      {% include 'userschedules/partials/side-nav.html' %}
+    </div>
+    <div class="col-sm-8 col-xs-6 pt-5">
+      <!-- messages -->
+      <div id="section-users" hx-get="{% url 'administration:section-users' type %}"
+        hx-trigger="refresh_users from:body">
+        {% include 'userschedules/partials/section-users.html' %}
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'scripts/administration/userschedules.js' %}" defer></script>
+{% endblock %}

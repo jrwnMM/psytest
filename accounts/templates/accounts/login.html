@@ -25,7 +25,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-3">
+        <div class="col-xs-12 col-sm-4">
             <div class="mx-auto mt-5">
                 <h3 class="text-center color-teal mb-3">Login to Continue</h3>
                 <!-- form -->
@@ -43,12 +43,18 @@
                                 name='password' required>
                             <label for="password" class="text-muted">password</label>
                         </div>
-                        <div class="d-flex justify-content-end custom-control custom-checkbox mb-4">
+                        <div class="d-flex justify-content-end custom-control custom-checkbox">
                             <!-- <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" id="remember-me" value="rememberme">
                                 <label class="form-check-label text-muted" for="remember-me">Remember me</label>
                             </div> -->
                             <a href="{% url 'password_reset' %}" class="fs-15">Forgot Password?</a>
+                        </div>
+                        <!-- error message div -->
+                        <div class="my-2">
+                            {% for message in messages %}
+                            <p class="text-center" id="messages" style="color:red;">{{message}}</p>
+                            {% endfor %}
                         </div>
                         <button class="btn-teal btn w-100 fs-17 p-2 rounded-pill">Login</button>
                     </div>
@@ -66,14 +72,14 @@
                                 Continue with Google
                             </span>
                         </a>
-<!--                        <a class="login-google-social social-bg2 flex-c-m mt-2 btn w-100 p-4 rounded-pill" type="button"-->
-<!--                            data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top"-->
-<!--                            data-bs-content="Available soon" tabindex="0" data-bs-trigger="focus">-->
-<!--                            <img src="{% static 'images/google.png' %}" alt="googleicon" id="google-icon">-->
-<!--                            <span>-->
-<!--                                Continue with Google-->
-<!--                            </span>-->
-<!--                        </a>-->
+                        <!--                        <a class="login-google-social social-bg2 flex-c-m mt-2 btn w-100 p-4 rounded-pill" type="button"-->
+                        <!--                            data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top"-->
+                        <!--                            data-bs-content="Available soon" tabindex="0" data-bs-trigger="focus">-->
+                        <!--                            <img src="{% static 'images/google.png' %}" alt="googleicon" id="google-icon">-->
+                        <!--                            <span>-->
+                        <!--                                Continue with Google-->
+                        <!--                            </span>-->
+                        <!--                        </a>-->
                         <!-- href="{% provider_login_url 'facebook' method='js_sdk' %}" -->
                         <a class="login-fb-social social-bg1 flex-c-m mt-2 btn w-100 p-4 rounded-pill" type="button"
                             data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top"
@@ -89,12 +95,7 @@
                         </a>
                     </div>
                 </form>
-                <!-- error message div -->
-                <div>
-                    {% for message in messages %}
-                    <p class="m-t-25 text-center" id="messages" style="color:red;">{{message}}</p>
-                    {% endfor %}
-                </div>
+
                 <!-- sign up link div -->
                 <div class="text-muted mt-3 text-center">Don't have an account? <a href="{% url 'accounts:register' %}"
                         style="color:#0d6efd">Sign up</a>

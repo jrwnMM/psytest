@@ -1,5 +1,6 @@
 {% extends 'accounts/base.html' %}
-
+{% load static %}
+{% load widget_tweaks %}
 
 {% block title %}Register{% endblock %}
 
@@ -36,8 +37,8 @@
                         {{form.gender.errors}}
                     </div>
                     <div class="col-sm-4 col-xs-6">
-                        <label for="id_contactNumber">ContactNumber</label>
-                        <small class="text-muted">(e.g +639057833050)</small>
+                        <label for="id_contactNumber">Contact Number</label>
+                        <small class="text-muted">(e.g 09057833023)</small>
                         {{form.contactNumber}}
                         {{form.contactNumber.errors}}
                     </div>
@@ -51,29 +52,25 @@
                 </div>
                 
                 <div class="row">
-                    <div class="col-4 col-xs-6">
+                    <div class="col-sm-6 col-xs-6">
+                        <label for="id_educationlevel">Education Level</label>
+                        {% render_field form.educationlevel class='form-select' hx-get="years/" hx-target="#id_year" %}
+                    </div>
+                    <div class="col-sm-6 col-xs-6">
                         <label for="id_department">Department</label>
-                        <select class="form-select" name="department" aria-label="Department" required>
-                            {% for index, choice in department %}
-                            <option value="{{index}}">{{choice}}</option>
-                            {% endfor %}
-                        </select>
+                        <activate hx-get="departments/" hx-include="[name='educationlevel']" hx-target="#id_department" hx-trigger="change from:#id_educationlevel" ></activate>
+                        {% render_field form.department class="form-select" %}
                     </div>
-                    <div class="col-4 col-xs-6">
-                        <label for="id_program">Program</label>
-                        <select class="form-select" name="program" aria-label="Prorgam" required>
-                            {% for index, choice in program_ibed %}
-                            <option value="{{index}}">{{choice}}</option>
-                            {% endfor %}
-                        </select>
+                    <div class="col-sm-6 col-xs-6">
+                        <label for="id_program">Program / Track</label>
+                        <activate hx-get="programs/" hx-include="[name='department']" hx-target="#id_program" hx-trigger="change from:#id_department"></activate>
+                        <activate hx-get="programs/" hx-target="#id_program" hx-trigger="change from:#id_educationlevel"></activate>
+                        {% render_field form.program class="form-select" %}
+
                     </div>
-                    <div class="col-4 col-xs-6">
+                    <div class="col-sm-6 col-xs-6">
                         <label for="id_year">Year</label>
-                        <select class="form-select" name="year" aria-label="Year" required>
-                            {% for index, choice in year_grade %}
-                            <option value="{{index}}">{{choice}}</option>
-                            {% endfor %}
-                        </select>
+                        {% render_field form.year class='form-select' %}
                     </div>
                 </div>
                 
@@ -105,11 +102,10 @@
                 {% if form.password1.errors %}
                 <div class="alert alert-secondary">
                     <ul>
-                        <li>Usernames can consist of lowercase and capitals</li>
-                        <li>Usernames can consist of alphanumeric characters</li>
-                        <li>Usernames can consist of underscore and hyphens and spaces</li>
-                        <li>Cannot be two underscores, two hypens or two spaces in a row</li>
-                        <li>Cannot have a underscore, hypen or space at the start or end</li>
+                        <li>Should have at least one number.</li>
+                        <li>Should have at least one uppercase and one lowercase character.</li>
+                        <li>Should have at least one special symbol.</li>
+                        <li>Should be between 6 to 20 characters long.</li>
                     </ul>
                 </div>
                 {% endif %}
@@ -120,35 +116,4 @@
         </div>
     </div>
 </main>
-<script>
-
-</script>
-<!--<script>-->
-<!--    $("#id_department").change(function () {-->
-<!--      var url = $("#registerForm").attr("data-profile-url");-->
-<!--      var departmentId = $(this).val();-->
-<!--      $.ajax({-->
-<!--        url: url,-->
-<!--        data: {-->
-<!--          'department': departmentId-->
-<!--        },-->
-<!--        success: function (data) {-->
-<!--          $("#id_program").html(data);-->
-<!--        }-->
-<!--      });-->
-<!--    });-->
-<!--     $("#id_program").change(function () {-->
-<!--      var url = $("#registerForm").attr("data-profile-url");-->
-<!--      var programId = $(this).val();-->
-<!--      $.ajax({-->
-<!--        url: url,-->
-<!--        data: {-->
-<!--          'program': programId-->
-<!--        },-->
-<!--        success: function (data) {-->
-<!--          $("#id_year").html(data);-->
-<!--        }-->
-<!--      });-->
-<!--    });-->
-<!--</script>-->
 {% endblock %}

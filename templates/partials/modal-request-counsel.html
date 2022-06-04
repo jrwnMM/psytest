@@ -1,0 +1,23 @@
+<div class="modal fade" id="request-counsel" aria-labelledby="request-counsel-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="request-counsel-label">Confirm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5>Are you sure to request for counseling?</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button 
+                    hx-post="{% url 'request-counsel' %}" 
+                    hx-target="#request-section" 
+                    hx-swap="outerHTML" 
+                    data-bs-dismiss="modal"
+                    class="btn btn-teal me-3">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>

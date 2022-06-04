@@ -1,0 +1,44 @@
+<div class="modal fade" id="add_department" aria-labelledby="add_department" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add_department">Add a department</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <form method="post" action="{% url 'administration:add-department' %}" id="department_add_form">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div>
+                        <label for="id_level">Education Level:</label>
+                        <div>
+                            {{form.level}}
+                            {{form.level.errors}}
+                            <ul id="levelErrors"></ul>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="id_code">Department code or abbreviation: <small class="text-muted">(e.g.
+                                CITE)</small> </label>
+                        <div>
+                            {{form.code}}
+                            <ul id="codeErrors"></ul>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="id_name">Department name:</label>
+                        <div>
+                            {{form.name}}
+                            {{form.name.errors}}
+                            <ul id="nameErrors"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-teal me-3">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

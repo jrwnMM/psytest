@@ -1,12 +1,13 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
-from django.utils.translation import gettext_lazy as _ #used for changing name in admin
+from django.utils.translation import gettext_lazy as _
 
-class RIASEC_Test(models.Model):
+from accounts.models import Program
+
+class Question(models.Model):
     class Meta:
-        verbose_name = _('RIASEC Test')
-        verbose_name_plural = _('RIASEC Tests')
+        ordering = ['-id']
 
     category_choices =[
         ('R','Realistic'),
@@ -16,8 +17,8 @@ class RIASEC_Test(models.Model):
         ('E','Enterprising'),
         ('C', 'Conventional'),
     ]
-    question=models.TextField()
-    slug = models.SlugField(max_length=256, null=True)
+    question=models.TextField(null=True, blank=True)
+    slug = models.SlugField(max_length=100, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=100, choices=category_choices)
 
@@ -26,14 +27,16 @@ class RIASEC_Test(models.Model):
 
     def save(self,*args, **kwargs):
             self.slug=slugify(self.question)
-            return super(RIASEC_Test, self).save(*args, **kwargs)
+            return super(Question, self).save(*args, **kwargs)
 
-class Riasec_result (models.Model):
-    class Meta:
-        verbose_name = _('RIASEC Result')
-        verbose_name_plural = _('RIASEC Results')
+class Answer(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True, blank=True)
+    answer = models.IntegerField(null=True, blank=True)
+    user = models.ForeignKey(User, models.CASCADE, null=True, blank=True, related_name="career_answer_user")
 
-    user=models.OneToOneField(User,null=True, on_delete=models.CASCADE)
+
+class Result(models.Model):
+    user=models.OneToOneField(User,null=True, on_delete=models.CASCADE, related_name="career_result_user")
     realistic = models.FloatField(default=0)
     investigative = models.FloatField(default=0)
     artistic = models.FloatField(default=0)
@@ -41,4 +44,21 @@ class Riasec_result (models.Model):
     enterprising = models.FloatField (default=0)
     conventional = models.FloatField(default=0)
     date_created = models.DateTimeField(auto_now_add=True)
+
+
+
+class OfferedProgram(models.Model):
+    class Interest(models.TextChoices):
+        REALISTIC = 'realistic', 'Realistic'
+        INVESTIGATIVE = 'investigative', 'Investigative'
+        ARTISTIC = 'artistic', 'Artistic'
+        SOCIAL = 'social', 'Social'
+        ENTERPRISING = 'enterprising', 'Enterprising'
+        CONVENTIONAL = 'conventional', 'Conventional'
+    
+    interest = models.CharField(max_length=16, choices=Interest.choices, null=True, blank=True)
+    program = models.ForeignKey(Program, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.program}"
     

@@ -1,0 +1,38 @@
+{% load static %}
+<div class="row mb-5">
+    <div class="col-sm-3 col-xs-6 align-self-center">
+        <div class="m-3">
+            <h4>College Category</h4>
+            <small class="text-muted p-0 m-0">total of: {{career_college_count|default:0}} </small>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <span class="bg-color-a p-2">Realistic</span> = {{ riasec_college.realistic__avg|floatformat:1|default:0}}
+            </li>
+            <li class="list-group-item">
+                <span class="bg-color-b p-2">Investigative</span> = {{riasec_college.investigative__avg|floatformat:1|default:0}}
+            </li>
+            <li class="list-group-item">
+                <span class="bg-color-c p-2">Artistic</span> = {{ riasec_college.artistic__avg|floatformat:1|default:0}}
+            </li>
+            <li class="list-group-item">
+                <span class="bg-color-d p-2">Social</span> = {{ riasec_college.social__avg|floatformat:1|default:0}}
+            </li>
+            <li class="list-group-item">
+                <span class="bg-color-e p-2">Enterprising</span> = {{riasec_college.enterprising__avg|floatformat:1|default:0}}
+            </li>
+            <li class="list-group-item">
+                <span class="bg-color-f p-2">Conventional</span> = {{riasec_college.conventional__avg|floatformat:1|default:0}}
+            </li>
+        </ul>
+    </div>
+    <div class="col-sm-9 col-xs-6 py-3">
+        <div class="chart-container mx-auto" style="height: 400px; width: 100%">
+            <canvas id="careerCollege"></canvas>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script src="{% static 'scripts/administration/statistics/career_college.js' %}"></script>
+{% endblock %}

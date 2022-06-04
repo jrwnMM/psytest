@@ -6,18 +6,19 @@ from accounts.models import Profile
 
 class AdminScheduledConsultation(models.Model):
     managed_by = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True, related_name='admin_name')
-    user = models.OneToOneField(Profile, on_delete=models.CASCADE, null=True, blank=True, related_name='clients')
-    # approved_time = models.DateTimeField(null=True, blank=True)
+    client = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True, related_name='clients')
     scheduled_date = models.DateTimeField(null=True, blank=True)
-    is_done = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'manage by {self.managed_by.user.username} to {self.user.user.username}'
+        return f'manage by {self.managed_by.user.username} to {self.client.user.username}'
 
-    @admin.display(ordering='user__user__first_name')
+    @admin.display(ordering='client__user__first_name')
     def full_name(self):
-        return self.user.user.get_full_name()
+        return self.client.user.get_full_name()
 
     @admin.display(ordering='managed_by__user__first_name')
     def managedby(self):
         return self.managed_by.user.get_full_name()
+
+    class Meta:
+        unique_together = ('managed_by', 'client')

@@ -1,0 +1,105 @@
+{% if not request.user.is_superuser and not profile.is_result %}
+<div class="m-3">
+    <p>Your result is being evaluate</p>
+</div>
+{% else %}
+{% if personalityTest_result and profile_result %}
+    {% if request.user.is_superuser and not profile.is_result and request.user.username == profile.user.username%}
+    <div class="m-3">
+        <p>Your result is being evaluate</p>
+    </div>
+    {% else %}
+
+<div class="d-flex justify-content-between">
+    <div class="m-3">
+        <p class="text-muted">Test taken: {{personalityTest_result.date_created}}</p>
+    </div>
+    {% if request.user.is_superuser %}
+    {% if profile.user.username != request.user.username %}
+    <button class="btn btn-danger m-3" type="button" data-bs-toggle="modal" data-bs-target="#delete-personality-modal">Delete record</button>
+    {% include 'userprofile/partials/delete-personality-modal.html' %}
+    {% endif %}
+    {% endif %}
+</div>
+<div class="text-center my-5">
+    <h2>Result</h2>
+</div>
+<div class="row">
+    <h4><u>IPIP Measures</u></h4>
+    <div class="col-sm-4 col-xs-12">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Extroversion: {{personalityTest_result.extroversion}}</li>
+            <li class="list-group-item">Neurotic: {{personalityTest_result.neurotic}}</li>
+            <li class="list-group-item">Agreeable: {{personalityTest_result.agreeable}}</li>
+            <li class="list-group-item">Conscientious: {{personalityTest_result.conscientious}}</li>
+            <li class="list-group-item">Openness: {{personalityTest_result.openness}}</li>
+        </ul>
+    </div>
+    <div class="col-sm-8 col-xs-12">
+        <div class="chart-container" style="height:100%; width:100%;">
+            <canvas id="predictionBarChart"></canvas>
+        </div>
+        {% include 'stats/personalityTest-scripts/predictionBarChart.html' %}
+    </div>
+</div>
+
+<div class="text-center my-5">
+    <h2>The Big Five Personality Traits</h2>
+</div>
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-e"
+            type="button" role="tab" aria-controls="pills-e" aria-selected="true">Extroversion</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-n" type="button"
+            role="tab" aria-controls="pills-n" aria-selected="true">Neurotic</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-a" type="button"
+            role="tab" aria-controls="pills-a" aria-selected="true">Agreeable</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-c" type="button"
+            role="tab" aria-controls="pills-c" aria-selected="true">Conscientious</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-o" type="button"
+            role="tab" aria-controls="pills-o" aria-selected="true">Openness</button>
+    </li>
+</ul>
+
+<div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane fade show active" id="pills-e" role="tabpanel" aria-labelledby="pills-home-tab">
+        {% include 'personalityTest/traits/extroversion.html' %}
+    </div>
+    <div class="tab-pane fade show" id="pills-n" role="tabpanel" aria-labelledby="pills-home-tab">
+        {% include 'personalityTest/traits/neurotic.html' %}
+    </div>
+    <div class="tab-pane fade show" id="pills-a" role="tabpanel" aria-labelledby="pills-home-tab">
+        {% include 'personalityTest/traits/agreeable.html' %}
+    </div>
+    <div class="tab-pane fade show" id="pills-c" role="tabpanel" aria-labelledby="pills-home-tab">
+        {% include 'personalityTest/traits/conscientious.html' %}
+    </div>
+    <div class="tab-pane fade show" id="pills-o" role="tabpanel" aria-labelledby="pills-home-tab">
+        {% include 'personalityTest/traits/openness.html' %}
+    </div>
+</div>
+
+{% include 'stats/recommendations/offeredcareer.html' %}
+{% endif %}
+{% else %}
+{% if messages %}
+{% for message in messages %}
+<div id="personality_alert" class="alert alert-{{message.extra_tags}} m-3" role="alert">
+    <span>{{ message }}</span>
+</div>
+{% endfor %}
+{% endif %}
+<div class="m-3">
+    <p>No record found</p>
+</div>
+{% endif %}
+{% endif %}

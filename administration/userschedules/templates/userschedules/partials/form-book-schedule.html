@@ -1,0 +1,9 @@
+<div class="modal-body" id="form-book-schedule">
+    <div class="mb-2">
+        <p>Client name: {{user.client.user.last_name}}, {{user.client.user.first_name}}</p>
+        <p>Department: {{user.client.department.code}}</p>
+        <p>Program: {{user.client.program.code}}</p>
+        <p>Year: {{user.client.year}}</p>
+    </div>
+    {{schedule_form.as_p}}
+</div>

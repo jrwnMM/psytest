@@ -1,0 +1,110 @@
+{% if not request.user.is_superuser  and not profile.is_result %}
+    <p>Your result is being evaluate</p>
+{% else %}
+{% if riasec_result and  profile_result %}
+{% if request.user.is_superuser and not profile.is_result and request.user.username == profile.user.username%}
+<div class="m-3">
+    <p>Your result is being evaluate</p>
+</div>
+{% else %}
+<div class="row">
+    <div class="d-flex justify-content-between">
+        <div class="m-3">
+            <p class="text-muted">Test taken: {{riasec_result.date_created}}</p>
+        </div>
+        {% if request.user.is_superuser %}
+            {% if profile.user.username != request.user.username %}
+                <button class="btn btn-danger m-3" type="button" data-bs-toggle="modal" data-bs-target="#delete-career-modal">Delete record</button>
+                {% include 'userprofile/partials/delete-career-modal.html' %}
+            {% endif %}
+        {% endif %}
+    </div>
+    <div class="text-center m-2">
+        <h2>Result</h2>
+    </div>
+    <div class="col-sm-3 col-xs-6 align-self-center">
+        <p class="p-2" id="r"> <span class="bg-color-a p-2">Realistic</span> =
+            {{riasec_result.realistic|floatformat:1}}</p>
+        <p class="p-2" id="i"><span class="bg-color-b p-2">Investigative</span> =
+            {{riasec_result.investigative|floatformat:1}}</p>
+        <p class="p-2" id="a"><span class="bg-color-c p-2">Artistic</span> =
+            {{riasec_result.artistic|floatformat:1}}</p>
+        <p class="p-2" id="s"><span class="bg-color-d p-2">Social</span> =
+            {{riasec_result.social|floatformat:1}}</p>
+        <p class="p-2" id="e"><span class="bg-color-e p-2">Enterprising</span> =
+            {{riasec_result.enterprising|floatformat:1}}</p>
+        <p class="p-2" id="c"><span class="bg-color-f p-2">Conventional</span> =
+            {{riasec_result.conventional|floatformat:1}}</p>
+    </div>
+    <div class="col-sm-9 col-xs-6 py-3">
+        <div class="chart-container mx-auto" style="height: 100%; width: 100%">
+            <canvas id="pieChart"></canvas>
+        </div>
+        {% include 'stats/riasec-scripts/piechart.html' %}
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="chart-container" style="height:100%; width:100%">
+        <canvas id="barChart"></canvas>
+    </div>
+</div>
+<div class="d-flex flex-wrap justify-content-evenly mb-5">
+    <div class="m-1">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Top 1</h5>
+                <ul>
+                    {% for obj in top1 %}
+                    <li>{{obj|title}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% if top2 %}
+    <div class="m-1">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Top 2</h5>
+                {% for obj in top2 %}
+                <li>{{obj|title}}</li>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if top3 %}
+    <div class="m-1">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Top 3</h5>
+                {% for obj in top3 %}
+                <li>{{obj|title}}</li>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% include 'riasec/scripts/piechart.html' %}
+{% include 'riasec/scripts/barchart.html' %}
+{% include 'riasec/carousels/top1.html' %}
+{% include 'riasec/carousels/top2.html' %}
+{% include 'riasec/carousels/top3.html' %}
+
+{% endif %}
+{% else %}
+<!-- messages -->
+{% if messages %}
+{% for message in messages %}
+<div id="career_alert" class="alert alert-{{message.extra_tags}} m-3" role="alert">
+    <span>{{ message }}</span>
+</div>
+{% endfor %}
+{% endif %}
+<div class="m-3">
+    <p>No record found</p>
+</div>
+{% endif %}
+
+{% endif %}

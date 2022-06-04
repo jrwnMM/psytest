@@ -1,0 +1,9 @@
+{% if profile.is_result %}
+<a href="#" class="btn btn-success m-1" type="button" data-bs-toggle="modal" data-bs-target="#unapprove">Unapprove
+    result</a>
+{% include 'userprofile/partials/unapprove-modal.html' %}
+{% else %}
+<a href="#" class="btn btn-success m-1" type="button" data-bs-toggle="modal" data-bs-target="#approve">Approve
+    result</a>
+{% include 'userprofile/partials/approve-modal.html' %}
+{% endif %}

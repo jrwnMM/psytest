@@ -1,0 +1,16 @@
+<h1>Users to Check</h1>
+<div class="list-group">
+    <a href="{% url 'administration:counseling-requests' %}" class="list-group-item item-badge-between link-teal">
+        Counseling Requests
+        <span class="badge bg-danger">{{counseling_requests_count}}</span>
+    </a>
+    <a href="{% url 'administration:pending-results' %}" class="list-group-item item-badge-between link-teal">
+        Pending Results
+        <span class="badge bg-danger">{{pending_results_count}}</span>
+    </a>
+    <a href="{% url 'administration:assigned-users' %}"
+        class="list-group-item item-badge-between link-teal">
+        Active Sessions
+        <span class="badge bg-info">{{active_sessions_count}}</span>
+    </a>
+</div>

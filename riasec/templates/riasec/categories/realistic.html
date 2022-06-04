@@ -2,29 +2,14 @@
     <h2 class="mt-2">R = Realistic</h2>
     <hr>
     <p>These people are often good at mechanical or athletic
-        jobs. Good college majors for Realistic people are:</p>
-    <div class="row">
-        <div class="col">
+        jobs.</p>
+    <div class="row mt-2">
+        <h5>Related Pathways:</h5>
+        <div>
             <ul>
-                <li>Agriculture</li>
-                <li>Health Assistant</li>
-                <li>Computers</li>
-                <li>Construction</li>
-                <li>Mechanic/Machinist</li>
-                <li>Engineering</li>
-                <li>Food and Hospitality</li>
-            </ul>
-        </div>
-        <div class="col">
-            <h5>Related Pathways</h5>
-            <ul>
-                <li>Food and Hospitality</li>
-                <li>Health Services</li>
-                <li>Industrial and Engineering
-                    Technology
-                </li>
-                <li>Arts and Communication
-                </li>
+                {% for program in realistic_programs %}
+                <li>{{program}}</li>
+                {% endfor %}
             </ul>
         </div>
     </div>

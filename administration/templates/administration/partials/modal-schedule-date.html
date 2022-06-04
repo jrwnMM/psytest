@@ -1,0 +1,21 @@
+<div class="modal fade" id="book-schedule" aria-labelledby="book-schedule-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="book-schedule-label">Schedule a date</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <!-- form -->
+            <form hx-post="{% url 'administration:book-schedule' %}" hx-swap="none" method="post">
+                {% csrf_token %}
+                {% include 'administration/partials/form-book-schedule.html' %}
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-teal me-3"
+                    data-bs-dismiss="modal">save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

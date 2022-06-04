@@ -1,0 +1,24 @@
+<div class="modal fade" id="send_email" tabindex="-1" aria-labelledby="send_email" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="send_email">Send you message here</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <form hx-post="{% url 'administration:send-msg' profile.user.username %}" hx-swap="none" id="msg-form">
+                {% csrf_token %}
+                <div class="modal-body">
+                <label class="mb-2" for="subject">Subject:</label>
+                {{form.subject}}
+                <label class="mb-2" for="message">Message:</label>    
+                {{form.message}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">close</button>
+                    <button type="submit" class="btn btn-success me-3" data-bs-dismiss="modal">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

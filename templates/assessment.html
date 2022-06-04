@@ -6,10 +6,12 @@
 <header>
     {% include 'partials/_navbar.html' %}
 </header>
-<main class="container mt-3">
+<main class="my-2">
+    <!-- message alert -->
     <div class="row justify-content-center ">
-        <div class="col-sm-2 col-xs-12 p-0 m-0">
-            <div class="border-1-round-box p-3 m-2 status">
+        <!-- main section -->
+        <div class="col-sm-3 col-xs-6">
+            <div class="border-1-round-box p-3 m-2">
                 <div>
                     <h3>Status:</h3>
                     <p>
@@ -70,10 +72,16 @@
                         {% endif %}
                         {% endif %}
                     </div>
+                    <hr>
+                    <!-- request section -->
+                    {% include 'partials/request-section.html' %}
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 col-xs-12 p-0 m-0">
+        <div class="col-sm-6 col-xs-6">
+            <div class="d-flex justify-content-center align-items-center">
+                {% include 'administration/partials/alert.html' %}
+            </div>
             <div class="row justify-content-center border-1-round-box p-4 m-2">
                 {% if personalityTest_results and riasec_results %}
                 <div class="text-center">
@@ -86,20 +94,22 @@
                             <div class="mb-5">
                                 {% if obj.is_result %}
                                 <p>Your result is now ready</p>
-                                <a href="{% url 'administration:user_detail' obj.user obj.user.pk %}"
+                                <a href="{% url 'profile:user-stats' obj.user.username obj.user.pk %}"
                                     class="btn btn-teal mt-2">view result</a>
                                 {% else %}
                                 <h2>Your answer is being evaluated</h2>
                                 {% endif %}
                             </div>
                             <div>
-                                <p>Help us improve by giving us feedback <a href="{% url 'evaluation:view' %}" class="link-teal">here</a></p>
+                                <p>Help us improve by giving us feedback <a href="{% url 'evaluation:view' %}"
+                                        class="link-teal">here</a></p>
                             </div>
                             <hr>
                             <div class="mt-3">
                                 <br>
                                 <h5>Looking for a game to play?</h5>
-                                <p>Download and play the first ever JMC CITE's Philippine History-Based offline visual novel game created by
+                                <p>Download and play the first ever JMC CITE's Philippine History-Based offline visual
+                                    novel game created by
                                     VICARY INC.</p>
                                 <div class="d-flex justify-content-center flex-wrap mt-4">
                                     <div>
@@ -180,4 +190,7 @@
         </div>
     </div>
 </main>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'scripts/psytest/assessment.js' %}"></script>
 {% endblock %}

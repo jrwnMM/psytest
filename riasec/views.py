@@ -1,25 +1,22 @@
 from django.shortcuts import redirect, render
-from django.views.generic.base import TemplateView
-from accounts.models import Profile
-
-from personalityTest.models import Result
-from .models import RIASEC_Test, Riasec_result
 from django.contrib.auth.decorators import login_required
-from django.views.generic.list import ListView
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
+from django.db import transaction
+
+from accounts.models import Profile
+from riasec.models import Question, Result as RResult, Answer
+from personalityTest.models import Result as PResult
 
 from datetime import datetime
-from django.utils import timezone
 # Create your views here.
 
 
 @login_required(login_url="accounts:login")
 def testPage(request):
     range_num = range(42)
-    obj = Riasec_result.objects.all()
-    questions = RIASEC_Test.objects.all()
+    obj = RResult.objects.all()
+    questions = Question.objects.all()
 
     if (request.user.profile.department):
         return render(
@@ -32,11 +29,13 @@ def testPage(request):
         return redirect('accounts:edit_user')
 
 
-
+@transaction.atomic
 @login_required(login_url="accounts:login")
 def evaluate(request):
     now = datetime.now()
-    name = request.user
+    user = request.user
+    q = Question.objects.all().order_by('pk').values_list('id', flat=True)
+    
     r = []
     i = []
     a = []
@@ -44,9 +43,22 @@ def evaluate(request):
     e = []
     c = []
 
-    for id in range(1, 43):
+    for id in q.iterator():
         score = float(request.POST.get(f"{id}"))
-        question = RIASEC_Test.objects.get(pk=id)
+        question = Question.objects.get(pk=id)
+        print(id)
+
+        
+        try:
+            answer = Answer.objects.get(user=user, question=question)
+            answer.answer = score
+            answer.save()
+        except Answer.DoesNotExist:
+            answer = Answer()
+            answer.question = question
+            answer.answer = score
+            answer.user = user
+            answer.save()
 
         if question.category == "R":
             r.append(score)
@@ -61,17 +73,17 @@ def evaluate(request):
         if question.category == "C":
             c.append(score)
 
-    r = (sum(r) / 7) * 100
-    i = (sum(i) / 7) * 100
-    a = (sum(a) / 7) * 100
-    s = (sum(s) / 7) * 100
-    e = (sum(e) / 7) * 100
-    c = (sum(c) / 7) * 100
+    r = (sum(r) / len(r)) * 100
+    i = (sum(i) / len(i)) * 100
+    a = (sum(a) / len(a)) * 100
+    s = (sum(s) / len(s)) * 100
+    e = (sum(e) / len(e)) * 100
+    c = (sum(c) / len(c)) * 100
     
 
 
     try:
-        obj = Riasec_result.objects.get(user=request.user)
+        obj = RResult.objects.get(user=request.user)
         obj.user=request.user
         obj.realistic=r
         obj.investigative=i
@@ -82,7 +94,7 @@ def evaluate(request):
         obj.save()
 
     except ObjectDoesNotExist:
-        result = Riasec_result.objects.create(
+        result = RResult.objects.create(
             user=request.user,
             realistic=r,
             investigative=i,
@@ -94,14 +106,9 @@ def evaluate(request):
         result.save()
 
     try:
-        obj = Result.objects.get(user__username=name)
-        obj2 = Riasec_result.objects.get(user__username=name)
-
-        if obj and obj2:
-            obj3 = Profile.objects.get(user__username=name)
-            obj3.is_assigned = False
-            obj3.test_completed = now
-            obj3.save()
+        obj3 = Profile.objects.get(user__username=user)
+        obj3.last_test_taken = now
+        obj3.save()
     except ObjectDoesNotExist:
             pass
 

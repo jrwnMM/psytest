@@ -1,0 +1,28 @@
+<div class="tab-pane fade show active" id="v-pills-career" role="tabpanel" aria-labelledby="v-pills-career-tab">
+
+    <div class="d-flex justify-content-end my-2">
+        <div class="text-end" style="width: 250px;">
+            <label for="career_category">Category</label>
+            <select name="career_category"
+                id="career_category" 
+                class="form-select" 
+                hx-get="{% url 'administration:statistics_career_category' %}"
+                hx-trigger="change"
+                hx-swap="innerHTML"
+                hx-target="#career-section"                
+                >
+                <option value="1">All</option>
+                <option value="2">Gender</option>
+                <option value="3">College</option>
+                <option value="4">Senior Highschool</option>
+                <option value="5">Junior Highschool</option>
+                <option value="6">Grade School</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="career-section">
+        <!-- All -->
+        {% include 'statistics/partials/career_all.html' %}
+    </div>
+</div>

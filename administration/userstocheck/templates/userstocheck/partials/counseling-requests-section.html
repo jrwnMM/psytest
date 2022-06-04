@@ -1,0 +1,157 @@
+{% load static %}
+<div class="row mb-2">
+    <h3>Counseling requests</h3>
+    <form method='GET'>
+        <div class="d-flex">
+            <div class="p-2 input-group">
+                {{filter.form.user}}
+                <div>
+                    <button class="btn teal-btn btn-default" type='submit'>Search</button>
+                </div>
+            </div>
+            <div class="dropdown p-2 bd-highlight">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-bs-toggle="dropdown" data-bs-auto-close="false" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-funnel-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z" />
+                    </svg>
+                    Filter
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li class="dropdown-item"> {{filter.form.date_completed_order.label_tag}}
+                        {{filter.form.w_order}}
+                    </li>
+                    <li class="dropdown-item"> {{filter.form.department.label_tag}}
+                        {{filter.form.department__name}}
+                    </li>
+                    <li class="dropdown-item">
+                        {{filter.form.program.label_tag}}{{filter.form.program__name}}
+                    </li>
+                    <li class="dropdown-item"> {{filter.form.year.label_tag}}
+                        {{filter.form.year__name}}
+                    </li>
+                    <li class="dropdown-item">{{filter.form.start_date.label_tag}}
+                        {{filter.form.start_date}}
+                    </li>
+                    <li class="dropdown-item">{{filter.form.end_date.label_tag}}
+                        {{filter.form.end_date}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </form>
+</div>
+<div>
+    {% if users %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Program</th>
+                    <th>Year</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for profile in users %}
+                <tr>
+                    <td>{{forloop.counter0|add:page_obj.start_index }}</td>
+                    <td>{{profile.user.last_name}}, {{profile.user.first_name}}</td>
+                    <td>{{profile.department.code}}</td>
+                    <td>{{profile.program.code}}</td>
+                    <td>{{profile.year}}</td>
+                    <td>
+                        <div class="d-flex justify-content-evenly gap-2">
+                            <a
+                                href="{% url 'profile:user-stats' username=profile.user.username pk=profile.user.pk %}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                    fill="#5F4B8BFF" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z" />
+                                    <path fill-rule="evenodd"
+                                        d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z" />
+                                </svg>
+                            </a>
+                            <a href="#" data-bs-toggle="modal"
+                                data-bs-target="#send_msg_{{profile.user.username}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                    fill="#89CFF0" class="bi bi-envelope" viewBox="0 0 16 16">
+                                    <path
+                                        d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z" />
+                                </svg>
+                            </a>
+                            {% include 'administration/partials/send-msg-modal.html' %}
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#book-schedule"
+                                hx-get="{% url 'administration:form-book-schedule' profile.id %}"
+                                hx-target="#form-book-schedule">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                    fill="#f4c430" class="bi bi-calendar2-plus" viewBox="0 0 16 16">
+                                    <path
+                                        d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z" />
+                                    <path
+                                        d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4zM8 8a.5.5 0 0 1 .5.5V10H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V11H6a.5.5 0 0 1 0-1h1.5V8.5A.5.5 0 0 1 8 8z" />
+                                </svg>
+                            </a>
+                            {% include 'administration/partials/modal-schedule-date.html' %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+
+    <div class="text-center">
+        <img class="w-75" src="{% static 'images/no-sched.png' %}" alt="">
+        <div>
+            <h3>
+                no pending users
+            </h3>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% if is_paginated %}
+<div>
+    <nav aria-label="Page navigation" class="mt-5">
+        <ul class="pagination justify-content-end">
+
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li><a href="?page={{ page_obj.previous_page_number }}" class="page-link">PREV </a></li>
+            {% endif %}
+
+            {% for n in page_obj.paginator.page_range %}
+            {% if page_obj.number == n %}
+            <li class="page-item {% if page_obj.number == n %}disabled{% endif %}">
+                <span class="page-link">{{ n }}</span>
+            </li>
+            {% elif n > page_obj.number|add:'-5' and n < page_obj.number|add:'5' %} <li class="page-item">
+                <a class="page-link" href="?page={{ n }}">{{ n }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}" class="page-link"> NEXT
+                    </a></li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endif %}
