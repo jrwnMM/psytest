@@ -68,13 +68,14 @@ class DataPrivacyConsent(LoginRequiredMixin, TemplateView):
     template_name = 'privacy_consent.html'
 
     def get(self, request, *args, **kwargs):
-        if (self.request.user.profile.department):
+        user = self.request.user
+        if (user.profile.department and user.profile.program and user.profile.year):
             return render(request, self.template_name, {
                 'test': self.kwargs['test']
             })
         else:
-            messages.error(request, 'Please enter Department,Program and Year')
-            return redirect(reverse('accounts:edit-profile', kwargs={'pk':self.request.user.id}))
+            messages.info(request, 'Please complete your educational background', extra_tags="info")
+            return redirect(reverse('profile:edit-profile', kwargs={'username':user.username, 'pk':user.id}))
 
 def request_counsel(request):
     context = {}

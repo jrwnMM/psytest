@@ -10,8 +10,18 @@
     {% include 'partials/_navbar.html' %}
 </header>
 <main class="container my-2">
+    <!-- alert -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.extra_tags}}" role="alert">
+        <span>{{ message }}</span>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+
     <div class="row justify-content-center">
-        <form method="post" class="p-4 border rounded-3 bg-light mt-5">
+        <form method="post" class="p-4 border rounded-3 bg-light">
             {% csrf_token %}
             <h3 class="text-center color-teal mb-3">Edit Your Profile</h3>
             <div class="row mb-3">
