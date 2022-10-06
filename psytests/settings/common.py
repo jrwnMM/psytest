@@ -21,7 +21,7 @@ INSTALLED_APPS = [
     "userprofile.apps.UserprofileConfig",
     "personalityTest.apps.PersonalitytestConfig",
     "evaluation.apps.EvaluationConfig",
-    "generalIQ.apps.GeneraliqConfig",
+    # "generalIQ.apps.GeneraliqConfig",
     # allauth
     "allauth",
     "allauth.account",
@@ -121,7 +121,6 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "social_django.context_processors.backends",
                 "social_django.context_processors.login_redirect",
-                "psytests.context_processors.get_obj_count",
             ],
         },
     },

@@ -2,7 +2,6 @@ from django.urls import path
 from userprofile.views import (
     UserStats, 
     EditProfile, 
-    btn_approve, 
     departments, 
     programs, 
     years
@@ -15,6 +14,5 @@ urlpatterns = [
     path('<username>/<int:pk>/edit/departments/', departments, name='department_choices'),
     path('<username>/<int:pk>/edit/programs/', programs, name='program_choices'),
     path('<username>/<int:pk>/edit/years/', years, name='year_choices'),
-    path('<int:pk>/btn-swap/', btn_approve, name='btn-approve'),
 ]
 

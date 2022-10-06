@@ -8,8 +8,6 @@ from django.contrib.auth.decorators import user_passes_test
 from django_htmx.http import trigger_client_event
 
 from accounts.models import Profile
-from administration.forms import ScheduleDateForm
-from administration.models import AdminScheduledConsultation
 from riasec.models import Result as CareerResult, Answer as CareerAnswer
 from personalityTest.models import RecommendedProgram, Result as PersonalityResult, Answer as PersonalityAnswer
 
@@ -99,61 +97,6 @@ def send_msg(request, username):
     ]
     send_mail(subject, message, email_from, recipient_list, fail_silently=True)
     return redirect("administration:pending-results")
-
-@user_passes_test(lambda u: u.is_superuser)
-def book_schedule(request):
-    client = Profile.objects.get(id=request.POST['client'])
-    managed_by = Profile.objects.get(id=request.POST['managed_by'])
-    sched = AdminScheduledConsultation.objects.filter(managed_by = managed_by, client = client)
-
-    if sched.exists():
-        sched.update(scheduled_date = request.POST['scheduled_date'])
-        messages.success(request, 'successfully updated', extra_tags='success')
-
-        subject = "Consultation Schedule Update"
-        message = f"Hello your supposed schedule ({sched.scheduled_date})for consultation has been updated to {request.POST['scheduled_date']}."
-
-        email_from = settings.EMAIL_HOST_USER
-        recipient_list = [
-            client.user.email,
-        ]
-        send_mail(subject, message, email_from, recipient_list, fail_silently=True)
-    else:
-        new_sched = AdminScheduledConsultation()
-        new_sched.managed_by = managed_by
-        new_sched.client = client
-        new_sched.scheduled_date = request.POST['scheduled_date']
-        new_sched.save()
-        client.is_assigned = True
-        client.save()
-        messages.success(request, 'successfully booked', extra_tags='success')
-
-        subject = "Consultation Notice"
-        message = f"Hello {client.user.first_name}, you have been assigned to\
-                    {managed_by.user.first_name} {managed_by.user.last_name} for consultation scheduled on\
-                    {request.POST['scheduled_date']}."
-
-        email_from = settings.EMAIL_HOST_USER
-        recipient_list = [
-            client.user.email,
-        ]
-        send_mail(subject, message, email_from, recipient_list, fail_silently=True)
-
-    response = HttpResponse('')
-    trigger_client_event(response, 'alert', {})
-    trigger_client_event(response, 'pending_result', {})
-    return response
-
-@user_passes_test(lambda u: u.is_superuser)
-def form_book_shedule(request, profile_id):
-    client = Profile.objects.get(id=profile_id)
-    context = {}
-    context['profile'] = client
-    context['schedule_form'] = ScheduleDateForm(initial={
-        'managed_by': request.user,
-        'client': client,
-    })
-    return render(request, 'administration/partials/form-book-schedule.html', context)
 
 def handle_alert(request):
     return render(request, 'administration/partials/alert.html')

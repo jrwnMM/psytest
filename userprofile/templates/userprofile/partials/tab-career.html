@@ -1,22 +1,15 @@
-{% if not request.user.is_superuser  and not profile.is_result %}
-    <p>Your result is being evaluate</p>
-{% else %}
-{% if riasec_result and  profile_result %}
-{% if request.user.is_superuser and not profile.is_result and request.user.username == profile.user.username%}
-<div class="m-3">
-    <p>Your result is being evaluate</p>
-</div>
-{% else %}
+{% if riasec_result %}
 <div class="row">
     <div class="d-flex justify-content-between">
         <div class="m-3">
             <p class="text-muted">Test taken: {{riasec_result.date_created}}</p>
         </div>
         {% if request.user.is_superuser %}
-            {% if profile.user.username != request.user.username %}
-                <button class="btn btn-danger m-3" type="button" data-bs-toggle="modal" data-bs-target="#delete-career-modal">Delete record</button>
-                {% include 'userprofile/partials/delete-career-modal.html' %}
-            {% endif %}
+        {% if profile.user.username != request.user.username %}
+        <button class="btn btn-danger m-3" type="button" data-bs-toggle="modal"
+            data-bs-target="#delete-career-modal">Delete record</button>
+        {% include 'userprofile/partials/delete-career-modal.html' %}
+        {% endif %}
         {% endif %}
     </div>
     <div class="text-center m-2">
@@ -92,8 +85,6 @@
 {% include 'riasec/carousels/top2.html' %}
 {% include 'riasec/carousels/top3.html' %}
 
-{% endif %}
-{% else %}
 <!-- messages -->
 {% if messages %}
 {% for message in messages %}
@@ -102,9 +93,9 @@
 </div>
 {% endfor %}
 {% endif %}
+
+{% else %}
 <div class="m-3">
     <p>No record found</p>
 </div>
-{% endif %}
-
 {% endif %}

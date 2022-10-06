@@ -29,24 +29,6 @@
                 <button class="btn btn-info m-1" type="button" data-bs-toggle="modal" data-bs-target="#send_email">Send
                     email</button>
                 {% include 'userprofile/partials/message-modal.html' %}
-
-                <!-- btn-set-schedule -->
-                <a href="#" 
-                    hx-get="{% url 'administration:form-book-schedule' profile.id %}"
-                    hx-target="#form-book-schedule"
-                    hx-swap="outerHTML"
-                    data-bs-target="#book-schedule"
-                    data-bs-toggle="modal"
-                    class="btn btn-warning m-1">Set-Schedule</a>
-                    {% include 'administration/partials/modal-schedule-date.html' %}
-
-                <!-- btn-approve -->
-                <div id="btn_approve"
-                    hx-get="{% url 'profile:btn-approve' profile.id %}"    
-                    hx-trigger="btn_approve from:body"
-                >
-                    {% include 'userprofile/partials/btn-approve.html' %}
-                </div>
             </div>
             {% endif %}
         </div>

@@ -21,42 +21,6 @@
                 </a>
             </div>
             {% endif %}
-            <ul class="navbar-nav d-flex">
-                <li class="nav-item align-self-center px-2">
-                    {% if request.user.is_superuser %}
-                    <a href="{% url 'administration:schedules' %}" class="link-teal position-relative">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                            class="bi bi-calendar-event-fill" viewBox="0 0 16 16">
-                            <path
-                                d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4V.5zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2zm-3.5-7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z" />
-                        </svg>
-                        {% if notif_count %}
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            {{notif_count}}
-                            <span class="visually-hidden">unread messages</span>
-                        </span>
-                        {% endif %}
-                    </a>
-                </li>
-                <li class="nav-item align-self-center px-2">
-                    <a href="{% url 'administration:counseling-requests' %}" class="link-teal position-relative">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                            class="bi bi-card-checklist" viewBox="0 0 16 16">
-                            <path
-                                d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
-                            <path
-                                d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z" />
-                        </svg>
-                        {% if userstocheck %}
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            {{userstocheck}}
-                            <span class="visually-hidden">unread messages</span>
-                        </span>
-                        {% endif %}
-                    </a>
-                    {% endif %}
-                </li>
-            </ul>
             <!-- user btn grp -->
             <div class="btn-group">
                 <button type="button" class="btn nav-user ms-auto px-2" data-bs-toggle="dropdown" aria-expanded="false">

@@ -9,7 +9,6 @@ from django.contrib.auth.mixins import (
 from .forms import UpdateProfileForm
 
 from accounts.models import Profile
-from administration.models import AdminScheduledConsultation
 from riasec.models import OfferedProgram, Result as CareerResult
 from personalityTest.models import RecommendedProgram, Result as PersonalityResult
 
@@ -38,14 +37,6 @@ class UserStats(LoginRequiredMixin, UserDetailViewMixin, TemplateView):
         context['form'] = ContactForm()
         obj = Profile.objects.get(user__username=self.kwargs.get("username"))
         context["profile"] = obj
-        context["profile_result"] = obj.is_result or obj.is_result is False
-
-        try:
-            obj = AdminScheduledConsultation.objects.get(client__user__username=self.kwargs.get("username"))
-            context["admin"] = obj
-            context["scheduled"] = obj.scheduled_date
-        except AdminScheduledConsultation.DoesNotExist:
-            pass
 
         try:
             context["riasec_result"] = CareerResult.objects.get(user__id=self.kwargs.get("pk")
@@ -142,10 +133,6 @@ class EditProfile(LoginRequiredMixin, TemplateView):
         else:
             context['profile_form_errors'] = form.errors
             return render(self.request, self.template_name, context)
-
-def btn_approve(request, pk):
-    profile = Profile.objects.get(id=pk)
-    return render(request, "userprofile/partials/btn-approve.html",{'profile': profile})
 
 def departments(request, username, pk):
     form=UpdateProfileForm(request.GET)

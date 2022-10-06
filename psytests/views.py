@@ -7,21 +7,15 @@ from django.urls import reverse_lazy, reverse
 from accounts.models import Profile
 from django.contrib import messages
 from django.shortcuts import render
-from django_htmx.http import trigger_client_event
 
 from personalityTest.models import Result as PResult
 from psytests.forms import ContactForm
 
-from django.conf import settings
-
 from riasec.models import Result as RResult
-
 
 
 class HomePageView(TemplateView):
     template_name = "homepage.html"
-
-
 
 class Assessment(LoginRequiredMixin, FormView):
     template_name = "assessment.html"
@@ -76,23 +70,3 @@ class DataPrivacyConsent(LoginRequiredMixin, TemplateView):
         else:
             messages.info(request, 'Please complete your educational background', extra_tags="info")
             return redirect(reverse('profile:edit-profile', kwargs={'username':user.username, 'pk':user.id}))
-
-def request_counsel(request):
-    context = {}
-    profile = Profile.objects.get(id=request.user.id)
-
-    if profile.is_assigned is False:
-        profile.is_assigned = None
-        messages.success(request, 'Request canceled', extra_tags="success")
-        profile.save()
-    elif profile.is_assigned is None:
-        profile.is_assigned = False
-        messages.success(request, 'Request Sent', extra_tags="success")
-        profile.save()
-
-    context['request_status'] = profile.is_assigned
-
-    response = render(request, 'partials/request-section.html', context)
-    trigger_client_event(response, 'confirm_request', {})
-    trigger_client_event(response, 'alert', {})
-    return  response

@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.views.generic.base import RedirectView
 from django.contrib.staticfiles.storage import staticfiles_storage
 from accounts.forms import CustomizedPasswordResetForm, CustomizedPasswordResetConfirmForm
-from psytests.views import Assessment, DataPrivacyConsent, HomePageView, Awesome, request_counsel
+from psytests.views import Assessment, DataPrivacyConsent, HomePageView, Awesome
 
 from django.contrib.auth import views as auth_views
 
@@ -41,11 +41,10 @@ urlpatterns = [
     path('auth/', include('accounts.urls')), #Connects to psytest folder urls.py
     path('career/',include('riasec.urls')), #Connects to riasec folder urls.py
     path('personality/',include('personalityTest.urls')), #Connects to personalityTest folder urls.py
-    path("generalIQ/", include("generalIQ.urls")),
+    # path("generalIQ/", include("generalIQ.urls")),
     path('accounts/', include('allauth.urls')),
     path('administration/', include('administration.urls')),
-    path('request-counsel/', request_counsel, name='request-counsel'),
-    path('ckeditor/', include('ckeditor_uploader.urls')),
+    # path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

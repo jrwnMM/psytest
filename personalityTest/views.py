@@ -134,7 +134,6 @@ class TestView(LoginRequiredMixin, TemplateView):
 
         try:
             obj3 = Profile.objects.get(user__username=user)
-            obj3.is_result = False
             obj3.last_test_taken = now
             obj3.save()
         except ObjectDoesNotExist:

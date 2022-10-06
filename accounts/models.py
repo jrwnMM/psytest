@@ -27,7 +27,6 @@ class Profile(models.Model):
     year= models.ForeignKey("Year",on_delete=models.SET_NULL,null=True)
     last_test_taken = models.DateTimeField(null=True, blank=True)
     is_assigned = models.BooleanField(null=True)
-    is_result = models.BooleanField(null=True)
     
     @admin.display(ordering='user__first_name')
     def full_name(self):
