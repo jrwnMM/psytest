@@ -1,0 +1,43 @@
+{% extends 'personalityTest/base.html' %}
+{% load static %}
+
+{% block title %}GeneralIQ Test{% endblock %}
+{% block content %}
+<div class="sticky-top pt-3 ps-4">
+    <h5>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-arrow-left color-teal" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+        </svg>
+        <a href="{% url 'assessment' %}" class="back-link">Back</a>
+    </h5>
+</div>
+<div class="d-flex justify-content-center">
+    <div class="container-test">
+        <h1>GeneralIQ Test</h1>
+        <p class="p-2">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga odio consectetur aut ducimus corporis
+            assumenda dolorum temporibus magnam accusamus voluptatibus, molestias ad vero. Quisquam rerum nemo fuga,
+            voluptatibus aliquam et.
+        </p>
+        <hr>
+        <form action="{% url 'personalityTest:test' %}" method="POST">
+            {% csrf_token %}
+            {% for question in questions %}
+            {{question.question | safe}}
+            <br>
+            <p>
+                <span>Answer: </span>
+                <input class="form-control" type="textbox">
+            </p>
+                <br>
+            {% endfor %}
+            <div class="d-flex flex-column p-2 justify-content-center">
+                <input id='submit' type="submit" class="btn pt-btn btn-lg btn-block" value="Submit">
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

@@ -59,6 +59,7 @@ django-htmx = "*"
 django-forms-dynamic = "*"
 django-widget-tweaks = "*"
 psycopg2-binary = "*"
+django-ckeditor = "*"
 
 [dev-packages]
 

@@ -55,4 +55,4 @@ class Result(models.Model):
 
 class RecommendedProgram(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    offeredProgram = models.ForeignKey(OfferedProgram, on_delete=models.PROTECT, null=True, blank=True )
+    offeredProgram = models.ForeignKey(OfferedProgram, on_delete=models.PROTECT, null=True, blank=True)

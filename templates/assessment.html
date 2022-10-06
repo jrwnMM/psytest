@@ -169,6 +169,17 @@
                         </div>
                     </a>
                 </div>
+                <div class="col">
+                    <a href="{% url 'generaliq:generalIQTest' %}"
+                        class="text-center link-teal {% if riasec_results %}disabled-links{% endif %}">
+                        <div>
+                            <img src="https://img.icons8.com/external-wanicon-flat-wanicon/120/000000/external-brain-training-and-coaching-wanicon-flat-wanicon.png"/>
+                        </div>
+                        <div {% if riasec_results %} class="text-muted" {% endif %}>
+                            General IQ Test
+                        </div>
+                    </a>
+                </div>
                 <div class="m-t-50">
                     <p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"

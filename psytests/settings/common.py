@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "userprofile.apps.UserprofileConfig",
     "personalityTest.apps.PersonalitytestConfig",
     "evaluation.apps.EvaluationConfig",
+    "generalIQ.apps.GeneraliqConfig",
     # allauth
     "allauth",
     "allauth.account",
@@ -32,12 +33,14 @@ INSTALLED_APPS = [
     "django_filters",
     "mathfilters",
     #Other apps
+    "ckeditor",
+    "ckeditor_uploader",
     'widget_tweaks',
     "phonenumber_field",
     "django_htmx",
 ]
 
-
+CKEDITOR_UPLOAD_PATH = "uploads/"
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
