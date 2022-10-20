@@ -16,7 +16,7 @@
                     <h3>Status:</h3>
                     <p>
                         Personality Test
-                        {% if personalityTest_results %}
+                        {% if personality_result %}
                         <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="green" class="bi bi-check"
                             viewBox="0 0 16 16">
                             <path
@@ -32,7 +32,7 @@
                     </p>
                     <p>
                         Career Test
-                        {% if riasec_results %}
+                        {% if career_result %}
                         <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="green" class="bi bi-check"
                             viewBox="0 0 16 16">
                             <path
@@ -54,19 +54,64 @@
                 {% include 'administration/partials/alert.html' %}
             </div>
             <div class="row justify-content-center border-1-round-box p-4 m-2">
-                {% if personalityTest_results and riasec_results %}
-                <div class="text-center">
-                    <img src="{% static 'images/checked.png' %}" alt="" class="w-75">
-                </div>
 
+                <div class="text-center mb-5">
+                    <h3>Choose a test</h3>
+                </div>
+                <div class="col">
+                    <a href="{% url 'consent' 'personality' %}"
+                        class="text-center link-teal {% if personality_result %}disabled-links{% endif %}">
+                        <div>
+                            <img
+                                src="https://img.icons8.com/external-wanicon-lineal-color-wanicon/120/000000/external-psychology-university-courses-wanicon-lineal-color-wanicon.png" />
+                        </div>
+                        <div {% if personality_result %} class="text-muted" {% endif %}>
+                            Personality Test
+                        </div>
+                    </a>
+                    {% if personality_result %}
+                    <div class="mt-2 text-center">
+                        <a class="btn btn-teal btn-sm" href="{% url 'profile:user-stats' profile.user.username profile.user.id 'personality' %}">view result</a>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col">
+                    <a href="{% url 'consent' 'career' %}"
+                        class="text-center link-teal {% if career_result %}disabled-links{% endif %}">
+                        <div>
+                            <img
+                            src="https://img.icons8.com/external-itim2101-lineal-color-itim2101/120/000000/external-skills-business-recruitment-itim2101-lineal-color-itim2101-1.png" />
+                        </div>
+                        <div {% if career_result %} class="text-muted" {% endif %}>
+                            Career Test
+                        </div>
+                    </a>
+                    {% if career_result %}
+                    <div class="mt-2 text-center">
+                        <a class="btn btn-teal btn-sm" href="{% url 'profile:user-stats' profile.user.username profile.user.id 'career' %}">view result</a>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="m-t-50">
+                    <p>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                            class="bi bi-exclamation-circle text-primary" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                            <path
+                                d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z" />
+                        </svg>
+                        <strong>Note:</strong>
+                    </p>
+                    <ul>
+                        <li>Both tests are needed inorder to validate result.</li>
+                        <li>Understand and answer each questions honestly.</li>
+                    </ul>
+
+                </div>
+                {% if personality_result and career_result %}
                 <div>
                     <div class="m-t-25">
                         <div class="text-center">
-                            <div class="mb-5">
-                                <p>Your have finished all the test</p>
-                                <a href="{% url 'profile:user-stats' obj.user.username obj.user.pk %}"
-                                    class="btn btn-teal mt-2">view result</a>
-                            </div>
                             <div>
                                 <p>Help us improve by giving us feedback <a href="{% url 'evaluation:view' %}"
                                         class="link-teal">here</a></p>
@@ -108,51 +153,8 @@
                         </div>
                     </div>
                 </div>
-                {% else %}
-                <div class="text-center mb-5">
-                    <h3>Choose a test</h3>
-                </div>
-                <div class="col">
-                    <a href="{% url 'consent' 'personality' %}"
-                        class="text-center link-teal {% if personalityTest_results %}disabled-links{% endif %}">
-                        <div>
-                            <img
-                                src="https://img.icons8.com/external-wanicon-lineal-color-wanicon/120/000000/external-psychology-university-courses-wanicon-lineal-color-wanicon.png" />
-                        </div>
-                        <div {% if personalityTest_results %} class="text-muted" {% endif %}>
-                            Personality Test
-                        </div>
-                    </a>
-                </div>
-                <div class="col">
-                    <a href="{% url 'consent' 'career' %}"
-                        class="text-center link-teal {% if riasec_results %}disabled-links{% endif %}">
-                        <div>
-                            <img
-                                src="https://img.icons8.com/external-itim2101-lineal-color-itim2101/120/000000/external-skills-business-recruitment-itim2101-lineal-color-itim2101-1.png" />
-                        </div>
-                        <div {% if riasec_results %} class="text-muted" {% endif %}>
-                            Career Test
-                        </div>
-                    </a>
-                </div>
-                <div class="m-t-50">
-                    <p>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                            class="bi bi-exclamation-circle text-primary" viewBox="0 0 16 16">
-                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                            <path
-                                d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z" />
-                        </svg>
-                        <strong>Note:</strong>
-                    </p>
-                    <ul>
-                        <li>Both tests are needed inorder to validate result.</li>
-                        <li>Understand and answer each questions honestly.</li>
-                    </ul>
-
-                </div>
                 {% endif %}
+
             </div>
         </div>
     </div>

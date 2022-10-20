@@ -27,17 +27,17 @@ class Assessment(LoginRequiredMixin, FormView):
         context = super().get_context_data(**kwargs)
 
         obj = get_object_or_404(Profile, user__username=self.request.user)
-        context["obj"] = obj
+        context["profile"] = obj
 
         try:
-            context["personalityTest_results"] = PResult.objects.get(
+            context["personality_result"] = PResult.objects.get(
                 user=self.request.user
             )
         except ObjectDoesNotExist:
             pass
 
         try:
-            context["riasec_results"] = RResult.objects.get(user=self.request.user)
+            context["career_result"] = RResult.objects.get(user=self.request.user)
         except ObjectDoesNotExist:
             pass
 
@@ -66,10 +66,12 @@ class DataPrivacyConsent(LoginRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         user = self.request.user
-        is_gradeSchool = user.profile.educationlevel == "Grade School" and user.profile.program
-        is_userdetails_complete = user.profile.department and user.profile.program and user.profile.year
+        is_gradeSchool = user.profile.educationlevel.name == "Grade School" and ((user.profile.department and user.profile.year) is None)
+        is_userdetails_complete = user.profile.educationlevel.name != "Grade School" and (user.profile.department and user.profile.program and user.profile.year) is None
         
-        if ((is_gradeSchool and is_userdetails_complete) is not None):
+        print(is_userdetails_complete)
+
+        if is_gradeSchool or is_userdetails_complete:
             messages.info(request, "Please complete your educational background", extra_tags="info")
             return redirect(reverse("profile:edit-profile", kwargs={"username": user.username, "pk": user.id}))
 
