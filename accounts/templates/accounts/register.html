@@ -32,9 +32,9 @@
                 
                 <div class="row">
                     <div class="col-sm-4 col-xs-6">
-                        <label for="id_gender">Gender</label>
-                        {{form.gender}}
-                        {{form.gender.errors}}
+                        <label for="id_sex">Sex</label>
+                        {{form.sex}}
+                        {{form.sex.errors}}
                     </div>
                     <div class="col-sm-4 col-xs-6">
                         <label for="id_contactNumber">Contact Number</label>
@@ -104,8 +104,7 @@
                     <ul>
                         <li>Should have at least one number.</li>
                         <li>Should have at least one uppercase and one lowercase character.</li>
-                        <li>Should have at least one special symbol.</li>
-                        <li>Should be between 6 to 20 characters long.</li>
+                        <li>Should be minimum of 8 characters.</li>
                     </ul>
                 </div>
                 {% endif %}

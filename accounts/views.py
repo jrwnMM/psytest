@@ -52,7 +52,7 @@ def registerPage(request):
             user.profile.contactNumber = form.cleaned_data.get('contactNumber')
             user.profile.educationlevel = get_or_none(EducationLevel, id=request.POST.get("educationlevel"))
             user.profile.department = get_or_none(Department, id=request.POST.get("department"))
-            user.profile.program = get_or_none(Program, id=request.POST.get("program"))
+            user.profile.program = get_or_none(Program, id=request.POST.get("program") or None)
             user.profile.year= get_or_none(Year, id=request.POST.get("year"))
             user.save()
             user.profile.save()

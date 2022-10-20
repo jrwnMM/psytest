@@ -17,6 +17,7 @@ from riasec.models import Result as RResult
 class HomePageView(TemplateView):
     template_name = "homepage.html"
 
+
 class Assessment(LoginRequiredMixin, FormView):
     template_name = "assessment.html"
     form_class = ContactForm
@@ -25,12 +26,13 @@ class Assessment(LoginRequiredMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        obj = get_object_or_404(Profile, user__username = self.request.user)
-        context['obj'] = obj
-        context['request_status'] = obj.is_assigned
-        
+        obj = get_object_or_404(Profile, user__username=self.request.user)
+        context["obj"] = obj
+
         try:
-            context["personalityTest_results"] = PResult.objects.get(user=self.request.user)
+            context["personalityTest_results"] = PResult.objects.get(
+                user=self.request.user
+            )
         except ObjectDoesNotExist:
             pass
 
@@ -48,25 +50,27 @@ class Awesome(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
-            context['riasec'] = RResult.objects.get(user=self.request.user)
+            context["riasec"] = RResult.objects.get(user=self.request.user)
         except ObjectDoesNotExist:
             pass
 
         try:
-            context['personality'] = PResult.objects.get(user=self.request.user)
+            context["personality"] = PResult.objects.get(user=self.request.user)
         except ObjectDoesNotExist:
             pass
         return context
-        
+
+
 class DataPrivacyConsent(LoginRequiredMixin, TemplateView):
-    template_name = 'privacy_consent.html'
+    template_name = "privacy_consent.html"
 
     def get(self, request, *args, **kwargs):
         user = self.request.user
-        if (user.profile.department and user.profile.program and user.profile.year):
-            return render(request, self.template_name, {
-                'test': self.kwargs['test']
-            })
-        else:
-            messages.info(request, 'Please complete your educational background', extra_tags="info")
-            return redirect(reverse('profile:edit-profile', kwargs={'username':user.username, 'pk':user.id}))
+        is_gradeSchool = user.profile.educationlevel == "Grade School" and user.profile.program
+        is_userdetails_complete = user.profile.department and user.profile.program and user.profile.year
+        
+        if ((is_gradeSchool and is_userdetails_complete) is not None):
+            messages.info(request, "Please complete your educational background", extra_tags="info")
+            return redirect(reverse("profile:edit-profile", kwargs={"username": user.username, "pk": user.id}))
+
+        return render(request, self.template_name, {"test": self.kwargs["test"]})

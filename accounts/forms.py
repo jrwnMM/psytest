@@ -28,12 +28,12 @@ class CreateUserForm(DynamicFormMixin, UserCreationForm):
         self.fields['username'].label = 'Username'
         self.fields['first_name'].label = 'First Name'
         self.fields['last_name'].label = 'Last Name'
-        self.fields['gender'].label = 'Gender'
+        self.fields['sex'].label = 'Sex'
         self.fields['date_of_birth'].label = 'Date of Birth'
 
 
 
-    gender_choices = [
+    sex_choices = [
         ('', 'Please select one'),
         ('Male', 'Male'),
         ('Female', 'Female'),
@@ -42,7 +42,7 @@ class CreateUserForm(DynamicFormMixin, UserCreationForm):
     date_of_birth = forms.DateField(required=True, widget=SelectDateWidget(empty_label=("Year", "Month", "Day"), years=year_range, attrs={
                                                                 'class': 'form-select'
                                                             }))
-    gender = forms.CharField(required=True,widget=Select(choices=gender_choices, attrs={
+    sex = forms.CharField(required=True,widget=Select(choices=sex_choices, attrs={
         'class': 'form-select'
     }))
     first_name = forms.CharField(widget=forms.TextInput(attrs={
@@ -110,7 +110,7 @@ class CreateUserForm(DynamicFormMixin, UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['first_name', 'middle_name', 'last_name', 'gender', 'date_of_birth', 'contactNumber', 'username',
+        fields = ['first_name', 'middle_name', 'last_name', 'sex', 'date_of_birth', 'contactNumber', 'username',
                   'email', 'password1', 'password2', 'educationlevel', 'department', 'program', 'year']
 
     def clean_first_name(self):
@@ -153,7 +153,7 @@ class CreateUserForm(DynamicFormMixin, UserCreationForm):
 
     def clean_password1(self):
         password1 = self.cleaned_data.get('password1')
-        pattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$"
+        pattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$"
         pat = re.compile(pattern)            
         mat = re.search(pat, password1)
         if mat:

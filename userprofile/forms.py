@@ -24,7 +24,7 @@ class UpdateProfileForm(DynamicFormMixin, forms.ModelForm):
         self.fields['first_name'].label = 'First Name'
         self.fields['last_name'].label = 'Last Name'
         self.fields['date_of_birth'].label = 'Date of Birth'
-        self.fields['gender'].label = 'Gender'
+        self.fields['sex'].label = 'Sex'
         self.fields['contactNumber'].label = 'Contact Number'
         self.fields['middle_name'].label = 'Middle Name'
         self.fields['educationlevel'].label = 'Education Level'
@@ -70,11 +70,11 @@ class UpdateProfileForm(DynamicFormMixin, forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['first_name', 'last_name', 'date_of_birth','gender','contactNumber','middle_name','educationlevel','department','program','year']
+        fields = ['first_name', 'last_name', 'date_of_birth','sex','contactNumber','middle_name','educationlevel','department','program','year']
         widgets = {
             'middle_name': forms.TextInput(attrs={'class': 'form-control'}),
             'date_of_birth': forms.SelectDateWidget(empty_label=("Year", "Month", "Day"), years=year_range, attrs={'class': 'form-select', 'required': True,}),
-            'gender': forms.Select(attrs={'class': 'form-select', 'required': True,}),
+            'sex': forms.Select(attrs={'class': 'form-select', 'required': True,}),
         }
 
     def clean_first_name(self):
