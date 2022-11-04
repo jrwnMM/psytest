@@ -7,10 +7,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from accounts.models import Department, Program
 from administration.department.forms import AddDepartmentForm, AddProgramForm
-from administration.views import SuperUserCheck
+from administration.views import Is_Counselor
 
 
-class DepartmentListView(LoginRequiredMixin, SuperUserCheck, ListView):
+class DepartmentListView(LoginRequiredMixin, Is_Counselor, ListView):
     template_name = 'department/list.html'
     paginate_by = 10
     context_object_name = 'departments'
@@ -23,7 +23,7 @@ class DepartmentListView(LoginRequiredMixin, SuperUserCheck, ListView):
         context['form'] = AddDepartmentForm()
         return context
 
-@user_passes_test(lambda u:u.is_superuser)
+@user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
 def addDepartment(request):
     form = AddDepartmentForm(request.POST or None)
     data = {}
@@ -36,7 +36,7 @@ def addDepartment(request):
         return JsonResponse(data, status=400)
 
 
-class DepartmentDetailView(LoginRequiredMixin, SuperUserCheck, DetailView):
+class DepartmentDetailView(LoginRequiredMixin, Is_Counselor, DetailView):
     template_name = 'department/details.html'
     context_object_name = 'department'
 
@@ -59,7 +59,7 @@ class DepartmentDetailView(LoginRequiredMixin, SuperUserCheck, DetailView):
         programs = paginator.get_page(page)
         return programs
         
-@user_passes_test(lambda u:u.is_superuser)
+@user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
 def addProgram(request):
     form = AddProgramForm(request.POST or None)
     data = {}
@@ -71,7 +71,7 @@ def addProgram(request):
         data['form'] = form.errors
         return JsonResponse(data, status=400)
 
-@user_passes_test(lambda u:u.is_superuser)
+@user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
 def deleteProgram(request, id):
     try:
         program = Program.objects.get(pk=id)
@@ -82,7 +82,7 @@ def deleteProgram(request, id):
 
     return redirect('administration:department-details', code=program.department.code)
 
-@user_passes_test(lambda u:u.is_superuser)
+@user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
 def delete_department(request):
     if request.is_ajax:
         checkedboxes = request.GET.getlist('checkedboxes[]')
@@ -94,7 +94,7 @@ def delete_department(request):
 
     return JsonResponse(data, safe=False)
 
-@user_passes_test(lambda u:u.is_superuser)
+@user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
 def delete_program(request):
     if request.is_ajax:
         checkedboxes = request.GET.getlist('checkedboxes[]')

@@ -1,12 +1,13 @@
+{% load has_group %}
 <div class="modal fade" id="superuser{{user.pk}}" tabindex="-1" aria-labelledby="superuser{{user.pk}}Label" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="superuser{{user.pk}}Label">{% if not user.is_superuser %}Make Superuser{% else %} Undo Superuser{% endif %}</h5>
+          <h5 class="modal-title" id="superuser{{user.pk}}Label">{% if not user|has_group:"Counselor" %}Make Superuser{% else %} Undo Superuser{% endif %}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            {% if not user.is_superuser %}
+            {% if not user|has_group:"Counselor" %}
             <p>Are you sure do you want to give {{user.first_name}} {{user.last_name}} a superuser status?</p>
             {% else %} 
             <p>Are you sure do you want to undo the superuser status of {{user.first_name}} {{user.last_name}}?</p>
@@ -14,7 +15,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          {% if not user.is_superuser %}
+          {% if not user|has_group:"Counselor" %}
           <a type="button" class="btn btn-teal" href="{% url 'administration:makesuperuser' user.pk %}">confirm</a>
           {% else %}
           <a type="button" class="btn btn-teal" href="{% url 'administration:unsuperuser' user.pk %}">confirm</a>

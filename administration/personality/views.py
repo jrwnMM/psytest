@@ -6,11 +6,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import user_passes_test
 
 from .forms import AddPQuestionsForm
-from administration.views import SuperUserCheck
+from administration.views import Is_Counselor
 
 from personalityTest.models import Question
 
-class PersonalityView(LoginRequiredMixin, SuperUserCheck, ListView):
+class PersonalityView(LoginRequiredMixin, Is_Counselor, ListView):
     model = Question
     template_name = "personality/personality.html"
     context_object_name = "questions"
@@ -27,7 +27,7 @@ class GetQuestions(PersonalityView):
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
 
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
 def add_question(request):
     form = AddPQuestionsForm(request.POST)
     if form.is_valid():
@@ -38,7 +38,7 @@ def add_question(request):
         messages.warning(request, 'Error', extra_tags="danger")
         return redirect('administration:get-personality-questions')
 
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
 def update_question(request, pk):
     question = Question.objects.get(id=pk)
     form = AddPQuestionsForm(request.POST or None, instance=question)
@@ -56,7 +56,7 @@ def update_question(request, pk):
     context['form'] = form
     return render(request, "personality/partials/form.html", context)
 
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
 def delete_question(request):
     if request.is_ajax:
         checkedboxes = request.GET.getlist('checkedboxes[]')

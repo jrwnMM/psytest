@@ -1,4 +1,5 @@
 {% extends 'administration/base.html' %}
+{% load has_group %}
 
 {% block title %}User Management{% endblock %}
 
@@ -60,7 +61,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Date Joined</th>
-                    <th>Is_superuser</th>
+                    <th>Is Counselor</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -71,7 +72,7 @@
                     <td>{{user.last_name|capfirst}}, {{user.first_name|capfirst}}</td>
                     <td>{{user.email}}</td>
                     <td>{{user.date_joined}}</td>
-                    <td>{% if user.is_superuser == False %}
+                    <td>{% if not user|has_group:"Counselor" %}
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" class="bi bi-x"
                              viewBox="0 0 16 16">
                             <path
@@ -86,7 +87,7 @@
                         {% endif %}
                     </td>
                     <td class="d-flex justify-content-evenly align-items-center">
-                        <a href="{% url 'profile:user-stats' user.username user.pk %}">
+                        <a href="{% url 'profile:user-stats' user.username user.pk 'profile' %}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
                                 fill="#5F4B8BFF" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd"

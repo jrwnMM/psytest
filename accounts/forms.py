@@ -66,7 +66,7 @@ class CreateUserForm(DynamicFormMixin, UserCreationForm):
         'class': 'form-control',
         'placeholder': 'Type your contact number'
     }))
-    email = forms.EmailField(widget=forms.EmailInput(attrs={
+    email = forms.EmailField(required=False, widget=forms.EmailInput(attrs={
         'class': 'form-control',
         'placeholder': 'Type your email address'
     }))

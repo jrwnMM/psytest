@@ -6,11 +6,11 @@ from django.contrib.auth.mixins import (
 
 
 # Create your views here.
-class SuperUserCheck(UserPassesTestMixin):
+class Is_Counselor(UserPassesTestMixin):
     def test_func(self):
-        return self.request.user.is_superuser
+        return self.request.user.groups.filter(name="Counselor").exists()
 
-class Home(LoginRequiredMixin, SuperUserCheck, TemplateView):
+class Home(LoginRequiredMixin, Is_Counselor, TemplateView):
     template_name = "administration/admin_home.html"
 
 

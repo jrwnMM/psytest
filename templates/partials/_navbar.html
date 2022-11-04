@@ -32,7 +32,7 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
                     <li><a class="dropdown-item" href="{% url 'profile:user-stats' user.username user.id 'profile' %}">Profile</a></li>
-                    {% if request.user.is_superuser %}
+                    {% if is_counselor %}
                     <li><a class="dropdown-item" href="{% url 'administration:home' %}">Admin</a></li>
                     {% endif %}
                     <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Log out</a></li>

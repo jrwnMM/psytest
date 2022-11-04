@@ -4,13 +4,13 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.generic import ListView
 from django.contrib import messages
-from administration.views import SuperUserCheck
+from administration.views import Is_Counselor
 
 from .forms import AddCareerQuestionForm
 
 from riasec.models import Question
 
-class CareerView(LoginRequiredMixin, SuperUserCheck, ListView):
+class CareerView(LoginRequiredMixin, Is_Counselor, ListView):
     model = Question
     template_name = "career/career.html"
     context_object_name = "questions"
@@ -29,7 +29,7 @@ class GetQuestions(CareerView):
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
 
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
 def add_question(request):
     form = AddCareerQuestionForm(request.POST)
     if form.is_valid():
@@ -40,7 +40,7 @@ def add_question(request):
         messages.warning(request, 'Error', extra_tags="danger")
         return redirect('administration:get-career-questions')
 
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
 def update_question(request, pk):
     question = Question.objects.get(id=pk)
     form = AddCareerQuestionForm(request.POST or None, instance=question)
@@ -58,7 +58,7 @@ def update_question(request, pk):
     context['form'] = form
     return render(request, "career/partials/form.html", context)
 
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
 def delete_question(request):
     if request.is_ajax:
         checkedboxes = request.GET.getlist('checkedboxes[]')
