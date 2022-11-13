@@ -60,6 +60,10 @@
       margin: 0px;
   }
 
+  .canva-100p {
+    width: 60%;
+}
+
   @media screen and (max-width: 576px) {
     .traits-box {
         border: 3px solid #008080;
@@ -68,6 +72,10 @@
         box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.2);
         transition: 0.5s;
       }
+
+    .canva-100p {
+        width: 100%;
+    }
     
   }
 
