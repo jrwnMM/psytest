@@ -13,7 +13,7 @@ app_name = "administration"
 
 urlpatterns = [
     path("", Home.as_view(), name="home"),
-    path("departments/", include("administration.department.urls")),
+    path("organization/", include("administration.organization.urls")),
     path("user-management/", include("administration.usermanagement.urls")),
     path("career/", include("administration.career.urls")),
     path("personality/", include("administration.personality.urls")),

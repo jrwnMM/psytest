@@ -1,0 +1,25 @@
+<div class="modal fade" id="add-edu-modal" tabindex="-1" aria-labelledby="add-edu-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="add-edu-modal-label">Add an Education Level</h5>
+        </div>
+        <div class="modal-body">
+          <form hx-post="{% url 'administration:add-education-level' %}" 
+                hx-target="#add_edu_msg">
+            {% csrf_token %}
+            <div class="input-group">
+                <input type="text" class="form-control" name="edu_text">
+                <button type="submit" 
+                    class="btn btn-teal">Add</button>
+            </div>
+            <div id="add_edu_msg" class="m-2"></div>
+            <activate hx-trigger="edu_level_options from:body" hx-get="{% url 'administration:edu-level-options' %}" hx-target="#edu_levels_select"/>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

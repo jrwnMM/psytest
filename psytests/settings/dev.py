@@ -11,6 +11,7 @@ SITE_ID = 2
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
+        "HOST": os.environ["LOCAL_DB_HOST"],
         "NAME": os.environ["LOCAL_DB_NAME"],
         "USER": os.environ["LOCAL_DB_USER"],
         "PASSWORD": os.environ["LOCAL_DB_PASS"],

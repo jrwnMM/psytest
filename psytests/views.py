@@ -66,13 +66,14 @@ class DataPrivacyConsent(LoginRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         user = self.request.user
-        is_gradeSchool = user.profile.educationlevel.name == "Grade School" and ((user.profile.department and user.profile.year) is None)
-        is_userdetails_complete = user.profile.educationlevel.name != "Grade School" and (user.profile.department and user.profile.program and user.profile.year) is None
-        
-        print(is_userdetails_complete)
+        if user.profile.educationlevel is not None:
+            is_gradeSchool = user.profile.educationlevel.name == "Grade School" and ((user.profile.department and user.profile.year) is None)
+            is_userdetails_complete = user.profile.educationlevel.name != "Grade School" and (user.profile.department and user.profile.program and user.profile.year) is None  
 
-        if is_gradeSchool or is_userdetails_complete:
-            messages.info(request, "Please complete your educational background", extra_tags="info")
-            return redirect(reverse("profile:edit-profile", kwargs={"username": user.username, "pk": user.id}))
+            if is_gradeSchool or is_userdetails_complete:
+                messages.info(request, "Please complete your educational background", extra_tags="info")
+                return redirect(reverse("profile:edit-profile", kwargs={"username": user.username, "pk": user.id}))
+        else:
+            return render(request, "testnotrdy.html")
 
         return render(request, self.template_name, {"test": self.kwargs["test"]})

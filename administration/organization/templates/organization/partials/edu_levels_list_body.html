@@ -1,0 +1,12 @@
+<form id="edu_level_form_delete">
+{% for edu_level in edu_levels %}
+    <tr>
+        <td>{{edu_level.name}}</td>
+        <td>
+            <div class="text-center">
+                <input type="checkbox" name="{{edu_level.id}}" class="form-check-input">
+            </div>
+        </td>
+    </tr>
+{% endfor %}
+</form>

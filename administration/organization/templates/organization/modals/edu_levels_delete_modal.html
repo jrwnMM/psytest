@@ -1,0 +1,17 @@
+<div class="modal fade" id="edu_levels_delete_modal" aria-labelledby="edu_levels_delete_modal-label" aria-hidden="true" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <p>Are you sure do you want to delete?</p>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-danger" 
+            data-bs-toggle="modal" 
+            data-bs-target="#edu_level_list"
+            hx-delete="{% url 'administration:delete-education-level' %}"
+            hx-indicator="#edu_level_form_delete">Yes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+        </div>
+      </div>
+    </div>
+  </div>

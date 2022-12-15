@@ -1,0 +1,105 @@
+/* container */
+.container-test {
+  width: 720px;
+  margin: 30px;
+  padding: 30px;
+  box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 30px;
+}
+
+.pt-btn {
+  background: #008080;
+  border: none;
+  color: white;
+}
+
+.pt-btn:hover {
+  color: white;
+  background: #008080;
+  opacity: 0.9;
+}
+.pt-btn:focus {
+  box-shadow: 0 0 0 0.25rem rgb(0,128,128,0.2);
+}
+
+.pt-bg {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  z-index: 2;
+  height: 92vh;
+}
+
+/* accordion btn */
+.accordion-button {
+  background-color: rgb(0,128,128,0.2);
+  text-decoration: none;
+  color: black;
+}
+
+.accordion-button:focus {
+  background-color: rgb(0,128,128,0.2);
+  text-decoration: none;
+  color: black;
+  border-color:none;
+  box-shadow: none;
+}
+
+.accordion-button:not(:focus) {
+  background-color: rgb(0,128,128,0.2);
+  text-decoration: none;
+  color: black;
+}
+
+.accordion-button:not(.collapsed)::after {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+.dropdown-item:active {
+  background: #008080;
+}
+
+/* Test Page */
+.form-check-input:checked {
+  background: #008080;
+  border: none;
+}
+
+
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.25rem rgb(0,128,128,0.2);
+}
+
+.dfn-box {
+  border: medium solid #008080;
+  border-radius: 25px;
+  margin: 10px 0 10px 0;
+  box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.2);
+}
+
+.traits-box {
+  border: 3px solid #008080;
+  border-radius: 25px;
+  margin: 10px 10px 10px 10px;
+  box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.2);
+  transition: 0.5s;
+}
+.traits-box:hover {
+  transition: 0.5s;
+  box-shadow: 0px 4px 16px 4px rgba(0,0,0,0.2);
+}
+
+.mini-box {
+  border: 3px solid #008080;
+  border-radius: 25px;
+  box-shadow: 0px 1px 4px 1px rgba(0,0,0,0.2);
+}
+.carousel-inner {
+  width: 75%;
+  margin: auto;
+  }
+
+.carousel-control-prev {
+  position: absolute;
+  
+}

@@ -104,7 +104,7 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
             BASE_DIR / "templates",
-            BASE_DIR / "administration" / "department" / "templates",
+            BASE_DIR / "administration" / "organization" / "templates",
             BASE_DIR / "administration" / "usermanagement" / "templates",
             BASE_DIR / "administration" / "userstocheck" / "templates",
             BASE_DIR / "administration" / "userschedules" / "templates",

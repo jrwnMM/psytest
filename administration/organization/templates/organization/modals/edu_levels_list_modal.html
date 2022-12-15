@@ -1,0 +1,27 @@
+<div class="modal fade" id="edu_level_list" aria-labelledby="edu_level_list-label" aria-hidden="true" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="edu_level_list-label">All Education Levels</h5>
+        </div>
+        <div class="modal-body">
+          <table class="table">
+            <thead>
+              <td></td>
+              <td class="text-center">
+                <button class="btn btn-danger" data-bs-target="#edu_levels_delete_modal" data-bs-toggle="modal">
+                  Delete?
+                </button>
+              </td>
+            </thead>
+            <tbody id="edu_levels_list_body">
+              {% include 'organization/partials/edu_levels_list_body.html' %}
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

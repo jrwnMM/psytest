@@ -62,13 +62,13 @@ class CreateUserForm(DynamicFormMixin, UserCreationForm):
         'class': 'form-control',
         'placeholder': 'Type your username'
     }))
-    contactNumber = PhoneNumberField(region="PH", widget=forms.TextInput(attrs={
+    contactNumber = PhoneNumberField(region="PH", required=False, widget=forms.TextInput(attrs={
         'class': 'form-control',
-        'placeholder': 'Type your contact number'
+        'placeholder': 'Optional',
     }))
     email = forms.EmailField(required=False, widget=forms.EmailInput(attrs={
         'class': 'form-control',
-        'placeholder': 'Type your email address'
+        'placeholder': 'Optional'
     }))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={
         'class': 'form-control',
