@@ -15,6 +15,7 @@
             </div>
             <div id="add_edu_msg" class="m-2"></div>
             <activate hx-trigger="edu_level_options from:body" hx-get="{% url 'administration:edu-level-options' %}" hx-target="#edu_levels_select"/>
+            <activate hx-trigger="edu_levels_list from:body" hx-get="{% url 'administration:edu-levels-list' %}" hx-target="#edu_levels_list_body"/>
           </form>
         </div>
         <div class="modal-footer">

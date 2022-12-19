@@ -5,11 +5,8 @@
           <p>Are you sure do you want to delete?</p>
         </div>
         <div class="modal-footer border-0">
-          <button type="button" class="btn btn-danger" 
-            data-bs-toggle="modal" 
-            data-bs-target="#edu_level_list"
-            hx-delete="{% url 'administration:delete-education-level' %}"
-            hx-indicator="#edu_level_form_delete">Yes</button>
+          <button id="delete_edu_levels_btn" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
+          <activate hx-trigger="edu_level_options from:body" hx-get="{% url 'administration:edu-level-options' %}" hx-target="#edu_levels_select"/>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
         </div>
       </div>

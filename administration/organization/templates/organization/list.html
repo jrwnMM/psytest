@@ -39,24 +39,36 @@
                         Add an Education Level
                     </a>
                     {% include 'organization/modals/add_edu_modal.html' %}
-                    {% include 'organization/modals/edu_levels_delete_modal.html' %}
+                    
                 </div>
-                <select name="" id="edu_levels_select" class="form-select">
+                <select id="edu_levels_select" class="form-select">
                     {% include 'organization/partials/education_level_options.html' %}
                 </select>
                 <div>
                     <a href="#edu_level_list" class="link-secondary" data-bs-toggle="modal" role="button">view list >></a>
-                    {% include 'organization/modals/edu_levels_list_modal.html' %}
+                    {% include 'organization/modals/list_edu_levels_modal.html' %}
+                    {% include 'organization/modals/delete_edu_levels_modal.html' %}
+                </div>
+                <div id="request-msg">
                 </div>
             </div>
             
         </div>
         <div class="col-sm-7">
             <div class="p-2">
-                <p>Departments</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <p>Departments</p>
+                    <a href="#add-department" class="d-flex link-dark gap-1 align-items-center" data-bs-toggle="modal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="green" class="bi bi-plus-square" viewBox="0 0 16 16">
+                            <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                        </svg>
+                        Add a department
+                    </a>
+                </div>
+                {% include 'organization/modals/add_department.html' %}
                 <hr>
-                <ul id="departments">
-                    {% include 'organization/partials/departments.html' %}
+                <ul id="edu_level_departments">
                 </ul>
             </div>
         </div>
@@ -140,5 +152,5 @@
 </main>
 {% endblock %}
 {% block scripts %}
-<script src="{% static 'scripts/administration/department.js' %}" defer></script>
+<script src="{% static 'scripts/administration/organization.js' %}" defer></script>
 {% endblock %}

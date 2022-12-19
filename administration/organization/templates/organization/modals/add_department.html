@@ -1,0 +1,27 @@
+<div class="modal fade" id="add-department" tabindex="-1" aria-labelledby="add-department-label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="add-department-label">Add a Department</h5>
+        </div>
+        <div class="modal-body">
+          <form hx-post="{% url 'administration:add-department' %}" 
+                hx-target="#department_list">
+            {% csrf_token %}
+            <div class="input-group m-2">
+                <span class="input-group-text">Name: </span>
+                <input type="text" class="form-control" name="department_name" required>
+            </div>
+            <div class="input-group m-2">
+                <span class="input-group-text">Code: </span>
+                <input type="text" class="form-control" name="department_code" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button  id="add_department_btn" class="btn btn-teal" data-bs-dismiss="modal">Add</button>
+          <button  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -11,27 +11,33 @@ from administration.views import Is_Counselor
 from accounts.models import EducationLevel, Department, Year
 from django_htmx.http import trigger_client_event
 
-class DepartmentListView(LoginRequiredMixin, Is_Counselor, ListView):
-    template_name = 'organization/department/list.html'
-    paginate_by = 10
-    context_object_name = 'departments'
+class OrganizationView(LoginRequiredMixin, Is_Counselor, ListView):
+    template_name = 'organization/list.html'
     
     def get_queryset(self):
         return Department.objects.all().order_by('name')
 
     def get_context_data(self, **kwargs):
-        context = super(DepartmentListView, self).get_context_data(**kwargs)
+        context = super(OrganizationView, self).get_context_data(**kwargs)
         context['form'] = AddDepartmentForm()
         context['edu_levels'] = EducationLevel.objects.all()
         context['departments'] = Department.objects.all()
         context['years'] = Year.objects.all()
         return context
 
+@user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
 def edu_level_options(request):
     context = {}
     context["edu_levels"] = EducationLevel.objects.all()
     return render(request, 'organization/partials/education_level_options.html', context)
 
+@user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
+def edu_levels_list_body(request):
+    context = {}
+    context["edu_levels"] = EducationLevel.objects.all()
+    return render(request, 'organization/partials/edu_levels_list_body.html', context)
+
+@user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
 def add_education_level(request):
     edu_text = request.POST['edu_text']
     edu_level, created = EducationLevel.objects.get_or_create(name=edu_text)
@@ -41,13 +47,45 @@ def add_education_level(request):
         # response = render(request, 'organization/partials/education_levels.html', context)
         response = HttpResponse("<div class='text-success'>Added</div>")
         trigger_client_event(response, "edu_level_options", {})
+        trigger_client_event(response, "edu_levels_list", {})
         return response
     
     return HttpResponse("<div class='text-danger'>Already Existed</div>")
 
+@user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
 def delete_education_level(request):
-    print(request)
+    checked = request.POST.getlist("edu_levels_id")
+    EducationLevel.objects.filter(id__in=checked).delete()
+    edu_levels = EducationLevel.objects.all()
+    response = HttpResponse("<div id='element-msg' class='text-success'>Deleted Successfully</div>")
+    trigger_client_event(response, "edu_level_options", {})
+    trigger_client_event(response, "edu_levels_list", {})
+    return response
     
+@user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
+def department_list(request):
+    context = {}
+    context["departments"] = Department.objects.all()
+    return render(request, 'organization/partials/department_list.html', context)
+
+@user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
+def add_department(request):
+    pass
+    # context = {}
+    # context["departments"] = Department.objects.all()
+    # return render(request, 'organization/partials/department_list.html', context)
+def handle_edu_levels_select(request):
+    print(request.GET.get("edu_level_id"))
+    context = {}
+    try:
+        edu_level_id = request.GET.get("edu_level_id")
+        if edu_level_id.isnumeric():
+            education_level = EducationLevel.objects.get(id = edu_level_id)
+            context["departmets"] = Department.objects.filter(educationlevel=education_level)
+    except EducationLevel.DoesNotExist:
+        pass
+    return render(request, 'organization/partials/department_list.html', context)
+
 
 
 
