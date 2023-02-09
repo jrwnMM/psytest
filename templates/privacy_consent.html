@@ -22,8 +22,11 @@ Privacy Consent
         </div>
         <div class="text-center m-t-30">
             <a href="{% url 'assessment' %}" class="btn btn-secondary">Back</a>
-            <a href="{% if test == 'personality' %}{% url 'personalityTest:test' %}{% endif %}{% if test == 'career' %}{% url 'riasec:test' %}{% endif %}"
-                class="btn btn-teal">Agree</a>
+            <a href="
+            {% if test == 'personality' %}{% url 'personalityTest:test' %}{% endif %}
+            {% if test == 'career' %}{% url 'riasec:test' %}{% endif %}
+            {% if test == 'iq' %}{% url 'iqtest:test' %}{% endif %}"
+            class="btn btn-teal">Agree</a>
         </div>
     </div>
 </div>

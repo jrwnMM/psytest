@@ -1,0 +1,22 @@
+{% if choices %}
+<div class="p-3" id="choice_list">
+    {% for choice in choices %}
+    <div class="d-flex align-items-center">
+        <a href="#" hx-post="{% url 'administration:delete-choice' id=choice.id question_id=choice.question.id %}"
+            hx-target="#choice_list" hx-swap="outerHTML" class="p-1">
+            <u class="text-danger">delete: </u>
+        </a>
+        {% if choice.is_answer == "correct" %}
+        <span class="badge bg-success mx-2">Correct answer</span>
+        {% endif %}
+        <div class="choice_display d-flex align-items-center">
+            {{choice.choice.html|safe}}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if count %}
+<div class="col-1" id="choice_count" hx-swap-oob="true">{{ count|default:"1.)" }}</div>
+{% endif %}

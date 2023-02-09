@@ -1,0 +1,21 @@
+<form hx-post="{% url 'administration:add-iq-question' %}" hx-target="#question_field" hx-swap="innterHTML"
+    hx-trigger="submit">
+    {{add_question_form.question}}
+    <div class="mt-2 d-flex justify-content-end">
+        <button id='question_btn' type="submit" class="btn btn-teal">Add Question</button>
+    </div>
+</form>
+
+{% if messages %}
+{% for message in messages %}
+<div id="id_alert_add_question" class="alert alert-{{message.extra_tags}} my-2" hx-swap-oob="true">
+    <span>{{ message }}</span>
+</div>
+{% endfor %}
+{% endif %}
+
+{% if changed %}
+<div id="questions" hx-swap-oob="true">
+    {% include 'iq/questions.html' %}
+</div>
+{% endif %}

@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.generic import TemplateView
 from django.db import transaction
 from django.contrib.auth.mixins import (
@@ -11,6 +12,7 @@ from .forms import UpdateProfileForm
 from accounts.models import Profile
 from riasec.models import OfferedProgram, Result as CareerResult
 from personalityTest.models import RecommendedProgram, Result as PersonalityResult
+from iqtest.models import Result as IQResult
 
 from psytests.forms import ContactForm
 
@@ -89,7 +91,21 @@ class UserStats(LoginRequiredMixin, UserDetailViewMixin, TemplateView):
             context["personalityTest_result"] = PersonalityResult.objects.get(user__id=self.kwargs.get("pk"))
         except PersonalityResult.DoesNotExist:
             pass
-        
+        iq_result = IQResult.objects.filter(user__id = self.kwargs.get("pk")).first()
+        context['iq_result'] = iq_result
+
+        if iq_result:
+            if iq_result.result in range(36,41):
+                result_desc = 'Exceptional'
+            if iq_result.result in range(25,31):
+                result_desc = 'Very Good'
+            if iq_result.result in range(19,25):
+                result_desc = 'Good'
+            if iq_result.result in range(15,19):
+                result_desc = 'Average'
+            if iq_result.result in range(0,15):
+                result_desc = 'Poor'
+        context['iqresult_desc'] = result_desc
         context['recommended_programs'] = RecommendedProgram.objects.filter(user__username=self.kwargs.get("username"))
         context['realistic_programs'] = OfferedProgram.objects.filter(interest='realistic')
         context['investigative_programs'] = OfferedProgram.objects.filter(interest='investigative')
@@ -129,7 +145,7 @@ class EditProfile(LoginRequiredMixin, TemplateView):
             profile.user.last_name = form.cleaned_data.get('last_name')
             profile.save()
             profile.user.save()
-            return redirect('profile:user-stats', username=self.kwargs['username'], pk=self.kwargs['pk'])
+            return redirect(reverse('profile:user-stats', kwargs={"username":self.kwargs['username'], "pk":self.kwargs['pk'], "tab":"profile"}))
         else:
             context['profile_form_errors'] = form.errors
             return render(self.request, self.template_name, context)

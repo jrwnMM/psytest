@@ -42,12 +42,13 @@
             </div>
             <div class="col-sm-6 col-xs-6">
                 <p>Contact Number: {{profile.contactNumber}}</p>
-                <p>Email: {{profile.user.email}}</p>
+                <p>Email: {% if not profile.user.email %}None{% endif %}{{profile.user.email}}</p>
             </div>
         </div>
         <h5>Educational Details</h5>
         <div class="row">
             <div>
+                <p>Education level: {{profile.educationlevel}}</p>
                 <p>Department: {{profile.department}}</p>
                 <p>Program: {{profile.program}}</p>
                 <p>Year: {{profile.year}}</p>

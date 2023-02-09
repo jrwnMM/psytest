@@ -1,0 +1,39 @@
+{% if iq_result %}
+<div class="d-flex justify-content-between">
+    <div class="m-3">
+        <p class="text-muted">Test taken: {{iq_result.date_created}}</p>
+    </div>
+    {% if request.user.is_superuser %}
+    {% if profile.user.username != request.user.username %}
+    <button class="btn btn-danger m-3" type="button" data-bs-toggle="modal"
+        data-bs-target="#delete-personality-modal">Delete record</button>
+    {% include 'userprofile/partials/delete-personality-modal.html' %}
+    {% endif %}
+    {% endif %}
+</div>
+<div class="text-center my-5">
+    <h2>Result</h2>
+</div>
+<div class="row justify-content-center">
+    <div class="col-3">
+        <ul class="list-group">
+            <li class="list-group-item bg-teal text-center text-white">Legend: </li>
+            <li class="list-group-item text-center">36-40 Exceptional</li>
+            <li class="list-group-item text-center">25-30 Very good</li>
+            <li class="list-group-item text-center">19-24 Good</li>
+            <li class="list-group-item text-center">15-18 Average</li>
+            <li class="list-group-item text-center">0-14 Poor</li>
+          </ul>
+    </div>
+    <div class="col-6 text-center">
+        <p>Total score:</p>
+        <p class="fs-50">{{iq_result.result}}</p>
+        <p>Overall: {{iqresult_desc}}</p>
+    </divc>
+</div>
+
+{% else %}
+<div class="m-3">
+    <p>No record found</p>
+</div>
+{% endif %}

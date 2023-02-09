@@ -20,16 +20,21 @@
     </button>
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <button class="nav-link {% if tab == 'profile' %}active{% endif %}" id="v-pills-profile-tab" data-bs-toggle="tab"
-                data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile"
-                aria-selected="true">Profile</button>
+            <button class="nav-link {% if tab == 'profile' %}active{% endif %}" id="v-pills-profile-tab"
+                data-bs-toggle="tab" data-bs-target="#v-pills-profile" type="button" role="tab"
+                aria-controls="v-pills-profile" aria-selected="true">Profile</button>
 
-            <button class="nav-link {% if tab == 'career' %}active{% endif %}" id="v-pills-career-tab" data-bs-toggle="tab" data-bs-target="#v-pills-career"
-                type="button" role="tab" aria-controls="v-pills-career" aria-selected="false">Career</button>
+            <button class="nav-link {% if tab == 'career' %}active{% endif %}" id="v-pills-career-tab"
+                data-bs-toggle="tab" data-bs-target="#v-pills-career" type="button" role="tab"
+                aria-controls="v-pills-career" aria-selected="false">Career</button>
 
-            <button class="nav-link {% if tab == 'personality' %}active{% endif %}" id="v-pills-personality-tab" data-bs-toggle="tab"
-                data-bs-target="#v-pills-personality" type="button" role="tab" aria-controls="v-pills-personality"
-                aria-selected="false">Personality</button>
+            <button class="nav-link {% if tab == 'personality' %}active{% endif %}" id="v-pills-personality-tab"
+                data-bs-toggle="tab" data-bs-target="#v-pills-personality" type="button" role="tab"
+                aria-controls="v-pills-personality" aria-selected="false">Personality</button>
+
+            <button class="nav-link {% if tab == 'iq' %}active{% endif %}" id="v-pills-iq-tab"
+                data-bs-toggle="tab" data-bs-target="#v-pills-iq" type="button" role="tab"
+                aria-controls="v-pills-iq" aria-selected="false">IQ</button>
         </div>
     </nav>
 
@@ -41,13 +46,20 @@
             {% include 'userprofile/partials/tab-profile.html' %}
         </div>
         <!-- career tab -->
-        <div class="tab-pane fade {% if tab == 'career' %}show active{% endif %}" id="v-pills-career" role="tabpanel" aria-labelledby="v-pills-career-tab">
+        <div class="tab-pane fade {% if tab == 'career' %}show active{% endif %}" id="v-pills-career" role="tabpanel"
+            aria-labelledby="v-pills-career-tab">
             {% include 'userprofile/partials/tab-career.html' %}
         </div>
         <!-- Personality Tab -->
-        <div class="tab-pane fade {% if tab == 'personality' %}show active{% endif %}" id="v-pills-personality" role="tabpanel" aria-labelledby="v-pills-personality-tab">
+        <div class="tab-pane fade {% if tab == 'personality' %}show active{% endif %}" id="v-pills-personality"
+            role="tabpanel" aria-labelledby="v-pills-personality-tab">
             {% include 'userprofile/partials/tab-personality.html' %}
         </div>
+        <!-- IQ Tab -->
+        <div class="tab-pane fade {% if tab == 'iq' %}show active{% endif %}" id="v-pills-iq"
+        role="tabpanel" aria-labelledby="v-pills-iq-tab">
+        {% include 'userprofile/partials/tab-iq.html' %}
+    </div>
     </div>
 
 

@@ -1,0 +1,23 @@
+<div class="modal fade" id="add_question" aria-labelledby="add_question" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add_question_title">Add a question</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <!-- form -->
+            <div id="id_alert_add_question">
+            </div>
+            <div class="modal-body d-flex flex-column gap-2">
+                <p>Write your question: </p>
+                <div id="question_field">
+                    {% include 'iq/partials/add_question_field.html' %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

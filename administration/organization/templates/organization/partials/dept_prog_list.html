@@ -1,0 +1,29 @@
+{% for program in programs %}
+    <tr>
+        <td>{{program.name}}</td>
+        <td></td>
+        <td>
+            <div class="text-center">
+                <input type="checkbox" name="program" class="form-check-input" value="{{program.id}}">
+            </div>
+        </td>
+    </tr>
+{% endfor %}
+
+{% if dept_code %}
+<input type="hidden" id="dept_code" value="{{dept_code}}">
+{% endif %}
+
+
+{% if success %}    
+<div id="add_prog_msg" class="m-2 d-flex justify-content-center fade-me-in-out" hx-swap-oob="true">
+    <p class="text-success">added</p>
+</div>
+{% endif %}
+
+{% if failed %}
+<div id="add_prog_msg" class="m-2 fade-me-in-out" hx-swap-oob="true">
+    <p class="text-success">Already Existed</p>
+</div>
+{% endif %}
+

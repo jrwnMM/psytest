@@ -1,0 +1,35 @@
+{% if question %}
+<div id="edit_question">
+    {% include 'iq/partials/edit_question.html' %}
+</div>
+
+<hr>
+
+<div>
+    <p>Choices:</p>
+</div>
+<div id="update_choice_{{question.id}}">
+    {% include 'iq/partials/add_choice.html' %}
+</div>
+<div class="mb-3">
+    <p>Make a choice:</p>
+</div>
+<form hx-post="{% url 'administration:add-choice' %}" hx-target="#update_choice_{{question.id}}" hx-swap="innerHTML">
+    <div class="row">
+        <div class="col-1" id="choice_count">{{ count|default:"1.)" }}</div>
+        <div class="col">
+            {{update_choice_form.question}}
+            <div>
+                {{update_choice_form.choice}}
+            </div>
+            <div class="mt-1">
+                <label>Is answer: </label>
+                {{update_choice_form.is_answer}}
+            </div>
+        </div>
+    </div>
+    <div class="mt-2 d-flex justify-content-end">
+        <button id='question_btn' type="submit" class="btn btn-teal">Add Choice</button>
+    </div>
+</form>
+{% endif %}

@@ -1,0 +1,57 @@
+<div class="modal fade" id="dept_prog_modal_{{department.code}}" aria-labelledby="dept_prog_modal_{{department.code}}-label" aria-hidden="true" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="dept_prog_modal_{{department.code}}-label">Programs</h5>
+      </div>
+      <div class="modal-body">
+        <div class="collapse" id="add_dept_prog">
+          <div class="m-3">
+            <form hx-post="{% url 'administration:add-department-program' %}" hx-target="#dept_prog_list_{{department.code}}" hx-swap="morph:innerHTML">
+              <input type="hidden" name="department" value="{{department.code}}" id="" placeholder="Department" class="form-control">
+              <input type="hidden" name="educationlevel" value="{{department.educationlevel.id}}" id="" placeholder="Education Level" class="form-control">
+              <div class="input-group">
+                <input type="text" name="program_code" id="" placeholder="Code" class="form-control w-25">
+                <input type="text" name="program_name" id="" placeholder="Name" class="form-control w-50">
+                <button type="submit" class="btn btn-teal">Add</button>
+              </div>
+            </form>
+          </div>
+          <div id="add_prog_msg" class="m-2 fade-me-in-out">
+        </div>
+        </div>
+        <table class="table">
+          <thead>
+            <td>Program Name</td>
+            <td>
+              <p>
+                <a class="d-flex link-dark gap-1 align-items-center" data-bs-toggle="collapse" href="#add_dept_prog" role="button" aria-expanded="false"
+                  aria-controls="add_dept_prog">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="green" class="bi bi-plus-square"
+                    viewBox="0 0 16 16">
+                    <path
+                      d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                      <path
+                      d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                  </svg>
+                  Add a program
+                </a>
+              </p>
+            </td>
+            <td class="text-center">
+              <button href="#program_delete_modal" class="btn btn-danger btn-sm" data-bs-toggle="modal">
+                Delete
+              </button>
+            </td>
+          </thead>
+          <tbody id="dept_prog_list_{{department.code}}">
+            {% include 'organization/partials/dept_prog_list.html' %}
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
