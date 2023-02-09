@@ -115,6 +115,8 @@ def career_grade(request):
     data['avg'] = CareerResult.objects.filter(user__profile__educationlevel__name="Grade School").aggregate(*riasec_avg)
     return JsonResponse(data)
 
+
+
 @user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
 @require_http_methods(["GET"])
 def personality_male(request):

@@ -175,16 +175,13 @@ class CreateUserForm(DynamicFormMixin, UserCreationForm):
         pattern = '([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+'
         email = self.cleaned_data.get('email')
         result = re.fullmatch(pattern, email)
-
-        try:
-            User.objects.get(email=email)
-            raise ValidationError('Email address already exist')
-        except ObjectDoesNotExist:
-            pass
-
-        if not result:
-            raise ValidationError('Invalid email address')
-
+        if email != "":
+            try:
+                User.objects.get(email=email)
+                raise ValidationError('Email address already exist')
+            except ObjectDoesNotExist:
+                pass
+        
         return self.cleaned_data.get('email')
 
 

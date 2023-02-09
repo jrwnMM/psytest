@@ -13,14 +13,16 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/nav-css.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/admin.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://unpkg.com/htmx.org@1.7.0" integrity="sha384-EzBXYPt0/T6gxNp0nuPtLkmRpmDBbjg6WmCUZRLXBBwYYmwAUxzlSGej0ARHX0Bo" crossorigin="anonymous" defer></script>
+    <script src="https://unpkg.com/htmx.org@1.8.4" integrity="sha384-wg5Y/JwF7VxGk4zLsJEcAojRtlVp1FKKdGy1qN+OMtdq72WRvX/EdRdqg/LOhYeV" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/idiomorph/dist/idiomorph-ext.min.js"></script>
+
     {% block head %}
     {% endblock %}
     <title>PSYTEST | {% block title %}{% endblock %}</title>
 </head>
 
 
-<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' hx-ext="morph">
     <header>
         {% include 'partials/_navbar.html' %}
         <div class='admin-div'>

@@ -24,7 +24,7 @@ $(document).ready(() => {
         },2000);
     })
 
-    htmx.on("htmx:beforeSwap", (e) => {
+    htmx.on("htmx:afterSwap", (e) => {
           $(".modal").modal('hide')
       })
 

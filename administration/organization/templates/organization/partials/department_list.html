@@ -1,3 +1,85 @@
-{% for department in departments %}
-<li>{department.name}</li>
-{% endfor %}
+{% if departments %}
+<thead>
+    <th>Code</th>
+    <th>Department Name</th>
+    <th></th>
+</thead>
+<tbody>
+    {% for department in departments %}
+    <tr>
+        <td>{{department.code}}</td>
+        <td>
+            <a href="#dept_prog_modal_{{department.code}}" data-bs-toggle="modal" class="link-teal"
+                hx-get="{% url 'administration:dept-prog-list' department.id %}"
+                hx-target="#dept_prog_list_{{department.code}}" hx-swap="innerHTML">{{department.name}}</a>
+            {% include 'organization/modals/dept_prog_modal.html' %}
+        </td>
+        <td>
+            <div class="text-center">
+                <input type="checkbox" name="department" class="form-check-input" value="{{department.id}}">
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+{% endif %}
+
+
+
+{% if yearlevels %}
+<div id="yearlevels" hx-swap-oob="true">
+    <div class="d-flex justify-content-end mb-2">
+
+        <a href="#yearlevels_modal" class="d-flex link-dark gap-1 align-items-center" data-bs-toggle="modal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="green" class="bi bi-plus-square"
+                viewBox="0 0 16 16">
+                <path
+                    d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                <path
+                    d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+            </svg>
+            <small>
+                Add a year level
+            </small>
+        </a>
+    </div>
+    <ul>
+        {% for yearlevel in yearlevels %}
+        <li>{{yearlevel.name}}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<tbody id="yearlevels_list" hx-swap-oob="true">
+    {% include 'organization/partials/yearlevel_list.html' %}
+  </tbody>
+
+{% else %}
+<div id="yearlevels" hx-swap-oob="true">
+    <p>Please select an education level</p>
+</div>
+{% endif %}
+
+{% if failed %}
+<div id="add_department_msg" class="text-danger" hx-swap-oob="true">
+    <p>Error</p>
+</div>
+{% endif %}
+
+{% if missing %}
+<div id="add_department_msg" class="text-danger" hx-swap-oob="true">
+    <p>Please select an education level</p>
+</div>
+{% endif %}
+
+{% if success %}
+<div id="add_department_msg" class="text-success" hx-swap-oob="true">
+    <p>Added</p>
+</div>
+{% endif %}
+
+{% if code_exists %}
+<div id="add_department_msg" class="text-danger" hx-swap-oob="true">
+    <p>Code already existed</p>
+</div>
+{% endif %}

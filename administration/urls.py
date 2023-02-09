@@ -17,6 +17,7 @@ urlpatterns = [
     path("user-management/", include("administration.usermanagement.urls")),
     path("career/", include("administration.career.urls")),
     path("personality/", include("administration.personality.urls")),
+    path("iq/", include("administration.iq.urls")),
     path("statistics/", include("administration.statistics.urls")),
     path("<username>/send-msg/", send_msg, name="send-msg"),
     path("<int:user_pk>/approve/", approve_user, name="approve-result"),

@@ -5,21 +5,22 @@
           <h5 class="modal-title" id="add-department-label">Add a Department</h5>
         </div>
         <div class="modal-body">
-          <form hx-post="{% url 'administration:add-department' %}" 
-                hx-target="#department_list">
+          <form id="add_department_form">
             {% csrf_token %}
             <div class="input-group m-2">
                 <span class="input-group-text">Name: </span>
-                <input type="text" class="form-control" name="department_name" required>
+                <input type="text" class="form-control" id="department_name" required>
             </div>
             <div class="input-group m-2">
                 <span class="input-group-text">Code: </span>
-                <input type="text" class="form-control" name="department_code" required>
+                <input type="text" class="form-control" id="department_code" required>
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button  id="add_department_btn" class="btn btn-teal" data-bs-dismiss="modal">Add</button>
+          <div id="add_department_msg">
+          </div>
+          <button  id="add_department_btn" form="#add_department_form" class="btn btn-teal">Add</button>
           <button  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>

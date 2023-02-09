@@ -3,8 +3,22 @@
         <td>{{edu_level.name}}</td>
         <td>
             <div class="text-center">
-                <input type="checkbox" name="edu_levels_id" class="form-check-input" value="{{edu_level.id}}">
+                <input type="checkbox" name="edu_level" class="form-check-input" value="{{edu_level.id}}">
             </div>
         </td>
     </tr>
 {% endfor %}
+
+
+{% if success %}    
+<div id="add_edu_msg" class="m-2 fade-me-in-out" hx-swap-oob="true">
+    <p class="text-success">added</p>
+</div>
+{% endif %}
+
+{% if failed %}
+<div id="add_edu_msg" class="m-2 fade-me-in-out" hx-swap-oob="true">
+    <p class="text-success">Already Existed</p>
+</div>
+{% endif %}
+

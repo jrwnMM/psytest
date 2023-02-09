@@ -1,16 +1,18 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, HttpResponse
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-
 import joblib
 import pandas as pd
 from accounts.models import Profile
-
-from personalityTest.models import Question, RecommendedProgram, Result as PResult, Answer
+from personalityTest.models import (
+    Question,
+    RecommendedProgram,
+    Result as PResult,
+    Answer,
+)
 from riasec.models import OfferedProgram
-
 from datetime import datetime
 
 
@@ -18,34 +20,48 @@ class TestView(LoginRequiredMixin, TemplateView):
     template_name = "personalityTest/testPage.html"
     ml_model = joblib.load("models/personality_career_dt.sav")
 
+    def get(self, *args, **kwargs):
+        if (
+            not len(
+                Question.objects.filter(
+                    category__in=["EXT", "EST", "AGR", "CSN", "OPN"]
+                )
+                .order_by("category")
+                .distinct("category")
+            )
+            == 5
+        ):
+            return HttpResponse("Not available")
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["questions"] = Question.objects.all()
 
         try:
-            context['existed'] = PResult.objects.get(user=self.request.user)
+            context["existed"] = PResult.objects.get(user=self.request.user)
         except ObjectDoesNotExist:
             pass
 
         return context
-        
+
     @transaction.atomic
     def post(self, *args, **kwargs):
         now = datetime.now()
         user = self.request.user
-        q = Question.objects.all().order_by('pk').values_list('id', flat=True)
-        lis = [] 
-        ext = [] 
-        est = [] 
-        agr = [] 
-        csn = [] 
+        q = Question.objects.all().order_by("pk").values_list("id", flat=True)
+        ext = []
+        est = []
+        agr = []
+        csn = []
         opn = []
 
         for id in q.iterator():
             score = float(self.request.POST.get(f"{id}"))
             question = Question.objects.get(pk=id)
 
-            if question.key == '0':
+            if question.key == "0":
                 if score == 5:
                     score = 1
                 if score == 4:
@@ -61,7 +77,6 @@ class TestView(LoginRequiredMixin, TemplateView):
                 answer.answer = score
                 answer.user = user
                 answer.save()
-        
             if question.category == "EXT":
                 ext.append(score)
             if question.category == "EST":
@@ -73,17 +88,11 @@ class TestView(LoginRequiredMixin, TemplateView):
             if question.category == "OPN":
                 opn.append(score)
 
-            lis.append(score)
-
-
-        df = pd.DataFrame(lis).transpose()
-
-        # my_sums = pd.DataFrame()
-        extroversion = float(df[ext].sum(axis=1) / len(ext))
-        neurotic = float(df[est].sum(axis=1) / len(est))
-        agreeable = float(df[agr].sum(axis=1) / len(agr))
-        conscientious = float(df[csn].sum(axis=1) / len(csn))
-        openness = float(df[opn].sum(axis=1) / len(opn))
+        extroversion = float(sum(ext)) / len(ext)
+        neurotic = float(sum(est))/ len(est)
+        agreeable = float(sum(agr)) / len(agr)
+        conscientious = float(sum(csn)) / len(csn)
+        openness = float(sum(opn)) / len(opn)
 
         # career_prediction = model.predict
         personality = [[extroversion, neurotic, agreeable, conscientious, openness]]
@@ -93,14 +102,14 @@ class TestView(LoginRequiredMixin, TemplateView):
 
         programs = []
         for key, value in first_ranked.items():
-            try: 
+            try:
                 offeredPrograms = OfferedProgram.objects.filter(interest=key)
                 if offeredPrograms:
                     for item in offeredPrograms:
                         programs.append(item)
             except ObjectDoesNotExist:
                 pass
-        
+
         if programs:
             if RecommendedProgram.objects.filter(user=user).exists():
                 RecommendedProgram.objects.filter(user=user).delete()
@@ -110,7 +119,7 @@ class TestView(LoginRequiredMixin, TemplateView):
                 recCareer.user = user
                 recCareer.offeredProgram = obj
                 recCareer.save()
-                
+
         try:
             obj = PResult.objects.get(user=user)
             obj.user = user
@@ -139,7 +148,7 @@ class TestView(LoginRequiredMixin, TemplateView):
         except ObjectDoesNotExist:
             pass
 
-        return redirect('awesome')
+        return redirect("awesome", test='personalitytest')
 
     def program_predictor(self, personality):
         prediction = self.ml_model.predict(personality)
@@ -147,23 +156,25 @@ class TestView(LoginRequiredMixin, TemplateView):
 
     def first_ranked(self, prediction):
         first = {}
-        
+
         obj = {
-        'realistic' : prediction[0][0],
-        'investigative' : prediction[0][1],
-        'artistic' : prediction[0][2],
-        'social' : prediction[0][3],
-        'enterprising' : prediction[0][4],
-        'conventional' : prediction[0][5]
+            "realistic": prediction[0][0],
+            "investigative": prediction[0][1],
+            "artistic": prediction[0][2],
+            "social": prediction[0][3],
+            "enterprising": prediction[0][4],
+            "conventional": prediction[0][5],
         }
 
-        sorted_obj = {key: value for key, value in sorted(obj.items(), key=lambda item: item[1], reverse=True)}
+        sorted_obj = {
+            key: value
+            for key, value in sorted(
+                obj.items(), key=lambda item: item[1], reverse=True
+            )
+        }
 
         for key, value in sorted_obj.items():
             if list(sorted_obj.values())[0] == value:
                 first[key] = value
-        
+
         return first
-            
-
-

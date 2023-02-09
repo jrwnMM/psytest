@@ -28,23 +28,31 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('icons/favicon.ico'))),
     path('admin/', admin.site.urls),
-    path('password_reset/', auth_views.PasswordResetView.as_view(template_name = 'accounts/password_reset_form.html', email_template_name='accounts/password_reset_email.html', form_class=CustomizedPasswordResetForm), name='password_reset'),
-    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='accounts/password_reset_done.html'), name='password_reset_done'),
-    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='accounts/password_reset_confirm.html', form_class=CustomizedPasswordResetConfirmForm), name='password_reset_confirm'),
-    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='accounts/password_reset_complete.html'), name='password_reset_complete'),
-    path('', HomePageView.as_view(), name="homepage"),
-    path('assessment/', Assessment.as_view(), name="assessment"),
-    path('awesome/', Awesome.as_view(), name="awesome"),
-    path('<str:test>/data/privacy/consent', DataPrivacyConsent.as_view(), name="consent"),
     path('profile/', include('userprofile.urls')),
     path('evaluation/', include('evaluation.urls')),
     path('auth/', include('accounts.urls')), #Connects to psytest folder urls.py
     path('career/',include('riasec.urls')), #Connects to riasec folder urls.py
     path('personality/',include('personalityTest.urls')), #Connects to personalityTest folder urls.py
-    # path("generalIQ/", include("generalIQ.urls")),
+    path('iq/', include('iqtest.urls')),
     path('accounts/', include('allauth.urls')),
     path('administration/', include('administration.urls')),
-    # path('ckeditor/', include('ckeditor_uploader.urls')),
+]
+
+# psytestviews
+urlpatterns += [
+    path('', HomePageView.as_view(), name="homepage"),
+    path('assessment/', Assessment.as_view(), name="assessment"),
+    path('awesome/<str:test>/', Awesome.as_view(), name="awesome"),
+    path('<str:test>/data/privacy/consent', DataPrivacyConsent.as_view(), name="consent"),
+]
+
+# authconfig
+urlpatterns += [
+    path('password_reset/', auth_views.PasswordResetView.as_view(template_name = 'accounts/password_reset_form.html', email_template_name='accounts/password_reset_email.html', form_class=CustomizedPasswordResetForm), name='password_reset'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='accounts/password_reset_done.html'), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='accounts/password_reset_confirm.html', form_class=CustomizedPasswordResetConfirmForm), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='accounts/password_reset_complete.html'), name='password_reset_complete'),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

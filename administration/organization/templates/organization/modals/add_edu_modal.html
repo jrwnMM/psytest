@@ -2,20 +2,18 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="add-edu-modal-label">Add an Education Level</h5>
+          <h5 class="modal-title" id="add-edu-modal-label">Add an education level</h5>
         </div>
         <div class="modal-body">
           <form hx-post="{% url 'administration:add-education-level' %}" 
-                hx-target="#add_edu_msg">
+                hx-target="#edu_levels_list_body">
             {% csrf_token %}
             <div class="input-group">
-                <input type="text" class="form-control" name="edu_text">
-                <button type="submit" 
-                    class="btn btn-teal">Add</button>
+                <input type="text" class="form-control" name="edu_text" placeholder="Education level">
+                <button type="submit" class="btn btn-teal">Add</button>
+                <activate hx-trigger="update_edu_level_options from:body" hx-get="{% url 'administration:edu-level-options' %}" hx-target="#edu_levels_select"  hx-swap="morph:innerHTML" />
             </div>
             <div id="add_edu_msg" class="m-2"></div>
-            <activate hx-trigger="edu_level_options from:body" hx-get="{% url 'administration:edu-level-options' %}" hx-target="#edu_levels_select"/>
-            <activate hx-trigger="edu_levels_list from:body" hx-get="{% url 'administration:edu-levels-list' %}" hx-target="#edu_levels_list_body"/>
           </form>
         </div>
         <div class="modal-footer">

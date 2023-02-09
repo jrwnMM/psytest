@@ -1,8 +1,9 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.db import transaction
+from django.db.models import Q
 
 from accounts.models import Profile
 from riasec.models import Question, Result as RResult, Answer
@@ -14,7 +15,10 @@ from datetime import datetime
 
 @login_required(login_url="accounts:login")
 def testPage(request):
-    range_num = range(42)
+    range_count = Question.objects.all().count()
+    if not len(Question.objects.filter(category__in=["R", "I", "A", "S", "E", "C"]).order_by("category").distinct("category")) == 6:
+        return HttpResponse("Not available")
+    range_num = range(range_count)
     obj = RResult.objects.all()
     questions = Question.objects.all()
 
@@ -46,8 +50,6 @@ def evaluate(request):
     for id in q.iterator():
         score = float(request.POST.get(f"{id}"))
         question = Question.objects.get(pk=id)
-        print(id)
-
         
         try:
             answer = Answer.objects.get(user=user, question=question)
@@ -112,7 +114,7 @@ def evaluate(request):
     except ObjectDoesNotExist:
             pass
 
-    return redirect('awesome')
+    return redirect('awesome', test='careertest')
 
 
 

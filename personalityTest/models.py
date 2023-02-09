@@ -41,7 +41,7 @@ class Answer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name="personality_answer_user")
 
 class Result(models.Model):
-    user=models.OneToOneField(User, on_delete=models.CASCADE, null=True, related_name="personality_result_user")
+    user=models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="personality_result_user")
     extroversion = models.FloatField(default=0)
     neurotic = models.FloatField(default=0)
     agreeable = models.FloatField(default=0)

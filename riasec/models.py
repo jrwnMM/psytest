@@ -36,7 +36,7 @@ class Answer(models.Model):
 
 
 class Result(models.Model):
-    user=models.OneToOneField(User,null=True, on_delete=models.CASCADE, related_name="career_result_user")
+    user=models.ForeignKey(User,null=True, on_delete=models.CASCADE, related_name="career_result_user")
     realistic = models.FloatField(default=0)
     investigative = models.FloatField(default=0)
     artistic = models.FloatField(default=0)

@@ -21,7 +21,7 @@ INSTALLED_APPS = [
     "userprofile.apps.UserprofileConfig",
     "personalityTest.apps.PersonalitytestConfig",
     "evaluation.apps.EvaluationConfig",
-    # "generalIQ.apps.GeneraliqConfig",
+    "iqtest.apps.IqtestConfig",
     # allauth
     "allauth",
     "allauth.account",
@@ -33,14 +33,12 @@ INSTALLED_APPS = [
     "django_filters",
     "mathfilters",
     #Other apps
-    # "ckeditor",
-    # "ckeditor_uploader",
+    'django_quill',
     'widget_tweaks',
     "phonenumber_field",
     "django_htmx",
 ]
 
-# CKEDITOR_UPLOAD_PATH = "uploads/"
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
@@ -52,7 +50,7 @@ SOCIALACCOUNT_PROVIDERS = {
         "SCOPE": [
             "profile",
             "email",
-        ],
+        ],  
         "AUTH_PARAMS": {
             "access_type": "online",
         },
@@ -111,6 +109,7 @@ TEMPLATES = [
             BASE_DIR / "administration" / "statistics" / "templates",
             BASE_DIR / "administration" / "career" / "templates",
             BASE_DIR / "administration" / "personality" / "templates", 
+            BASE_DIR / "administration" / "iq" / "templates",
             ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -163,7 +162,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
 
 MEDIA_URL = "/images/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "static/images")

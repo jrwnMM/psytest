@@ -6775,6 +6775,12 @@ a {
   box-shadow: 0px 4px 8px 2px rgba(0, 0, 0, 0.2);
 }
 
+.border-2-round-box {
+  border: 2px solid rgba(0, 128, 128);
+  border-radius: 25px;
+  box-shadow: 0px 4px 8px 2px rgba(0, 0, 0, 0.2);
+}
+
 .border-3-round-box {
   border: 3px solid rgba(0, 128, 128);
   border-radius: 25px;
@@ -6944,4 +6950,21 @@ a.page-link:focus {
 .fade-me-out.htmx-swapping {
   opacity: 0;
   transition: opacity 1s ease-out;
+}
+
+.fade-me-in-out.htmx-added {
+  opacity: 1;
+}
+.fade-me-in-out {
+  opacity: 0;
+  transition: opacity 1s ease-out;
+  transition-delay: 2s;
+}
+
+.choice_display p img {
+  width: 100%;
+}
+
+.choice_display p {
+  word-break: break-all;
 }
