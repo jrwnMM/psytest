@@ -4,7 +4,6 @@ from django.shortcuts import redirect, render, HttpResponse
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import user_passes_test
-from django_htmx.http import retarget
 from .forms import AddIQQuestionForm, AddIQChoiceForm
 from administration.views import Is_Counselor
 from django.utils.html import strip_tags
