@@ -13,7 +13,7 @@ class TestView(LoginRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         iq_questionnaires = Question.objects.all().count()
-        if  not iq_questionnaires > 40:
+        if  not iq_questionnaires < 40:
             return HttpResponse("Not Available")
         return super().get(request, *args, **kwargs)
 

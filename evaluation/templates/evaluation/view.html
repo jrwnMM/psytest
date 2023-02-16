@@ -16,7 +16,8 @@
                 {% csrf_token %}
                 {% for question in ratings %}
                 <div class="mb-2">
-                    <p>{{forloop.counter}}.) {{question}}</p>
+                    {% comment %} <p>{{forloop.counter}}.) {{question}}</p> {% endcomment %}
+                    <p>{{question}}</p>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="rate_{{question.id}}"
@@ -58,7 +59,8 @@
                 {% for question in essays %}
                 <div>
                     <div class="mb-2">
-                        <p>{{forloop.counter}}.) {{question}}</p>
+                        {% comment %} <p>{{forloop.counter}}.) {{question}}</p> {% endcomment %}
+                        <p>{{question}}</p>
                     </div>
                     <textarea class="form-control mb-3" rows="3" name="essay_{{question.id}}"></textarea>
                 </div>

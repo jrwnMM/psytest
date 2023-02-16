@@ -18,7 +18,9 @@ from psytests.forms import ContactForm
 
 
 from django.contrib.auth import get_user_model
+
 User = get_user_model()
+
 
 class UserDetailViewMixin(UserPassesTestMixin):
     def test_func(self):
@@ -31,23 +33,32 @@ class UserDetailViewMixin(UserPassesTestMixin):
                 test = False
         return test
 
+
 class UserStats(LoginRequiredMixin, UserDetailViewMixin, TemplateView):
     template_name = "userprofile/stats.html"
 
     def get_context_data(self, **kwargs):
         context = super(UserStats, self).get_context_data(**kwargs)
-        context['form'] = ContactForm()
+        context["form"] = ContactForm()
         obj = Profile.objects.get(user__username=self.kwargs.get("username"))
         context["profile"] = obj
 
         try:
-            context["riasec_result"] = CareerResult.objects.get(user__id=self.kwargs.get("pk")
-)
+            context["riasec_result"] = CareerResult.objects.get(
+                user__id=self.kwargs.get("pk")
+            )
             obj = (
                 CareerResult.objects.filter(
                     user__username=self.kwargs.get("username"),
                 )
-                .values("realistic","investigative","artistic","social","enterprising","conventional",)
+                .values(
+                    "realistic",
+                    "investigative",
+                    "artistic",
+                    "social",
+                    "enterprising",
+                    "conventional",
+                )
                 .first()
             )
             if obj is not None:
@@ -86,79 +97,109 @@ class UserStats(LoginRequiredMixin, UserDetailViewMixin, TemplateView):
                     context["top3value"] = list(top3.values())[0]
         except CareerResult.DoesNotExist:
             pass
-        
+
         try:
-            context["personalityTest_result"] = PersonalityResult.objects.get(user__id=self.kwargs.get("pk"))
+            context["personalityTest_result"] = PersonalityResult.objects.get(
+                user__id=self.kwargs.get("pk")
+            )
         except PersonalityResult.DoesNotExist:
             pass
-        iq_result = IQResult.objects.filter(user__id = self.kwargs.get("pk")).first()
-        context['iq_result'] = iq_result
+        iq_result = IQResult.objects.filter(user__id=self.kwargs.get("pk")).first()
+        context["iq_result"] = iq_result
 
         if iq_result:
-            if iq_result.result in range(36,41):
-                result_desc = 'Exceptional'
-            if iq_result.result in range(25,31):
-                result_desc = 'Very Good'
-            if iq_result.result in range(19,25):
-                result_desc = 'Good'
-            if iq_result.result in range(15,19):
-                result_desc = 'Average'
-            if iq_result.result in range(0,15):
-                result_desc = 'Poor'
-        context['iqresult_desc'] = result_desc
-        context['recommended_programs'] = RecommendedProgram.objects.filter(user__username=self.kwargs.get("username"))
-        context['realistic_programs'] = OfferedProgram.objects.filter(interest='realistic')
-        context['investigative_programs'] = OfferedProgram.objects.filter(interest='investigative')
-        context['artistic_programs'] = OfferedProgram.objects.filter(interest='artistic')
-        context['social_programs'] = OfferedProgram.objects.filter(interest='social')
-        context['enterprising_programs'] = OfferedProgram.objects.filter(interest='enterprising')
-        context['conventional_programs'] = OfferedProgram.objects.filter(interest='conventional')
-        
+            if iq_result.result in range(36, 41):
+                result_desc = "Exceptional"
+            if iq_result.result in range(25, 31):
+                result_desc = "Very Good"
+            if iq_result.result in range(19, 25):
+                result_desc = "Good"
+            if iq_result.result in range(15, 19):
+                result_desc = "Average"
+            if iq_result.result in range(0, 15):
+                result_desc = "Poor"
+            context["iqresult_desc"] = result_desc
+        context["recommended_programs"] = RecommendedProgram.objects.filter(
+            user__username=self.kwargs.get("username")
+        )
+        context["realistic_programs"] = OfferedProgram.objects.filter(
+            interest="realistic"
+        )
+        context["investigative_programs"] = OfferedProgram.objects.filter(
+            interest="investigative"
+        )
+        context["artistic_programs"] = OfferedProgram.objects.filter(
+            interest="artistic"
+        )
+        context["social_programs"] = OfferedProgram.objects.filter(interest="social")
+        context["enterprising_programs"] = OfferedProgram.objects.filter(
+            interest="enterprising"
+        )
+        context["conventional_programs"] = OfferedProgram.objects.filter(
+            interest="conventional"
+        )
+
         return context
+
 
 class EditProfile(LoginRequiredMixin, TemplateView):
-    template_name = 'userprofile/profile-edit.html'
+    template_name = "userprofile/profile-edit.html"
 
     def get_context_data(self, **kwargs):
-        profile = Profile.objects.get(user__username=self.kwargs['username'])
+        profile = Profile.objects.get(user__username=self.kwargs["username"])
         context = super(EditProfile, self).get_context_data(**kwargs)
-        context['profile_form'] = UpdateProfileForm(instance=profile, initial={
-            'first_name': profile.user.first_name,
-            'last_name': profile.user.last_name,
-            'educationlevel': profile.educationlevel,
-            'department': profile.department,
-            'program': profile.program,
-            'year': profile.year,
-        })
-        context['profile'] = profile
+        context["profile_form"] = UpdateProfileForm(
+            instance=profile,
+            initial={
+                "first_name": profile.user.first_name,
+                "last_name": profile.user.last_name,
+                "educationlevel": profile.educationlevel,
+                "department": profile.department,
+                "program": profile.program,
+                "year": profile.year,
+            },
+        )
+        context["profile"] = profile
         return context
-            
+
     @transaction.atomic
     def post(self, request, *args, **kwargs):
-        user_profile = Profile.objects.get(user__username=self.kwargs['username'])
+        user_profile = Profile.objects.get(user__username=self.kwargs["username"])
         form = UpdateProfileForm(self.request.POST, instance=user_profile)
         context = self.get_context_data()
 
         if form.is_valid():
             profile = form.save(commit=False)
-            profile.user.first_name = form.cleaned_data.get('first_name')
-            profile.user.last_name = form.cleaned_data.get('last_name')
+            profile.user.first_name = form.cleaned_data.get("first_name")
+            profile.user.last_name = form.cleaned_data.get("last_name")
             profile.save()
             profile.user.save()
-            return redirect(reverse('profile:user-stats', kwargs={"username":self.kwargs['username'], "pk":self.kwargs['pk'], "tab":"profile"}))
+            return redirect(
+                reverse(
+                    "profile:user-stats",
+                    kwargs={
+                        "username": self.kwargs["username"],
+                        "pk": self.kwargs["pk"],
+                        "tab": "profile",
+                    },
+                )
+            )
         else:
-            context['profile_form_errors'] = form.errors
+            context["profile_form_errors"] = form.errors
             return render(self.request, self.template_name, context)
 
+
 def departments(request, username, pk):
-    form=UpdateProfileForm(request.GET)
-    return HttpResponse(form['department'])
+    form = UpdateProfileForm(request.GET)
+    return HttpResponse(form["department"])
+
 
 def programs(request, username, pk):
-    form=UpdateProfileForm(request.GET)
-    return HttpResponse(form['program'] or '')
+    form = UpdateProfileForm(request.GET)
+    return HttpResponse(form["program"] or "")
+
 
 def years(request, username, pk):
     form = UpdateProfileForm(request.GET)
-    response = HttpResponse(form['year'] or None)
+    response = HttpResponse(form["year"] or None)
     return response
