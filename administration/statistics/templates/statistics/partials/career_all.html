@@ -1,48 +1,10 @@
-<form action="" method="post">
-  {% csrf_token %}
-  <h3>Education Level</h3>
-  {% for education_level in education_levels %}
-  <input type="checkbox" name="education_level" value="{{ education_level }}" />
-  {{ education_level }} <br />
-  {% endfor %}
-
-  <h3>Gender</h3>
-  {% for gender in genders %}
-  <input type="checkbox" name="gender" value="{{ gender }}" /> {{ gender }}
-  <br />
-  {% endfor %}
-
-  <h3>Age Range</h3>
-  <input type="number" name="min_age" min="0" max="100" /> to
-  <input type="number" name="max_age" min="0" max="100" />
-
-  <br /><br />
-  <input type="submit" value="Filter" />
-</form>
-
-<br /><br />
-
-{% if filtered_data %}
-<table>
-  <tr>
-    <th>Education Level</th>
-    <th>Gender</th>
-    <th>Age Range</th>
-    {% for label in career_labels %}
-    <th>{{ label }}</th>
-    {% endfor %}
-  </tr>
-  {% for data in filtered_data %}
-  <tr>
-    <td>{{ data.education_level }}</td>
-    <td>{{ data.gender }}</td>
-    <td>{{ data.age_range }}</td>
-    {% for field in data.fields %}
-    <td>{{ field }}</td>
-    {% endfor %}
-  </tr>
-  {% endfor %}
-</table>
-{% else %}
-<p>No data available for selected filters.</p>
-{% endif %}
+<!-- Sex -->
+{% include 'statistics/partials/career_sex.html' %}
+<!-- College -->
+{% include 'statistics/partials/career_college.html' %}
+<!-- Senior Highschool -->
+{% include 'statistics/partials/career_senior.html' %}
+<!-- Junior Highschool -->
+{% include 'statistics/partials/career_junior.html' %}
+<!-- Grade School -->
+{% include 'statistics/partials/career_grade.html' %}

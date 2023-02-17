@@ -13,7 +13,7 @@ class TestView(LoginRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         iq_questionnaires = Question.objects.all().count()
-        if  not iq_questionnaires < 40:
+        if  not iq_questionnaires <= 40:
             return HttpResponse("Not Available")
         return super().get(request, *args, **kwargs)
 
@@ -27,6 +27,7 @@ class TestContainer(LoginRequiredMixin, TemplateView):
         for i in request.POST:
             if i != "csrfmiddlewaretoken":
                 splitted = request.POST[i].split(":")
+                print(splitted)
                 if splitted[1] == "correct":
                     totalscore += 1
         result = Result.objects.create(user=user, result = totalscore)
@@ -46,7 +47,6 @@ class TestContainer(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["questions"] = Question.objects.all().order_by("id")
-        context["started"] = True
         questions = Question.objects.all()
         return context
 

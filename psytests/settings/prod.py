@@ -3,7 +3,7 @@ from .common import *
 import dj_database_url
 
 DEBUG = False
-ALLOWED_HOSTS = ["psytest-app.herokuapp.com", "jmcproject.herokuapp.com"]
+ALLOWED_HOSTS = ["*"]
 
 SECRET_KEY = os.environ["SECRET_KEY"]
 

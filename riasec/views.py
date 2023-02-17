@@ -15,23 +15,21 @@ from datetime import datetime
 
 @login_required(login_url="accounts:login")
 def testPage(request):
-    range_count = Question.objects.all().count()
     if not len(Question.objects.filter(category__in=["R", "I", "A", "S", "E", "C"]).order_by("category").distinct("category")) == 6:
         return HttpResponse("Not available")
-    range_num = range(range_count)
-    obj = RResult.objects.all()
-    questions = Question.objects.all()
-
     if (request.user.profile.department):
-        return render(
-            request,
-            "riasec/test.html",
-            {"questions": questions, "obj": obj, "range": range_num},
-        )
+        return render(request,"riasec/test.html")
     else:
         messages.error(request, 'Please enter Department,Program and Year')
         return redirect('accounts:edit_user')
 
+def test_container(request):
+    questions = Question.objects.all()
+    return render(
+            request,
+            "riasec/partials/test_container.html",
+            {"questions": questions},
+        )
 
 @transaction.atomic
 @login_required(login_url="accounts:login")
@@ -48,64 +46,46 @@ def evaluate(request):
     c = []
 
     for id in q.iterator():
-        score = float(request.POST.get(f"{id}"))
         question = Question.objects.get(pk=id)
+        score = None if request.POST.get(f"{id}") == None else float(request.POST.get(f"{id}"))
+
+        answer = Answer()
+        answer.question = question
+        answer.answer = score
+        answer.user = user
+        answer.save()
         
-        try:
-            answer = Answer.objects.get(user=user, question=question)
-            answer.answer = score
-            answer.save()
-        except Answer.DoesNotExist:
-            answer = Answer()
-            answer.question = question
-            answer.answer = score
-            answer.user = user
-            answer.save()
+        if score:
+            if question.category == "R":
+                r.append(score)
+            if question.category == "I":
+                i.append(score)
+            if question.category == "A":
+                a.append(score)
+            if question.category == "S":
+                s.append(score)
+            if question.category == "E":
+                e.append(score)
+            if question.category == "C":
+                c.append(score)
 
-        if question.category == "R":
-            r.append(score)
-        if question.category == "I":
-            i.append(score)
-        if question.category == "A":
-            a.append(score)
-        if question.category == "S":
-            s.append(score)
-        if question.category == "E":
-            e.append(score)
-        if question.category == "C":
-            c.append(score)
+    r = 0 if len(r) == 0 else (sum(r) / len(r)) * 100
+    i = 0 if len(i) == 0 else (sum(i) / len(i)) * 100
+    a = 0 if len(a) == 0 else(sum(a) / len(a)) * 100
+    s = 0 if len(s) == 0 else(sum(s) / len(s)) * 100
+    e = 0 if len(e) == 0 else(sum(e) / len(e)) * 100
+    c = 0 if len(c) == 0 else(sum(c) / len(c)) * 100
 
-    r = (sum(r) / len(r)) * 100
-    i = (sum(i) / len(i)) * 100
-    a = (sum(a) / len(a)) * 100
-    s = (sum(s) / len(s)) * 100
-    e = (sum(e) / len(e)) * 100
-    c = (sum(c) / len(c)) * 100
-    
-
-
-    try:
-        obj = RResult.objects.get(user=request.user)
-        obj.user=request.user
-        obj.realistic=r
-        obj.investigative=i
-        obj.artistic=a
-        obj.social=s
-        obj.enterprising=e
-        obj.conventional=c
-        obj.save()
-
-    except ObjectDoesNotExist:
-        result = RResult.objects.create(
-            user=request.user,
-            realistic=r,
-            investigative=i,
-            artistic=a,
-            social=s,
-            enterprising=e,
-            conventional=c,
-        )
-        result.save()
+    result = RResult.objects.create(
+        user=request.user,
+        realistic=r,
+        investigative=i,
+        artistic=a,
+        social=s,
+        enterprising=e,
+        conventional=c,
+    )
+    result.save()
 
     try:
         obj3 = Profile.objects.get(user__username=user)

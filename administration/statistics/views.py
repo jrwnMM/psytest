@@ -39,25 +39,53 @@ class Statistics(LoginRequiredMixin, Is_Counselor, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        education_level = ["College", "Grade School", "Junior Highschool", "Senior Highschool"]
-        sex = ["Male", "Female"]
+        context["riasec_male"] = CareerResult.objects.filter(user__profile__sex="Male").aggregate(*riasec_avg)
+        context["riasec_female"] = CareerResult.objects.filter(user__profile__sex="Female").aggregate(*riasec_avg)
+        context["riasec_college"] = CareerResult.objects.filter(user__profile__educationlevel__name="College").aggregate(*riasec_avg)
+        context["riasec_grade"] = CareerResult.objects.filter(user__profile__educationlevel__name="Grade School").aggregate(*riasec_avg)
+        context["riasec_junior"] = CareerResult.objects.filter(user__profile__educationlevel__name="Junior Highschool").aggregate(*riasec_avg)
+        context["riasec_senior"] = CareerResult.objects.filter(user__profile__educationlevel__name="Senior Highschool").aggregate(*riasec_avg)
+        context["rm_count"] = CareerResult.objects.filter(user__profile__sex="Male").count()
+        context["rf_count"] = CareerResult.objects.filter(user__profile__sex="Female").count()
+        context["career_college_count"] = CareerResult.objects.filter(user__profile__educationlevel__name="College").count()
+        context["career_senior_count"] = CareerResult.objects.filter(user__profile__educationlevel__name="Senior Highschool").count()
+        context["career_junior_count"] = CareerResult.objects.filter(user__profile__educationlevel__name="Junior Highschool").count()
+        context["career_grade_count"] = CareerResult.objects.filter(user__profile__educationlevel__name="Grade School").count()
 
-        riasec_aggregates = {}
-        personality_aggregates = {}
-        count_data = {}
+        context["personality_male"] = PersonalityResult.objects.filter(user__profile__sex="Male").aggregate(*personality_avg)
+        context["personality_female"] = PersonalityResult.objects.filter(user__profile__sex="Female").aggregate(*personality_avg)
+        context["personality_college"] = PersonalityResult.objects.filter(user__profile__educationlevel__name="College").aggregate(*personality_avg)
+        context["personality_senior"] = PersonalityResult.objects.filter(user__profile__educationlevel__name="Senior Highschool").aggregate(*personality_avg)
+        context["personality_junior"] = PersonalityResult.objects.filter(user__profile__educationlevel__name="Junior Highschool").aggregate(*personality_avg)
+        context["personality_grade"] = PersonalityResult.objects.filter(user__profile__educationlevel__name="Grade School").aggregate(*personality_avg)
+        context["pm_count"] = PersonalityResult.objects.filter(user__profile__sex="Male").count()
+        context["pf_count"] = PersonalityResult.objects.filter(user__profile__sex="Female").count()
+        context["personality_college_count"] = PersonalityResult.objects.filter(user__profile__educationlevel__name="College").count()
+        context["personality_senior_count"] = PersonalityResult.objects.filter(user__profile__educationlevel__name="Senior Highschool").count()
+        context["personality_junior_count"] = PersonalityResult.objects.filter(user__profile__educationlevel__name="Junior Highschool").count()
+        context["personality_grade_count"] = PersonalityResult.objects.filter(user__profile__educationlevel__name="Grade School").count()
 
-        for category, field in [("education_level", "educationlevel"), ("sex", "sex")]:
-            for value in locals()[category]:
-                filter = Q(**{'user__profile__{}__name'.format(field): value}) if category == "education_level" else Q(user__profile__sex=value)
-                career_results = CareerResult.objects.filter(filter)
-                riasec_aggregates[f"{category}_{value.lower()}"] = career_results.aggregate(*riasec_avg)
-                count_data[f"career_{value.lower()}_count"] = career_results.count()
-                personality_aggregates[f"personality_{value.lower()}"] = PersonalityResult.objects.filter(filter).aggregate(*personality_avg)
-                count_data[f"personality_{value.lower()}_count"] = PersonalityResult.objects.filter(filter).count()
+        return context
+        # context = super().get_context_data(**kwargs)
+        # education_level = ["College", "Grade School", "Junior Highschool", "Senior Highschool"]
+        # sex = ["Male", "Female"]
 
-        context.update(riasec_aggregates)
-        context.update(personality_aggregates)
-        context.update(count_data)
+        # riasec_aggregates = {}
+        # personality_aggregates = {}
+        # count_data = {}
+
+        # for category, field in [("education_level", "educationlevel"), ("sex", "sex")]:
+        #     for value in locals()[category]:
+        #         filter = Q(**{'user__profile__{}__name'.format(field): value}) if category == "education_level" else Q(user__profile__sex=value)
+        #         career_results = CareerResult.objects.filter(filter)
+        #         riasec_aggregates[f"{category}_{value.lower()}"] = career_results.aggregate(*riasec_avg)
+        #         count_data[f"career_{value.lower()}_count"] = career_results.count()
+        #         personality_aggregates[f"personality_{value.lower()}"] = PersonalityResult.objects.filter(filter).aggregate(*personality_avg)
+        #         count_data[f"personality_{value.lower()}_count"] = PersonalityResult.objects.filter(filter).count()
+
+        # context.update(riasec_aggregates)
+        # context.update(personality_aggregates)
+        # context.update(count_data)
 
         return context
 

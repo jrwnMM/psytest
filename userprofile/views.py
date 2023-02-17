@@ -44,9 +44,9 @@ class UserStats(LoginRequiredMixin, UserDetailViewMixin, TemplateView):
         context["profile"] = obj
 
         try:
-            context["riasec_result"] = CareerResult.objects.get(
+            context["riasec_result"] = CareerResult.objects.filter(
                 user__id=self.kwargs.get("pk")
-            )
+            ).last()
             obj = (
                 CareerResult.objects.filter(
                     user__username=self.kwargs.get("username"),
@@ -99,12 +99,12 @@ class UserStats(LoginRequiredMixin, UserDetailViewMixin, TemplateView):
             pass
 
         try:
-            context["personalityTest_result"] = PersonalityResult.objects.get(
+            context["personalityTest_result"] = PersonalityResult.objects.filter(
                 user__id=self.kwargs.get("pk")
-            )
+            ).last()
         except PersonalityResult.DoesNotExist:
             pass
-        iq_result = IQResult.objects.filter(user__id=self.kwargs.get("pk")).first()
+        iq_result = IQResult.objects.filter(user__id=self.kwargs.get("pk")).last()
         context["iq_result"] = iq_result
 
         if iq_result:
@@ -154,6 +154,7 @@ class EditProfile(LoginRequiredMixin, TemplateView):
                 "first_name": profile.user.first_name,
                 "last_name": profile.user.last_name,
                 "educationlevel": profile.educationlevel,
+                "sex": profile.sex,
                 "department": profile.department,
                 "program": profile.program,
                 "year": profile.year,

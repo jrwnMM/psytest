@@ -13,7 +13,7 @@ import re
 
 from phonenumber_field.formfields import PhoneNumberField
 
-from accounts.models import Department, EducationLevel, Program, Year
+from accounts.models import Department, EducationLevel, Program, Year, Profile
 
 now = timezone.now()
 year_range = list(range(now.year - 100, now.year + 1))
@@ -62,9 +62,8 @@ class CreateUserForm(DynamicFormMixin, UserCreationForm):
         'class': 'form-control',
         'placeholder': 'Type your username'
     }))
-    contactNumber = PhoneNumberField(region="PH", required=False, widget=forms.TextInput(attrs={
+    contactNumber = PhoneNumberField(region="PH", required=True, widget=forms.TextInput(attrs={
         'class': 'form-control',
-        'placeholder': 'Optional',
     }))
     email = forms.EmailField(required=False, widget=forms.EmailInput(attrs={
         'class': 'form-control',
@@ -130,6 +129,11 @@ class CreateUserForm(DynamicFormMixin, UserCreationForm):
             raise ValidationError("it shouldn't contain numbers")
 
         return self.cleaned_data.get('last_name').title()
+
+    def clean_contactNumber(self):
+        if Profile.objects.filter(contactNumber=self.cleaned_data.get('contactNumber')).exists():
+            raise ValidationError('Already exist')
+        return self.cleaned_data.get('contactNumber')
 
     def clean_date_of_birth(self):
         try:

@@ -1,6 +1,7 @@
 {% load static %}
-<form action="{% url 'iqtest:submit-test' %}" method="post" id="submit_form">
-  {% csrf_token %} {% for question in questions %}
+<form action="{% url 'iqtest:test-container' %}" method="post" id="submit_form">
+  {% csrf_token %} 
+  {% for question in questions %}
   <div>
     <div class="row my-2">
       <div class="col-1">
@@ -25,13 +26,8 @@
   {% endfor %}
   <hr />
   <div class="d-flex flex-column p-2 justify-content-center">
-    <input
-      id="submit"
-      type="submit"
-      class="btn btn-teal btn-lg btn-block"
-      value="Submit"
-    />
+    <input type="submit" class="btn btn-teal btn-lg btn-block" value="Submit" />
   </div>
 </form>
 
-<script src="{% static 'scripts/timer.js' %}" defer></script>
+<script src="{% static 'scripts/iq_timer.js' %}" defer></script>

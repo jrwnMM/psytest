@@ -21,4 +21,6 @@ class AddPQuestionsForm(forms.ModelForm):
 
         widgets = {
             'question': forms.TextInput(attrs={'class': 'form-control', 'required': True, 'rows': 5}),
+            'category': forms.Select(attrs={'class': 'form-select'}, choices=category_choices),
+            'key': forms.Select(attrs={'class': 'form-select'}, choices=key_choices),
         }

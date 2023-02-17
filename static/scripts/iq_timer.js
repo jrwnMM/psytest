@@ -1,6 +1,5 @@
 $(document).ready(() => {
-  console.log("sdfsdf")
-  var end = new Date().getTime() + 90 * 60 * 1000; //3 hours in milliseconds
+  var end = new Date().getTime() + 10 * 1000; //3 hours in milliseconds
   var x = setInterval(function () {
     var now = new Date().getTime();
     var distance = end - now
@@ -14,7 +13,7 @@ $(document).ready(() => {
     if (distance < 0) {
       clearInterval(x);
       $("#countdown").html("EXPIRED");
-      htmx.trigger("#submit_form", "submit");      
+      $("#submit_form").submit();
     }
   }, 1000);
 

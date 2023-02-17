@@ -58,41 +58,38 @@ class TestView(LoginRequiredMixin, TemplateView):
         opn = []
 
         for id in q.iterator():
-            score = float(self.request.POST.get(f"{id}"))
             question = Question.objects.get(pk=id)
-
+            score = None if self.request.POST.get(f"{id}") == None else float(self.request.POST.get(f"{id}"))
+            
             if question.key == "0":
                 if score == 5:
                     score = 1
                 if score == 4:
                     score = 2
 
-            try:
-                answer = Answer.objects.get(user=self.request.user, question=question)
-                answer.answer = score
-                answer.save()
-            except Answer.DoesNotExist:
-                answer = Answer()
-                answer.question = question
-                answer.answer = score
-                answer.user = user
-                answer.save()
-            if question.category == "EXT":
-                ext.append(score)
-            if question.category == "EST":
-                est.append(score)
-            if question.category == "AGR":
-                agr.append(score)
-            if question.category == "CSN":
-                csn.append(score)
-            if question.category == "OPN":
-                opn.append(score)
+            answer = Answer()
+            answer.question = question
+            answer.answer = score
+            answer.user = user
+            answer.save()
 
-        extroversion = float(sum(ext)) / len(ext)
-        neurotic = float(sum(est))/ len(est)
-        agreeable = float(sum(agr)) / len(agr)
-        conscientious = float(sum(csn)) / len(csn)
-        openness = float(sum(opn)) / len(opn)
+            if score:
+                if question.category == "EXT":
+                    ext.append(score)
+                if question.category == "EST":
+                    est.append(score)
+                if question.category == "AGR":
+                    agr.append(score)
+                if question.category == "CSN":
+                    csn.append(score)
+                if question.category == "OPN":
+                    opn.append(score)
+
+        extroversion = 0 if len(ext) == 0 else float(sum(ext)) / len(ext)
+        neurotic = 0 if len(est) == 0 else float(sum(est))/ len(est)
+        agreeable = 0 if len(agr) == 0 else float(sum(agr)) / len(agr)
+        conscientious = 0 if len(csn) == 0 else float(sum(csn)) / len(csn)
+        openness = 0 if len(opn) == 0 else float(sum(opn)) / len(opn)
 
         # career_prediction = model.predict
         personality = [[extroversion, neurotic, agreeable, conscientious, openness]]
@@ -120,26 +117,15 @@ class TestView(LoginRequiredMixin, TemplateView):
                 recCareer.offeredProgram = obj
                 recCareer.save()
 
-        try:
-            obj = PResult.objects.get(user=user)
-            obj.user = user
-            obj.extroversion = extroversion
-            obj.neurotic = neurotic
-            obj.agreeable = agreeable
-            obj.conscientious = conscientious
-            obj.openness = openness
-            obj.save()
-
-        except ObjectDoesNotExist:
-            result = PResult.objects.create(
-                user=user,
-                extroversion=extroversion,
-                neurotic=neurotic,
-                agreeable=agreeable,
-                conscientious=conscientious,
-                openness=openness,
-            )
-            result.save()
+        result = PResult.objects.create(
+            user=user,
+            extroversion=extroversion,
+            neurotic=neurotic,
+            agreeable=agreeable,
+            conscientious=conscientious,
+            openness=openness,
+        )
+        result.save()
 
         try:
             obj3 = Profile.objects.get(user__username=user)
@@ -178,3 +164,12 @@ class TestView(LoginRequiredMixin, TemplateView):
                 first[key] = value
 
         return first
+
+class TestContainer(TemplateView):
+    template_name = "personalityTest/partials/test_container.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["questions"] = Question.objects.all() 
+        return context
+    
