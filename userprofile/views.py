@@ -154,6 +154,7 @@ class EditProfile(LoginRequiredMixin, TemplateView):
                 "first_name": profile.user.first_name,
                 "last_name": profile.user.last_name,
                 "educationlevel": profile.educationlevel,
+                "sex": profile.sex,
                 "department": profile.department,
                 "program": profile.program,
                 "year": profile.year,

@@ -5,58 +5,37 @@
 
 
 {% block content %}
-<div class="sticky-top pt-3 ps-4">
-    <h5>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left color-teal" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-            </svg>
-        <a href="{% url 'assessment' %}" class="back-link">Back</a>
-    </h5>
+<div class="sticky-top row justify-content-center">
+    <div class="col-9 m-3">
+        <div class="d-flex justify-content-between">
+            <h5>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-arrow-left color-teal" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+                </svg>
+                <a href="{% url 'assessment' %}" class="back-link">Back</a>
+            </h5>
+            <div>
+                <p class="text-center">Time:</p>
+                <p id="countdown"></p>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="d-flex justify-content-center">
-    <div class="container-test">
+<div class="d-flex justify-content-center" >
+    <div class="container-test" id="container_test">
         <h1>Personality Test</h1>
         <p class="p-2">
             Rate each task by how much you would enjoy performing them on a scale of <b>(1) Strongly Disagree (2) Disagree (3) Neutral (4) Agree (5) Strongly Agree</b>. Please answer as honestly as possible for an accurate result.
         </p>
         <hr>
-        <form action="{% url 'personalityTest:test' %}" method="POST">
-            {% csrf_token %}
-            {% for question in questions %}
-            <p id="question_{{forloop.counter}}" class="mt-5">{{forloop.counter}}. {{question.question}}</p>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="{{question.id}}" id="strongly_disagree_{{question.id}}" value="1"
-                    required>
-                <label for="strongly_disagree_{{question.id}}">Strongly Disagree</label>
+        <div id="test_container">
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-teal btn-lg" hx-get="{% url 'personalityTest:test-container' %}"
+                    hx-target="#test_container" id="start_test">Start Test</button>
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="{{question.id}}" id="disagree_{{question.id}}"
-                    value="2" required>
-                <label for="disagree_{{question.id}}">Disagree</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="{{question.id}}" id="neutral_{{question.id}}" value="3"
-                    required >
-                <label for="neutral_{{question.id}}">Neutral</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="{{question.id}}" id="agree_{{question.id}}"
-                    value="4" required>
-                <label for="agree_{{question.id}}">Agree</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="{{question.id}}" id="strongly_agree_{{question.id}}" value="5"
-                    required checked>
-                <label for="strongly_agree_{{question.id}}">Strongly Agree</label>
-            </div>
-            <br>
-            <hr>
-            {% endfor %}
-            <div class="d-flex flex-column p-2 justify-content-center">
-                <input id='submit' type="submit" class="btn pt-btn btn-lg btn-block" value="Submit">
-            </div>
-        </form>
-        
+        </div>
     </div>
 </div>
 {% endblock %}
