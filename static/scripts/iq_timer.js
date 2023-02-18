@@ -1,5 +1,5 @@
 $(document).ready(() => {
-  var end = new Date().getTime() + 10 * 1000; //3 hours in milliseconds
+  var end = new Date().getTime() + 30 * 60 * 1000;
   var x = setInterval(function () {
     var now = new Date().getTime();
     var distance = end - now

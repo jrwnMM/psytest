@@ -1,8 +1,5 @@
 $(document).ready(() => {
-  console.log("asdas")
-  console.log("asdas")
-
-  var end = new Date().getTime() + 10 * 1000; //3 hours in milliseconds
+  var end = new Date().getTime() + 10 * 60 * 1000;
   var x = setInterval(function () {
     var now = new Date().getTime();
     var distance = end - now
@@ -17,7 +14,6 @@ $(document).ready(() => {
         clearInterval(x);
         $("#countdown").html("EXPIRED");
         $("#submit_form").submit();
-        console.log("asdas")
     }
   }, 1000);
 
