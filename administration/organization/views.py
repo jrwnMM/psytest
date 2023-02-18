@@ -104,6 +104,7 @@ def add_department(request):
             new_department.code = department_code
             new_department.save()
             context["success"] = True
+            context["yearlevels"] = Year.objects.filter(educationlevel=education_level)
         else:
             context["code_exists"] = True
     except EducationLevel.DoesNotExist:
@@ -152,6 +153,7 @@ def delete_department(request):
     checked = request.POST.getlist("department_id")
     edu_level_id = request.POST["edu_level"]
     Department.objects.filter(educationlevel__id=edu_level_id, id__in=checked).delete()
+    context["yearlevels"] = Year.objects.filter(educationlevel__id=edu_level_id)
     context["departments"] = Department.objects.filter(educationlevel__id=edu_level_id)
     return render(request, "organization/partials/department_list.html", context)
 
