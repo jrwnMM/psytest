@@ -3,7 +3,7 @@ import dj_database_url
 
 DEBUG = False
 DEBUG_PROPAGATE_EXCEPTIONS = True
-ALLOWED_HOSTS = ["psytest-6ll2.onrender.com", "https://psytest-6ll2.onrender.com/", "web-production-b3fa3.up.railway.app"]
+ALLOWED_HOSTS = ["psytest-6ll2.onrender.com", "https://psytest-6ll2.onrender.com/", "web-production-b3fa3.up.railway.app", "https://web-production-b3fa3.up.railway.app/"]
 
 SECRET_KEY = os.environ["SECRET_KEY"]
 
