@@ -3,7 +3,7 @@ from .common import *
 import dj_database_url
 
 DEBUG = False
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["psytest-6ll2.onrender.com"]
 
 SECRET_KEY = os.environ["SECRET_KEY"]
 
