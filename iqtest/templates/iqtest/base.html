@@ -22,9 +22,6 @@
 
 
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' hx-ext="morph">
-    <header>
-        {% include 'partials/_navbar.html' %}
-    </header>
     {% block content %}
     {% endblock %}
 </body>

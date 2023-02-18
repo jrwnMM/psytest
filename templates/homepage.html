@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% load static %} {% block title %}Home{% endblock %}
 {% block content %}
 <header>{% include 'partials/_navbar.html' %}</header>
-<main class="conainer-fluid">
+<main>
   {% if messages %}
   <div class="bg-success text-white text-center">
     {% for message in messages %} {{message}} {% endfor %}

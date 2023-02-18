@@ -1,0 +1,18 @@
+BEGIN;
+SELECT setval(pg_get_serial_sequence('"accounts_educationlevel"','id'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "accounts_educationlevel";
+SELECT setval(pg_get_serial_sequence('"accounts_department"','id'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "accounts_department";
+SELECT setval(pg_get_serial_sequence('"accounts_program"','id'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "accounts_program";
+SELECT setval(pg_get_serial_sequence('"accounts_year"','id'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "accounts_year";
+SELECT setval(pg_get_serial_sequence('"auth_permission"','id'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "auth_permission";
+SELECT setval(pg_get_serial_sequence('"auth_group_permissions"','id'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "auth_group_permissions";
+SELECT setval(pg_get_serial_sequence('"auth_group"','id'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "auth_group";
+SELECT setval(pg_get_serial_sequence('"auth_user_groups"','id'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "auth_user_groups";
+SELECT setval(pg_get_serial_sequence('"auth_user_user_permissions"','id'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "auth_user_user_permissions";
+SELECT setval(pg_get_serial_sequence('"auth_user"','id'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "auth_user";
+SELECT setval(pg_get_serial_sequence('"iqtest_question"','id'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "iqtest_question";
+SELECT setval(pg_get_serial_sequence('"iqtest_choice"','id'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "iqtest_choice";
+SELECT setval(pg_get_serial_sequence('"personalityTest_question"','id'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "personalityTest_question";
+SELECT setval(pg_get_serial_sequence('"personalityTest_recommendedprogram"','id'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "personalityTest_recommendedprogram";
+SELECT setval(pg_get_serial_sequence('"riasec_offeredprogram"','id'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "riasec_offeredprogram";
+SELECT setval(pg_get_serial_sequence('"riasec_question"','id'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "riasec_question";
+COMMIT;
