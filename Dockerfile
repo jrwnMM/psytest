@@ -17,6 +17,8 @@ COPY . .
 
 # collect static files
 RUN python manage.py collectstatic --noinput
+RUN python manage.py makemigrations
+RUN python manage.py migrate
 
 # run gunicorn
 CMD gunicorn psytests.wsgi:application --bind 0.0.0.0:$PORT
