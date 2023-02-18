@@ -1,9 +1,8 @@
-from psytests.settings.dev import DATABASES
 from .common import *
 import dj_database_url
 
 DEBUG = False
-ALLOWED_HOSTS = ["psytest-6ll2.onrender.com"]
+ALLOWED_HOSTS = ["psytest-6ll2.onrender.com", "https://psytest-6ll2.onrender.com/"]
 
 SECRET_KEY = os.environ["SECRET_KEY"]
 
