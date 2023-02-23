@@ -3,7 +3,7 @@ import dj_database_url
 
 DEBUG = False
 DEBUG_PROPAGATE_EXCEPTIONS = True
-ALLOWED_HOSTS = ["https://psytestjmc.up.railway.app/", "psytestjmc.up.railway.app"]
+ALLOWED_HOSTS = [os.environ["ALLOWED_HOST"]]
 
 SECRET_KEY = os.environ["SECRET_KEY"]
 
