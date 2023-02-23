@@ -48,7 +48,7 @@ def registerPage(request):
             user.refresh_from_db()
             user.profile.middle_name = form.cleaned_data.get('middle_name')
             user.profile.date_of_birth = form.cleaned_data.get('date_of_birth')
-            user.profile.gender = form.cleaned_data.get('gender')
+            user.profile.sex = form.cleaned_data.get('sex')
             user.profile.contactNumber = form.cleaned_data.get('contactNumber')
             user.profile.educationlevel = get_or_none(EducationLevel, id=request.POST.get("educationlevel"))
             user.profile.department = get_or_none(Department, id=request.POST.get("department"))
