@@ -1,4 +1,5 @@
 {% load static %}
+
 <form action="{% url 'iqtest:test-container' %}" method="post" id="submit_form">
   {% csrf_token %} 
   {% for question in questions %}

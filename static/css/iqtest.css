@@ -10,3 +10,13 @@
   p{
     display:inline;
   }
+
+  @media screen and (max-width:576px) {
+    p, label {
+      font-size: small;
+    }
+
+    img {
+      width: 70%;
+    }
+  }

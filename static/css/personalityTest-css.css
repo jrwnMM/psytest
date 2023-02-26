@@ -103,3 +103,9 @@
   position: absolute;
   
 }
+
+@media screen and (max-width:576px) {
+  p,label {
+    font-size: small;
+  }
+}

@@ -104,3 +104,9 @@ min-height: 500px;
 .top-3-color {
     background: #AD8A56;
 }
+
+@media screen and (max-width:576px) {
+    p, label {
+      font-size: small;
+    }
+  }
