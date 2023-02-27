@@ -2,11 +2,15 @@ from django.db import models
 from django_quill.fields import QuillField
 from accounts.models import Profile
 from django.core.validators import MaxValueValidator
+from django.utils.html import mark_safe
 
 # Create your models here.
 
 class Question(models.Model):
     question = QuillField(blank=False)
+    
+    def __str__(self) -> str:
+        return mark_safe(self.question.html)
 
 class Choice(models.Model):
     class answerTextChoices(models.TextChoices):
@@ -16,11 +20,17 @@ class Choice(models.Model):
     choice = QuillField()
     is_answer = models.CharField(max_length=32, choices=answerTextChoices.choices, blank=False, default=answerTextChoices.INCORRECT)
 
+    def __str__(self) -> str:
+        return mark_safe(self.choice.html)
+
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.SET_NULL, null=True, blank=True)
     result = models.ForeignKey('Result', on_delete=models.SET_NULL, null=True, blank=True)
     answer = models.ForeignKey(Choice, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True, related_name="iq_answer_user")
+
+    def __str__(self) -> str:
+        return mark_safe(self.answer.choice.html)
 
 
 class Result(models.Model):
@@ -48,3 +58,5 @@ class Result(models.Model):
     result = models.IntegerField(blank=False, validators=[MaxValueValidator(100)])
     date_created = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self) -> str:
+        return str(self.result)
