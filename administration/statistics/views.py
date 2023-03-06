@@ -1,13 +1,14 @@
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth import get_user_model
-from django.db.models import Avg,Q
+from django.db.models import Avg,Q, Count
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from personalityTest.models import Result as PersonalityResult
 from riasec.models import Result as CareerResult
+from iqtest.models import Result as IQResult
 from administration.views import Is_Counselor
 
 User = get_user_model()
@@ -28,6 +29,17 @@ personality_avg = (
     Avg("agreeable"),
     Avg("neurotic"),
 )
+
+distinct_iq_result = IQResult.objects.all().distinct("user")
+exceptional = Count("result", filter=Q(result__gte=36) & Q(result__lte=40))
+excellent = Count("result", filter=Q(result__gte=31) & Q(result__lte=35))
+verygood = Count("result", filter=Q(result__gte=25) & Q(result__lte=30))
+good = Count("result", filter=Q(result__gte=19) & Q(result__lte=24))
+average = Count("result", filter=Q(result__gte=15) & Q(result__lte=18))
+poor = Count("result", filter=Q(result__gte=0) & Q(result__lte=14))
+iq_result = distinct_iq_result.annotate()
+
+
 
 career_labels = ['Realistic', 'Investigative', 'Artistic', 'Social', 'Enterprising', 'Conventional']
 personality_labels = ['Openness', 'Conscientious', 'Extroversion', 'Agreeable', 'Neurotic']
@@ -88,6 +100,27 @@ class Statistics(LoginRequiredMixin, Is_Counselor, TemplateView):
         # context.update(count_data)
 
         return context
+
+class IQStats(TemplateView):
+    template_name = 'statistics/iq_stat.html'
+
+    def get(self, request, *args, **kwargs):
+        sample = IQResult.objects.annotate(poor=poor)
+        exceptional1 = distinct_iq_result.filter(Q(result__gte=36) & Q(result__lte=40)).count()
+        excellent = distinct_iq_result.filter(Q(result__gte=31) & Q(result__lte=35)).count()
+        verygood = distinct_iq_result.filter(Q(result__gte=25) & Q(result__lte=30)).count()
+        good = distinct_iq_result.filter(Q(result__gte=19) & Q(result__lte=24)).count()
+        average = distinct_iq_result.filter(Q(result__gte=15) & Q(result__lte=18)).count()
+        poor1 = distinct_iq_result.filter(Q(result__gte=0) & Q(result__lte=14)).count()
+        print(sample[1].poor)
+        data = {}
+        data['labels'] = IQResult.labelTextChoices.labels
+        print(data['labels'])
+        data['avg'] = [exceptional1, excellent, verygood, good, average, poor1]
+        data['total'] = IQResult.objects.all().count()
+        print(data["avg"])
+        return JsonResponse(data)
+
 
 @user_passes_test(lambda u:u.groups.filter(name="Counselor").exists())
 @require_http_methods(["GET"])

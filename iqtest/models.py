@@ -41,6 +41,7 @@ class Result(models.Model):
         VERYGOOD = 'verygood', 'Very Good'
         GOOD = 'good', 'Good'
         AVERAGE = 'average', 'Average'
+        POOR = 'poor', 'Poor'
 
     @property
     def get_label(self):
@@ -50,9 +51,11 @@ class Result(models.Model):
             return self.labelTextChoices.EXCELLENT
         elif self.result in range(25,31):
             return self.labelTextChoices.VERYGOOD
-        elif self.result in range(20,26):
-            return self.labelTextChoices.VERYGOOD
-        return self.labelTextChoices.AVERAGE
+        elif self.result in range(20,25):
+            return self.labelTextChoices.GOOD
+        elif self.result in range(15,19):
+            return self.labelTextChoices.AVERAGE
+        return self.labelTextChoices.POOR
     
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="iq_result")
     result = models.IntegerField(blank=False, validators=[MaxValueValidator(100)])

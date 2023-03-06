@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (
     Statistics,
+    IQStats,
     career_category, 
     career_college, 
     career_grade, 
@@ -19,6 +20,7 @@ from .views import (
 
 urlpatterns = [
     path('', Statistics.as_view(), name="statistics"),
+    path('iq_stats/', IQStats.as_view(), name="iq-stats"),
     path('career_male/', career_male, name="career_male"),
     path('career_female/', career_female, name="career_female"),
     path('career_college/', career_college, name="career_college"),

@@ -28,6 +28,10 @@
                 data-bs-target="#v-pills-personality" type="button" role="tab" aria-controls="v-pills-personality"
                 aria-selected="false">Personality
             </button>
+            <button class="nav-link" id="v-pills-iq-tab" data-bs-toggle="tab"
+                data-bs-target="#v-pills-iq" type="button" role="tab" aria-controls="v-pills-iq"
+                aria-selected="false">IQ
+            </button>
         </div>
     </nav>
     <div class="tab-content" id="v-pills-tabContent">
@@ -35,7 +39,9 @@
     {% include 'statistics/career-section.html' %}
     <!-- Personality Tab -->
     {% include 'statistics/personality-section.html' %}
-        
+    <!-- IQ Tab -->
+    {% include 'statistics/iq-section.html' %}
+            
     </div>
 </main>
 {% endblock %}
