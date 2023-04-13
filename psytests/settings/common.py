@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "django_filters",
     "mathfilters",
     #Other apps
+    'chartjs',
     'django_quill',
     'widget_tweaks',
     "phonenumber_field",

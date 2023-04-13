@@ -3,23 +3,26 @@
     <div class="col-sm-3 col-xs-6 align-self-center">
         <div class="m-3">
             <h4>Male Category</h4>
-            <small class="text-muted p-0 m-0">total of: {{pm_count|default:0}}</small>
+            <small class="text-muted p-0 m-0">total of: {{iq_all_count|default:0}}</small>
         </div>
         <ul class="list-group">
             <li class="list-group-item">
-                <span class="bg-color-a p-2">Openness</span> = {{personality_male.openness__avg|floatformat:1|default:0 }}
+                <span class="bg-color-a p-2">{{iq_averages.labels.0}}</span> = {{iq_averages.avg.exceptional}}
             </li>
             <li class="list-group-item">
-                <span class="bg-color-b p-2">Conscientious</span> = {{personality_male.conscientious__avg|floatformat:1|default:0 }}
+                <span class="bg-color-b p-2">{{iq_averages.labels.1}}</span> = {{iq_averages.avg.excellent}}
             </li>
             <li class="list-group-item">
-                <span class="bg-color-c p-2">Extroversion</span> = {{personality_male.extroversion__avg|floatformat:1|default:0 }}
+                <span class="bg-color-c p-2">{{iq_averages.labels.2}}</span> = {{iq_averages.avg.verygood}}
             </li>
             <li class="list-group-item">
-                <span class="bg-color-d p-2">Agreeable</span> = {{personality_male.agreeable__avg|floatformat:1|default:0 }}
+                <span class="bg-color-d p-2">{{iq_averages.labels.3}}</span> = {{iq_averages.avg.good}}
             </li>
             <li class="list-group-item">
-                <span class="bg-color-e p-2">Neurotic</span> = {{personality_male.neurotic__avg|floatformat:1|default:0 }}
+                <span class="bg-color-e p-2">{{iq_averages.labels.4}}</span> = {{iq_averages.avg.average}}
+            </li>
+            <li class="list-group-item">
+                <span class="bg-color-e p-2">{{iq_averages.labels.5}}</span> = {{iq_averages.avg.poor}}
             </li>
         </ul>
     </div>
@@ -30,6 +33,52 @@
     </div>
 </div>
 
-{% block scripts %}
-<script src="{% static 'scripts/administration/statistics/iq.js' %}"></script>
+{% block iq_scripts %}
+<script id="iq_script">
+    $(document).ready(() => {   
+          let IQChart = new Chart(iqChart, {
+            type: "line", // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+            data: {
+              labels: {{iq_results.labels|safe}},
+              datasets: [
+                {
+                  data: {{iq_results.avg|safe}},
+                  backgroundColor: [
+                    "rgba(54, 162, 235, 0.6)",
+                    "rgba(255, 206, 86, 0.6)",
+                    "rgba(75, 192, 192, 0.6)",
+                    "rgba(153, 102, 255, 0.6)",
+                    "rgba(255, 159, 64, 0.6)",
+                    "rgba(255, 99, 132, 0.6)",
+                  ],
+                  borderWidth: 1,
+                  borderColor: "#777",
+                  hoverBorderWidth: 3,
+                  hoverBorderColor: "#000",
+                },
+              ],
+            },
+            options: {
+              maintainAspectRatio: false,
+              responsive: true,
+              legend: {
+                display: false,
+              },
+              tooltips: {
+                enabled: true,
+              },
+              scales: {
+                yAxes: [
+                  {
+                    ticks: {
+                      beginAtZero: true,
+                      max: 100,
+                    },
+                  },
+                ],
+              },
+            },
+          });
+      });
+</script>
 {% endblock %}
